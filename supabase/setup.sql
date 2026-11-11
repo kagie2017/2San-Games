@@ -38,7 +38,9 @@ create table public.players (
   role text not null default 'player' check (role in ('host','player')),
   nick text not null check (char_length(nick) between 1 and 18),
   color text not null default '#FB7569' check (color ~ '^#[0-9A-Fa-f]{6}$'),
-  face text not null default 'smile' check (face in ('smile','cool','wow')),
+  face text not null default 'smile' check (face ~ '^[a-z0-9]{1,12}$'),
+  hair text not null default 'none' check (hair ~ '^[a-z0-9]{1,12}$'),
+  weapon text not null default 'none' check (weapon ~ '^[a-z0-9]{1,12}$'),
   joined timestamptz not null default now()
 );
 create index players_lobby_idx on public.players(lobby_id);
@@ -114,7 +116,7 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 create or replace function public.lobby_create(p_token text, p_name text, p_password text,
-  p_nick text, p_color text, p_face text) returns uuid
+  p_nick text, p_color text, p_face text, p_hair text default 'none', p_weapon text default 'none') returns uuid
 language plpgsql security definer set search_path = public, extensions as $$
 declare v_lobby uuid; v_player uuid; v_pw boolean := coalesce(char_length(p_password), 0) > 0;
 begin
@@ -125,14 +127,14 @@ begin
   insert into lobbies (name, has_password) values (trim(p_name), v_pw) returning id into v_lobby;
   insert into lobby_secrets (lobby_id, password_hash)
     values (v_lobby, case when v_pw then crypt(p_password, gen_salt('bf')) end);
-  insert into players (lobby_id, role, nick, color, face)
-    values (v_lobby, 'host', trim(p_nick), p_color, p_face) returning id into v_player;
+  insert into players (lobby_id, role, nick, color, face, hair, weapon)
+    values (v_lobby, 'host', trim(p_nick), p_color, p_face, coalesce(p_hair,'none'), coalesce(p_weapon,'none')) returning id into v_player;
   insert into player_tokens (token, player_id) values (p_token, v_player);
   return v_lobby;
 end $$;
 
 create or replace function public.lobby_join(p_token text, p_lobby uuid, p_password text,
-  p_nick text, p_color text, p_face text) returns uuid
+  p_nick text, p_color text, p_face text, p_hair text default 'none', p_weapon text default 'none') returns uuid
 language plpgsql security definer set search_path = public, extensions as $$
 declare v_hash text; me players; v_player uuid;
 begin
@@ -140,7 +142,8 @@ begin
   if not exists (select 1 from lobbies where id = p_lobby) then raise exception 'lobby_not_found'; end if;
   me := public._me(p_token);
   if me.id is not null and me.lobby_id = p_lobby then
-    update players set nick = trim(p_nick), color = p_color, face = p_face where id = me.id;
+    update players set nick = trim(p_nick), color = p_color, face = p_face,
+      hair = coalesce(p_hair,'none'), weapon = coalesce(p_weapon,'none') where id = me.id;
     return p_lobby;
   end if;
   select password_hash into v_hash from lobby_secrets where lobby_id = p_lobby;
@@ -149,16 +152,18 @@ begin
   end if;
   if (select count(*) from players where lobby_id = p_lobby) >= 61 then raise exception 'lobby_full'; end if;
   perform public._leave(p_token);
-  insert into players (lobby_id, role, nick, color, face)
-    values (p_lobby, 'player', trim(p_nick), p_color, p_face) returning id into v_player;
+  insert into players (lobby_id, role, nick, color, face, hair, weapon)
+    values (p_lobby, 'player', trim(p_nick), p_color, p_face, coalesce(p_hair,'none'), coalesce(p_weapon,'none')) returning id into v_player;
   insert into player_tokens (token, player_id) values (p_token, v_player);
   update lobbies set updated_at = now() where id = p_lobby;
   return p_lobby;
 end $$;
 
-create or replace function public.player_update(p_token text, p_nick text, p_color text, p_face text) returns void
+create or replace function public.player_update(p_token text, p_nick text, p_color text, p_face text,
+  p_hair text default 'none', p_weapon text default 'none') returns void
 language sql security definer set search_path = public as $$
-  update players set nick = trim(p_nick), color = p_color, face = p_face
+  update players set nick = trim(p_nick), color = p_color, face = p_face,
+    hair = coalesce(p_hair,'none'), weapon = coalesce(p_weapon,'none')
    where id = (select player_id from player_tokens where token = p_token);
 $$;
 
@@ -254,9 +259,9 @@ begin delete from lobbies where id = lid; end $$;
 
 grant execute on function
   public.me(text),
-  public.lobby_create(text,text,text,text,text,text),
-  public.lobby_join(text,uuid,text,text,text,text),
-  public.player_update(text,text,text,text),
+  public.lobby_create(text,text,text,text,text,text,text,text),
+  public.lobby_join(text,uuid,text,text,text,text,text,text),
+  public.player_update(text,text,text,text,text,text),
   public.lobby_leave(text),
   public.player_answer(text,text,int,int,double precision,text),
   public.host_set_state(text,jsonb,boolean), public.host_set_scores(text,jsonb),

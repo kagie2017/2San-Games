@@ -6,7 +6,7 @@ Live: https://2san-games.vercel.app/
 
 ## How it works
 
-1. **Lobby browser**: make your blocky character (nickname, shirt color, face) and see every open lobby with its host, player count and status.
+1. **Lobby browser**: make your blocky character (nickname, shirt color, 10 faces, 9 hairstyles in your shirt color, and a 2San device as your weapon: Easy Pen Test sword, Breath Alcohol Test blaster, Home Water Test bottle, Safe Sip+ shield, Digital Thermometer wand, Swimcount hammer or 3 in 1 Self-Test paddle) and see every open lobby with its host, player count and status.
 2. **Create lobby**: anyone can create one and becomes its **host**. A password is optional.
 3. **Join**: tap a lobby (type the password if it has one).
 4. **Host controls**: pick a game, start, reveal answers, show the leaderboard, remove players (×), or hand the host role to someone else (👑). Closing the lobby removes everyone from it.

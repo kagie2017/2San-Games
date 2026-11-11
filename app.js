@@ -202,10 +202,39 @@ const GAMES={
 const RACE_NAMES=['The Agility Sprint','The Fearlessness Dash','The Integrity Cup','The Rigor Regatta','The Excellence Classic','The Swimcount Swim',
  'The Safe Sip+ Splash','The 10-Minute Results Race','Better Care, Better Life Cup','Journey to Self-testing for All','The Four Continents Relay','The Green Office Paddle','The Home Water Test Trial','The Reusable Cup Race'];
 const RACE_FACTS=()=>TF.filter(t=>t.a).map(t=>t.q);
-const DEMO_BOTS=[['Agility','#0084DB','cool'],['Rigor','#1DD6A5','smile'],['Integrity','#7E43CA','wow']];
+const DEMO_BOTS=[['Agility','#0084DB','cool','spiky','pen'],['Rigor','#1DD6A5','grin','short','thermo'],['Integrity','#7E43CA','wow','long','safesip']];
 const OPT_STYLE=[{c:'var(--coral)',s:'▲'},{c:'var(--blue)',s:'◆'},{c:'var(--mint)',s:'●',fg:'var(--ink)'},{c:'var(--purple)',s:'■'}];
 const COLORS=['#FB7569','#0084DB','#1DD6A5','#7E43CA','#FFC83D','#FF7AB6','#FF9A3D','#19B5C9','#8FD14F','#5A6FD6'];
-const FACES=[['smile','Smile'],['cool','Shades'],['wow','Wow']];
+const FACES=[['smile','Smile'],['cool','Shades'],['wow','Wow'],['grin','Grin'],['wink','Wink'],['laugh','Laugh'],['love','Love'],['sleepy','Sleepy'],['cheeky','Cheeky'],['fierce','Fierce']];
+const HAIRS=[['none','Bald'],['short','Short'],['bangs','Bangs'],['spiky','Spiky'],['mohawk','Mohawk'],['long','Long'],['bun','Bun'],['pigtails','Pigtails'],['afro','Afro']];
+/* Weapons are 2San devices. [id, short label, line shown under the character] */
+const WEAPONS=[['none','None','No weapon yet. Pick a 2San device!'],['pen','Pen Test','Armed with the Easy Pen Test sword'],['alcohol','Alcohol Test','Armed with the Breath Alcohol Test blaster'],
+ ['water','Water Test','Armed with the Home Water Test splash bottle'],['safesip','Safe Sip+','Armed with the Safe Sip+ sticker shield'],['thermo','Thermometer','Armed with the Digital Thermometer wand'],
+ ['swim','Swimcount','Armed with the Swimcount hammer'],['combo','3 in 1 Test','Armed with the 3 in 1 Self-Test paddle']];
+const SKIN='#FFCF5C',HAIR_ROOM=18,W_='#F4F6FB';
+/* Hair is built from blocks around the 36-unit head: [w,h,d,x,y,z]. It always takes the shirt color. */
+const HAIR_PARTS={none:[],
+ short:[[38,7,38,-1,-6,0]],
+ bangs:[[38,7,38,-1,-6,0],[38,8,3,-1,-1,19.5]],
+ spiky:[[38,5,38,-1,-4,0],[8,9,8,0,-12,9],[8,11,8,14,-14,9],[8,9,8,28,-12,9],[8,9,8,7,-12,-8],[8,9,8,21,-12,-8]],
+ mohawk:[[8,13,40,14,-12,0]],
+ long:[[38,7,38,-1,-6,0],[38,44,5,-1,-4,-20],[4,32,22,-4,0,-9],[4,32,22,36,0,-9]],
+ bun:[[38,7,38,-1,-6,0],[16,12,16,10,-17,-4]],
+ pigtails:[[38,7,38,-1,-6,0],[8,24,8,-9,6,-4],[8,24,8,37,6,-4]],
+ afro:[[48,18,48,-6,-16,0],[6,20,44,-6,2,0],[6,20,44,36,2,0]]};
+const HAIR_UP={none:0,short:6,bangs:6,spiky:14,mohawk:12,long:6,bun:17,pigtails:6,afro:16};
+/* Weapons sit in the right hand of the 72-unit-wide character: [w,h,d,color,x,y,z,front decal]. */
+const WEAPON_PARTS={none:[],
+ pen:[[7,13,7,'#0084DB',61.5,70,13],[13,3,7,'#FB7569',58.5,67,13],[6,32,5,W_,62,35,13,'<span class="wd win"></span>'],[6,6,5,'#FB7569',62,29,13]],
+ alcohol:[[6,13,6,'#1D1D4F',62,69,13],[9,9,26,W_,60.5,60,24],[10,10,5,'#FFC83D',60,59.5,22],[5,5,6,'#FB7569',62.5,62,40]],
+ water:[[15,19,15,'#7CCBFF',57.5,62,18,'<span class="wd drop"></span>'],[7,5,7,W_,61.5,57,18],[9,4,9,'#0084DB',60.5,53,18]],
+ safesip:[[30,30,3,'#1DD6A5',48,46,13,'<span class="wd plus"></span>']],
+ thermo:[[6,30,5,'#1DD6A5',62,48,13,'<span class="wd lcd"></span>'],[3,9,3,'#C9D3E0',63.5,39,13]],
+ swim:[[5,42,5,W_,62.5,38,13],[18,13,12,'#0084DB',56,26,13,'<span class="wd dot"></span>']],
+ combo:[[6,13,5,'#1D1D4F',62,69,13],[17,32,4,W_,56.5,37,13,'<span class="wd tri"></span>']]};
+const pickId=(list,v)=>list.some(x=>x[0]===v)?v:list[0][0];
+/* A safe look for any player row: unknown values (older or newer versions of the game) fall back to the defaults. */
+function look(p){p=p||{};return {color:/^#[0-9A-Fa-f]{6}$/.test(p.color||'')?p.color:COLORS[0],face:pickId(FACES,p.face),hair:pickId(HAIRS,p.hair),weapon:pickId(WEAPONS,p.weapon)};}
 
 /* ================= helpers ================= */
 const $=id=>document.getElementById(id);
@@ -217,37 +246,53 @@ const local={get(k){try{return JSON.parse(localStorage.getItem('2san-live-'+k))}
 
 /* ================= 3D blocks ================= */
 function faceHTML(f){return `<span class="face ${f||'smile'}"><span class="eye l"></span><span class="eye r"></span>${f==='cool'?'<span class="bridge"></span>':''}<span class="mouth"></span></span>`;}
-function box(w,h,d,color,x,y,front){
-  const b=el('div','bx');b.style.width=w+'px';b.style.height=h+'px';b.style.transform=`translate3d(${x}px,${y}px,0)`;
+function box(w,h,d,color,x,y,front,z=0,lite=false){
+  const b=el('div','bx');b.style.width=w+'px';b.style.height=h+'px';b.style.transform=`translate3d(${x}px,${y}px,${z}px)`;
   const F=[['ft',w,h,0,0,`translateZ(${d/2}px)`,1],['bk',w,h,0,0,`rotateY(180deg) translateZ(${d/2}px)`,.72],['rt',d,h,(w-d)/2,0,`rotateY(90deg) translateZ(${w/2}px)`,.8],['lt',d,h,(w-d)/2,0,`rotateY(-90deg) translateZ(${w/2}px)`,.88],['tp',w,d,0,(h-d)/2,`rotateX(90deg) translateZ(${h/2}px)`,1.16],['bt',w,d,0,(h-d)/2,`rotateX(-90deg) translateZ(${h/2}px)`,.6]];
-  for(const[n,fw,fh,l,t,tr,sh] of F){const f=el('i','fc');f.style.cssText=`width:${fw}px;height:${fh}px;left:${l}px;top:${t}px;transform:${tr};background:${color};filter:brightness(${sh})`;if(n==='ft'&&front){f.innerHTML=front;f.style.filter='none';}b.append(f);}
+  for(const[n,fw,fh,l,t,tr,sh] of F){if(lite&&(n==='bk'||n==='bt'))continue;const f=el('i','fc');f.style.cssText=`width:${fw}px;height:${fh}px;left:${l}px;top:${t}px;transform:${tr};background:${color};filter:brightness(${sh})`;if(n==='ft'&&front){f.innerHTML=front;f.style.filter='none';}b.append(f);}
   return b;
 }
-function character(color,face,s){
+function hairBoxes(L,u,ox,oy){return HAIR_PARTS[L.hair].map(([w,h,d,x,y,z])=>box(w*u,h*u,d*u,L.color,ox+x*u,oy+y*u,null,z*u,true));}
+function weaponBoxes(weapon,s,oy=0,mirror=false){return (WEAPON_PARTS[weapon]||[]).map(([w,h,d,c,x,y,z,f])=>box(w*s,h*s,d*s,c,(mirror?72-x-w:x)*s,y*s+oy,f||null,z*s,true));}
+function character(L,s){
   const k=v=>v*s,p=el('div','bx');
-  p.append(box(k(19),k(40),k(20),'#1D1D4F',k(16),k(84)),box(k(19),k(40),k(20),'#1D1D4F',k(37),k(84)),box(k(14),k(44),k(20),'#FFCF5C',k(0),k(38)),box(k(14),k(44),k(20),'#FFCF5C',k(58),k(38)),box(k(40),k(46),k(22),color,k(16),k(38)),box(k(36),k(36),k(36),'#FFCF5C',k(18),0,faceHTML(face)));
+  p.append(box(k(19),k(40),k(20),'#1D1D4F',k(16),k(84)),box(k(19),k(40),k(20),'#1D1D4F',k(37),k(84)),box(k(14),k(44),k(20),SKIN,k(0),k(38)),box(k(14),k(44),k(20),SKIN,k(58),k(38)),box(k(40),k(46),k(22),L.color,k(16),k(38)),box(k(36),k(36),k(36),SKIN,k(18),0,faceHTML(L.face)),
+    ...hairBoxes(L,s,k(18),0),...weaponBoxes(L.weapon,s));
   return p;
 }
-function charScene(color,face,s,hop){
-  const sc=el('div','scene'),w=el('div','world sway'),inner=el('div','bx'+(hop?' hop':''));
-  w.style.width=72*s+'px';w.style.height=124*s+'px';inner.style.width='100%';inner.style.height='100%';inner.append(character(color,face,s));w.append(inner);sc.append(w);return sc;
+/* Standing character. The scene always leaves the same head room so the layout does not move when the hair changes. */
+function charScene(L,s,hop){
+  const sc=el('div','scene'),w=el('div','world sway'),inner=el('div','bx'+(hop?' hop':'')),c=character(L,s);
+  w.style.width=72*s+'px';w.style.height=(124+HAIR_ROOM)*s+'px';inner.style.width='100%';inner.style.height='100%';c.style.transform=`translate3d(0,${HAIR_ROOM*s}px,0)`;inner.append(c);w.append(inner);sc.append(w);return sc;
 }
-/* The player's character sitting down, for riding a duck. Turned toward the finish line. */
-function riderScene(color,face,s){
-  const k=v=>v*s,sc=el('div','scene rider'),w=el('div','world'),p=el('div','bx');
-  w.style.width=k(72)+'px';w.style.height=k(100)+'px';w.style.transform='rotateX(-12deg) rotateY(38deg)';
-  p.append(box(k(19),k(18),k(30),'#1D1D4F',k(16),k(82)),box(k(19),k(18),k(30),'#1D1D4F',k(37),k(82)),box(k(14),k(40),k(20),'#FFCF5C',k(0),k(38)),box(k(14),k(40),k(20),'#FFCF5C',k(58),k(38)),box(k(40),k(46),k(22),color,k(16),k(38)),box(k(36),k(36),k(36),'#FFCF5C',k(18),0,faceHTML(face)));
-  w.append(p);sc.style.width=k(72)+'px';sc.style.height=k(100)+'px';sc.append(w);return sc;
+/* The player's character sitting down, for riding a duck. Turned toward the finish line, weapon in the near hand. */
+function riderScene(L,s,armed=true){
+  const k=v=>v*s,up=HAIR_UP[L.hair],sc=el('div','scene rider'),w=el('div','world'),p=el('div','bx');
+  w.style.width=k(72)+'px';w.style.height=k(100+up)+'px';w.style.transform='rotateX(-12deg) rotateY(38deg)';p.style.transform=`translate3d(0,${k(up)}px,0)`;
+  p.append(box(k(19),k(18),k(30),'#1D1D4F',k(16),k(82)),box(k(19),k(18),k(30),'#1D1D4F',k(37),k(82)),box(k(14),k(40),k(20),SKIN,k(0),k(38)),box(k(14),k(40),k(20),SKIN,k(58),k(38)),box(k(40),k(46),k(22),L.color,k(16),k(38)),box(k(36),k(36),k(36),SKIN,k(18),0,faceHTML(L.face)),
+    ...hairBoxes(L,s,k(18),0),...(armed?weaponBoxes(L.weapon,s,k(-5),true):[]));
+  w.append(p);sc.style.width=k(72)+'px';sc.style.height=k(100+up)+'px';sc.append(w);return sc;
 }
-function duckRider(color,face,s){const d=el('div','duck');d.setAttribute('aria-hidden','true');d.append(riderScene(color,face,s),el('span','bird','🦆'));return d;}
-function headScene(color,face,size){
-  const sc=el('div','scene'),w=el('div','world');w.style.width=size+'px';w.style.height=size+'px';w.style.transform='rotateX(-18deg) rotateY(-30deg)';
-  w.append(box(size,size,size,'#FFCF5C',0,0,faceHTML(face)));sc.style.width=size*1.5+'px';sc.style.height=size*1.5+'px';sc.style.borderBottom=`6px solid ${color}`;sc.style.borderRadius='4px';sc.append(w);return sc;
+function duckRider(L,s,armed=true){const d=el('div','duck');d.setAttribute('aria-hidden','true');d.append(riderScene(L,s,armed),el('span','bird','🦆'));return d;}
+/* Just the head (with hair), for lists. Heads with tall hair are drawn a little smaller so they stay inside the same box. */
+function headScene(L,size,bar=true){
+  const up=HAIR_UP[L.hair],f=36/(36+up*.9),hs=size*f,u=hs/36,sc=el('div','scene'),w=el('div','world');w.style.width=hs+'px';w.style.height=hs+'px';
+  w.style.transform=`translateY(${(up*u*.5).toFixed(1)}px) rotateX(-18deg) rotateY(-30deg)`;
+  w.append(box(hs,hs,hs,SKIN,0,0,faceHTML(L.face)),...hairBoxes(L,u,0,0));sc.style.width=size*1.5+'px';sc.style.height=size*1.5+'px';if(bar){sc.style.borderBottom=`6px solid ${L.color}`;sc.style.borderRadius='4px';}sc.append(w);return sc;
 }
-function podiumScene(color,face,rank,stepH,s){
-  const W=120*s,D=80*s,cH=124*s,sc=el('div','scene'),w=el('div','world sway');w.style.width=W+'px';w.style.height=(cH+stepH)+'px';
-  const ch=el('div','bx'+(rank===1?' hop':''));ch.style.width=W+'px';ch.style.height=cH+'px';const c=character(color,face,s);c.style.transform=`translate3d(${(W-72*s)/2}px,0,0)`;ch.append(c);
-  w.append(ch,box(W,stepH,D,color,0,cH,`<span class="stepnum">${rank}</span>`));sc.append(w);return sc;
+/* A weapon on its own, for the picker. */
+function weaponScene(weapon,size){
+  const parts=WEAPON_PARTS[weapon]||[],sc=el('div','scene');sc.style.width=sc.style.height=size+'px';
+  if(!parts.length){sc.append(el('span','wnone','✋'));return sc;}
+  const x0=Math.min(...parts.map(p=>p[4])),x1=Math.max(...parts.map(p=>p[4]+p[0])),y0=Math.min(...parts.map(p=>p[5])),y1=Math.max(...parts.map(p=>p[5]+p[1]));
+  const s=Math.min(size*.86/(y1-y0),size*.6/(x1-x0),1.3),w=el('div','world'),g=el('div','bx');
+  w.style.width=(x1-x0)*s+'px';w.style.height=(y1-y0)*s+'px';w.style.transform='rotateX(-14deg) rotateY(-32deg)';
+  g.style.transform=`translate3d(${-x0*s}px,${-y0*s}px,${-13*s}px)`;g.append(...weaponBoxes(weapon,s));w.append(g);sc.append(w);return sc;
+}
+function podiumScene(L,rank,stepH,s){
+  const W=120*s,D=80*s,cH=(124+HAIR_ROOM)*s,sc=el('div','scene'),w=el('div','world sway');w.style.width=W+'px';w.style.height=(cH+stepH)+'px';
+  const ch=el('div','bx'+(rank===1?' hop':''));ch.style.width=W+'px';ch.style.height=cH+'px';const c=character(L,s);c.style.transform=`translate3d(${(W-72*s)/2}px,${HAIR_ROOM*s}px,0)`;ch.append(c);
+  w.append(ch,box(W,stepH,D,L.color,0,cH,`<span class="stepnum">${rank}</span>`));sc.append(w);return sc;
 }
 function put(id,node){const e=$(id);e.innerHTML='';e.append(node);}
 /* ---- animation helpers (CSS does the motion; reduced-motion users get none) ---- */
@@ -275,7 +320,13 @@ async function loadUsed(){if(H.usedLoaded)return;try{const k=await hostCall('hos
 let P={tick:null,localStart:0,answered:local.get('answered')||{}};
 /* How far into the round we are, from the server's start time. Clamped so a wrong device clock cannot break the timer. */
 function roundStart(s){const t=Date.parse(s.startedAt||'');if(!isFinite(t))return performance.now();const el=Date.now()-t;return el>=0&&el<=s.dur*1000?performance.now()-el:performance.now();}
-let myColor=local.get('color')||COLORS[Math.floor(Math.random()*COLORS.length)],myFace=local.get('face')||'smile';
+const anyOf=(list,skip=1)=>list[skip+Math.floor(Math.random()*(list.length-skip))][0];
+let myColor=local.get('color')||COLORS[Math.floor(Math.random()*COLORS.length)],myFace=pickId(FACES,local.get('face'));
+// First visit with the new character maker: start with a random hairstyle and weapon so everyone looks different.
+let myHair=local.get('hair'),myWeapon=local.get('weapon');
+if(!HAIRS.some(x=>x[0]===myHair)){myHair=anyOf(HAIRS);local.set('hair',myHair);}
+if(!WEAPONS.some(x=>x[0]===myWeapon)){myWeapon=anyOf(WEAPONS);local.set('weapon',myWeapon);}
+const myLook=()=>look({color:myColor,face:myFace,hair:myHair,weapon:myWeapon});
 
 function newToken(){try{return crypto.randomUUID()+'-'+crypto.randomUUID().slice(0,8);}catch(e){return Array.from({length:4},()=>Math.random().toString(36).slice(2)).join('')+Date.now().toString(36);}}
 async function rpc(fn,args){const {data,error}=await sb.rpc(fn,args);if(error)throw error;return data;}
@@ -287,18 +338,18 @@ async function loadLobbies(){
   const since=new Date(Date.now()-12*3600e3).toISOString();
   const [{data:ls},{data:ps}]=await Promise.all([
     sb.from('lobbies').select('id,name,has_password,state,updated_at').gte('updated_at',since).order('created_at',{ascending:false}),
-    sb.from('players').select('lobby_id,role,nick,color,face')]);
+    sb.from('players').select('lobby_id,role,nick,color,face,hair,weapon')]);
   LOBBIES=ls||[];ALLP=ps||[];
 }
 async function loadLobby(){
   if(!ME){LOBBY=null;STATE=null;SCORES=null;PLAYERS={};return;}
   const [{data:l},{data:ps}]=await Promise.all([
     sb.from('lobbies').select('id,name,has_password,state,scores,started_at').eq('id',ME.lobby_id).maybeSingle(),
-    sb.from('players').select('id,role,nick,color,face,joined').eq('lobby_id',ME.lobby_id)]);
+    sb.from('players').select('id,role,nick,color,face,hair,weapon,joined').eq('lobby_id',ME.lobby_id)]);
   LOBBY=l||null;
   if(!l){STATE=null;SCORES=null;PLAYERS={};return;}
   STATE={...l.state,startedAt:l.started_at};SCORES=l.scores||{};
-  const o={};(ps||[]).forEach(p=>o[p.id]={role:p.role,nick:p.nick,color:p.color,face:p.face,joined:Date.parse(p.joined)});PLAYERS=o;
+  const o={};(ps||[]).forEach(p=>o[p.id]={role:p.role,nick:p.nick,color:p.color,face:p.face,hair:p.hair,weapon:p.weapon,joined:Date.parse(p.joined)});PLAYERS=o;
 }
 async function loadAnswers(){if(!isHost())return;try{const rows=await rpc('host_answers',{p_token:TOKEN});const o={};(rows||[]).forEach(r=>o[r.player_id]={session:r.session,idx:r.idx,choice:r.choice,value:r.value,text:r.text,ms:r.ms});ANSWERS=o;onAnswers();}catch(e){}}
 
@@ -362,13 +413,25 @@ const playerIds=()=>Object.keys(PLAYERS).filter(id=>PLAYERS[id].role==='player')
 /* ================= LOBBY BROWSER ================= */
 function buildPickers(){
   const sw=$('swatches');if(sw.firstChild)return;
-  COLORS.forEach(c=>{const b=el('button','sw');b.type='button';b.dataset.c=c;b.style.setProperty('--c',c);b.setAttribute('aria-label','Shirt color');b.onclick=()=>{myColor=c;local.set('color',c);paintPickers();drawPreview();};sw.append(b);});
-  FACES.forEach(([f,l])=>{const b=el('button','fbtn',l);b.type='button';b.dataset.f=f;b.onclick=()=>{myFace=f;local.set('face',f);paintPickers();drawPreview();};$('faces').append(b);});
+  const set=(k,v)=>{if(k==='color')myColor=v;else if(k==='face')myFace=v;else if(k==='hair')myHair=v;else myWeapon=v;local.set(k,v);paintPickers();drawPreview();};
+  COLORS.forEach(c=>{const b=el('button','sw');b.type='button';b.dataset.c=c;b.style.setProperty('--c',c);b.setAttribute('aria-label','Shirt color');b.onclick=()=>set('color',c);sw.append(b);});
+  FACES.forEach(([f,l])=>{const b=el('button','ftile');b.type='button';b.dataset.f=f;b.setAttribute('aria-label',l+' face');b.title=l;b.innerHTML=faceHTML(f);b.onclick=()=>set('face',f);$('faces').append(b);});
+  HAIRS.forEach(([id,l])=>{const b=el('button','ctile');b.type='button';b.dataset.h=id;b.append(el('span','tprev'),el('span',null,l));b.onclick=()=>set('hair',id);$('hairs').append(b);});
+  WEAPONS.forEach(([id,l,line])=>{const b=el('button','ctile');b.type='button';b.dataset.w=id;b.title=id==='none'?'No weapon':line.replace('Armed with the ','');b.append(weaponScene(id,46),el('span',null,l));b.onclick=()=>set('weapon',id);$('weapons').append(b);});
+  document.querySelectorAll('#charTabs button').forEach(t=>t.onclick=()=>{document.querySelectorAll('#charTabs button').forEach(o=>{const on=o===t;o.setAttribute('aria-selected',String(on));$(o.dataset.t).hidden=!on;});});
+  $('randChar').onclick=()=>{myColor=COLORS[Math.floor(Math.random()*COLORS.length)];myFace=anyOf(FACES,0);myHair=anyOf(HAIRS,0);myWeapon=anyOf(WEAPONS);
+    local.set('color',myColor);local.set('face',myFace);local.set('hair',myHair);local.set('weapon',myWeapon);paintPickers();drawPreview();animIn($('pPreview'));beep(740,.08);};
   $('nick').value=local.get('nick')||'';$('nick').addEventListener('input',()=>local.set('nick',$('nick').value.trim()));
   paintPickers();drawPreview();
 }
-function paintPickers(){document.querySelectorAll('#swatches .sw').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.c===myColor)));document.querySelectorAll('#faces .fbtn').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.f===myFace)));}
-function drawPreview(){put('pPreview',charScene(myColor,myFace,innerWidth<760?.95:1.3,true));}
+function paintPickers(){
+  const on=(sel,key,v)=>document.querySelectorAll(sel).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[key]===v)));
+  on('#swatches .sw','c',myColor);on('#faces .ftile','f',myFace);on('#hairs .ctile','h',myHair);on('#weapons .ctile','w',myWeapon);
+  // hair previews follow the shirt color and face
+  document.querySelectorAll('#hairs .ctile').forEach(b=>{const p=b.querySelector('.tprev');p.innerHTML='';p.append(headScene({...myLook(),hair:b.dataset.h},26,false));});
+  $('charLine').textContent=WEAPONS.find(x=>x[0]===myWeapon)[2];
+}
+function drawPreview(){put('pPreview',charScene(myLook(),innerWidth<760?.95:1.3,true));}
 function needNick(){const n=$('nick').value.trim().slice(0,18);if(!n){$('browserErr').textContent='Type your nickname first.';$('nick').focus();return null;}$('browserErr').textContent='';return n;}
 
 let browserKey='';
@@ -377,20 +440,20 @@ function renderBrowser(){
   const rows=LOBBIES.map(l=>{const ps=ALLP.filter(p=>p.lobby_id===l.id);return {...l,host:ps.find(p=>p.role==='host'),count:ps.filter(p=>p.role==='player').length};}).filter(l=>l.host);
   $('lobbyCount').textContent=rows.length?`${rows.length} open ${rows.length===1?'lobby':'lobbies'}`:'Open lobbies';
   $('lobbyEmpty').hidden=rows.length>0;
-  const key=JSON.stringify(rows.map(r=>[r.id,r.name,r.has_password,r.count,r.host.nick,r.host.color,r.host.face,lobbyStatus(r.state)[1]]));
+  const key=JSON.stringify(rows.map(r=>[r.id,r.name,r.has_password,r.count,r.host.nick,r.host.color,r.host.face,r.host.hair,lobbyStatus(r.state)[1]]));
   if(key===browserKey)return;browserKey=key;
   const open=document.querySelector('.lcard .pwrow:not([hidden])'),openId=open&&open.closest('.lcard').dataset.id,typed=open&&open.querySelector('input').value;
   const list=$('lobbyList');list.innerHTML='';
   rows.forEach(r=>{
     const c=el('div','lcard');c.dataset.id=r.id;const[sc,st]=lobbyStatus(r.state);
-    const top=el('div','top');top.append(headScene(r.host.color,r.host.face,30));
+    const top=el('div','top');top.append(headScene(look(r.host),30));
     const tt=el('div');tt.style.minWidth='0';tt.append(el('div','nm',(r.has_password?'🔒 ':'')+r.name),el('div','hint','Host: '+r.host.nick));top.append(tt);
     const meta=el('div','meta');meta.append(el('span','st '+sc,st),el('span',null,`${r.count} ${r.count===1?'player':'players'}`));
     const join=el('button','btn mint',r.has_password?'Join with password':'Join');join.type='button';
     const pw=el('div','pwrow');pw.hidden=true;const pin=el('input');pin.type='text';pin.placeholder='Lobby password';pin.setAttribute('aria-label','Password for '+r.name);pin.autocomplete='off';
     const go=el('button','btn mint','Join');go.type='button';pw.append(pin,go);
     const doJoin=async(pass)=>{const nick=needNick();if(!nick)return;join.disabled=go.disabled=true;
-      try{await rpc('lobby_join',{p_token:TOKEN,p_lobby:r.id,p_password:pass||null,p_nick:nick,p_color:myColor,p_face:myFace});ensureAudio();beep(880,.1);await refresh();}
+      try{await rpc('lobby_join',{p_token:TOKEN,p_lobby:r.id,p_password:pass||null,p_nick:nick,p_color:myColor,p_face:myFace,p_hair:myHair,p_weapon:myWeapon});ensureAudio();beep(880,.1);await refresh();}
       catch(e){const m=errCode(e);$('browserErr').textContent=m.includes('wrong_password')?'Wrong password for '+r.name+'.':m.includes('lobby_full')?'That lobby is full.':m.includes('lobby_not_found')?'That lobby just closed.':'Could not join. Try again.';}
       join.disabled=go.disabled=false;};
     join.onclick=()=>{if(r.has_password){pw.hidden=false;join.hidden=true;pin.focus();}else doJoin(null);};
@@ -405,7 +468,7 @@ $('createForm').addEventListener('submit',async e=>{
   e.preventDefault();const nick=needNick();if(!nick)return;const name=$('lobbyName').value.trim().slice(0,30);
   if(!name){$('browserErr').textContent='Give the lobby a name.';return;}
   $('createBtn').disabled=true;
-  try{await rpc('lobby_create',{p_token:TOKEN,p_name:name,p_password:$('lobbyPw').value||null,p_nick:nick,p_color:myColor,p_face:myFace});
+  try{await rpc('lobby_create',{p_token:TOKEN,p_name:name,p_password:$('lobbyPw').value||null,p_nick:nick,p_color:myColor,p_face:myFace,p_hair:myHair,p_weapon:myWeapon});
     $('createForm').hidden=true;$('createOpen').hidden=false;$('lobbyPw').value='';ensureAudio();beep(880,.1);await refresh();}
   catch(err){$('browserErr').textContent=errCode(err).includes('too_many_lobbies')?'There are too many open lobbies right now. Join one instead.':'Could not create the lobby. Try again.';}
   $('createBtn').disabled=false;
@@ -453,12 +516,12 @@ function demoRace(){
   $('dCard').classList.add('racecard');
   $('dCat').textContent='Practice race';$('dText').textContent=RACE_NAMES[rnd(0,RACE_NAMES.length-1)];$('dHint').hidden=true;$('dNote').hidden=true;
   ['dOpts','dTxt','dNum','dSlideWrap','dResult'].forEach(i=>$(i).hidden=true);$('dClock').textContent='🦆';
-  const nick=($('nick').value.trim()||'You').slice(0,18),riders=[['me',nick,myColor,myFace],...DEMO_BOTS.map(b=>[b[0],b[0]+' duck',b[1],b[2]])];
+  const nick=($('nick').value.trim()||'You').slice(0,18),riders=[['me',nick,myLook()],...DEMO_BOTS.map(b=>[b[0],b[0]+' duck',look({color:b[1],face:b[2],hair:b[3],weapon:b[4]})])];
   const r={ids:shuffle(riders.map(x=>x[0])),order:shuffle(riders.map(x=>x[0])),place:1,seed:rid(),dur:7};
   const race=el('div','race small'),cnt=el('div','race-count'),lanes=el('div');race.append(cnt,lanes);
   const disp=$('dDisp');disp.innerHTML='';disp.append(race);
   animIn($('dCard'));
-  const RV=buildRiver(lanes,riders.map(x=>({id:x[0],name:x[1].replace(' (you)',''),color:x[2],face:x[3],me:x[0]==='me'})),{small:true,dur:r.dur});
+  const RV=buildRiver(lanes,riders.map(x=>({id:x[0],name:x[1],...x[2],me:x[0]==='me'})),{small:true,dur:r.dur});
   const plan=racePlan(r),t0=performance.now();let last=null;
   (function f(){if(run!==DM.run)return;const t=(performance.now()-t0)/1000-3,c=t<0?String(Math.ceil(-t)):t<.8?'GO!':'';
     if(c!==last){last=c;cnt.textContent=c;if(c)beep(c==='GO!'?990:520,.1);}
@@ -520,7 +583,7 @@ const ordinal=n=>n+(n%100>=11&&n%100<=13?'th':{1:'st',2:'nd',3:'rd'}[n%10]||'th'
 function boardRows(container,rows,{showGain=true,limit=10,highlight=null}={}){
   const c=$(container);c.innerHTML='';
   rows.slice(0,limit).forEach(r=>{const p=PLAYERS[r.id]||{};const row=el('div','rrow'+(r.id===highlight?' me':''));
-    row.append(el('span','rk',r.place),headScene(p.color||COLORS[0],p.face,22),el('span','nm',playerName(r.id)),el('span','gn',showGain&&r.gain?'+'+r.gain:''),el('span','sc',r.score));c.append(row);});
+    row.append(el('span','rk',r.place),headScene(look(p),22),el('span','nm',playerName(r.id)),el('span','gn',showGain&&r.gain?'+'+r.gain:''),el('span','sc',r.score));c.append(row);});
   stagger(c);if(!rows.length)c.append(el('p','hint','No players yet.'));
 }
 
@@ -557,9 +620,9 @@ function renderHostLobby(){
   $('playerLink').textContent=location.origin+location.pathname;
   const ids=playerIds().sort((a,b)=>(PLAYERS[a].joined||0)-(PLAYERS[b].joined||0));
   $('pCount').textContent=ids.length;$('rosterEmpty').hidden=ids.length>0;
-  const key=ids.map(id=>id+PLAYERS[id].nick+PLAYERS[id].color+PLAYERS[id].face).join('|');if(key===rosterKey)return;rosterKey=key;
+  const key=ids.map(id=>id+PLAYERS[id].nick+PLAYERS[id].color+PLAYERS[id].face+PLAYERS[id].hair).join('|');if(key===rosterKey)return;rosterKey=key;
   const r=$('roster');r.innerHTML='';
-  ids.forEach(id=>{const p=PLAYERS[id],c=el('div','pcard');c.append(headScene(p.color||COLORS[0],p.face,30),el('span',null,p.nick));
+  ids.forEach(id=>{const p=PLAYERS[id],c=el('div','pcard');c.append(headScene(look(p),30),el('span',null,p.nick));
     const k=el('button','kick','×');k.type='button';k.title='Remove';k.setAttribute('aria-label','Remove '+p.nick);
     k.onclick=async()=>{try{await hostCall('host_kick',{p_player:id});await refresh();}catch(e){}};
     const cr=el('button','crown','👑');cr.type='button';cr.title='Make host';cr.setAttribute('aria-label','Make '+p.nick+' the host');
@@ -664,7 +727,7 @@ function paintHostOpts(){
     const closest=q.type==='number'&&!q.exact;
     nr.append(el('h3',null,closest?'Closest guesses':q.type==='slide'?`Fastest solvers · ${s.right||0} solved`:`Fastest correct · ${s.right||0} got it`));
     const wrap=el('div','board');nr.append(wrap);
-    (s.closest||[]).forEach(c=>{const p=PLAYERS[c.id]||{};const row=el('div','rrow');row.append(el('span','rk',c.p),headScene(p.color||COLORS[0],p.face,22),el('span','nm',playerName(c.id)),el('span','gn',''),el('span','sc',c.v));wrap.append(row);});stagger(wrap);
+    (s.closest||[]).forEach(c=>{const p=PLAYERS[c.id]||{};const row=el('div','rrow');row.append(el('span','rk',c.p),headScene(look(p),22),el('span','nm',playerName(c.id)),el('span','gn',''),el('span','sc',c.v));wrap.append(row);});stagger(wrap);
     if(!(s.closest||[]).length)wrap.append(el('p','hint',q.type==='slide'?'Nobody solved this one.':'Nobody got this one.'));
   }
 }
@@ -709,7 +772,7 @@ function renderHostFinal(){
   $('hTie').hidden=!tie;$('hPodium').hidden=!!tie;
   if(tie){
     $('hWinner').textContent=`It's a tie for ${ordinal(tie.place)} place!`;
-    const heads=$('tieHeads');heads.innerHTML='';tie.ids.forEach(id=>{const p=PLAYERS[id]||{},c=el('div','pcard');c.append(headScene(p.color||COLORS[0],p.face,30),el('span',null,playerName(id)));heads.append(c);});stagger(heads);
+    const heads=$('tieHeads');heads.innerHTML='';tie.ids.forEach(id=>{const p=PLAYERS[id]||{},c=el('div','pcard');c.append(headScene(look(p),30),el('span',null,playerName(id)));heads.append(c);});stagger(heads);
     $('tieText').textContent=`${tie.ids.length} players have ${rows.find(r=>r.id===tie.ids[0]).score} points. A duck race decides who places higher. Every duck has the same chance.`;
     $('raceBtn').onclick=()=>startRace(tie);
     animIn($('hWinner'));stopConfetti();
@@ -765,11 +828,11 @@ function buildRiver(box,riders,{small=false,board=false,dur=10}={}){
   const lead=board?el('ol','rlead'):null;if(lead){lead.hidden=true;view.append(lead);}
   const you=el('div','ryou');you.hidden=true;view.append(you);
   riders.forEach((p,i)=>{const w=el('div','dk'+(p.me?' me':'')),tag=el('span','dtag',p.name+(p.me?' (you)':''));tag.style.setProperty('--c',p.color);
-    const d=duckRider(p.color,p.face,s);d.style.setProperty('--bird',bird+'px');d.style.animationDelay=(-(i*.17)%.6).toFixed(2)+'s';
+    const d=duckRider(p,s,n<=16);d.style.setProperty('--bird',bird+'px');d.style.animationDelay=(-(i*.17)%.6).toFixed(2)+'s';
     w.append(tag,d);w.style.zIndex=10+i;world.append(w);D[p.id]={w,tag,name:p.name,y:0,fin:false};});
   let G={W:600,H:300,L:1400,sx:80,fx:1480,ww:1800},last=null,lastLead=0;
   function relayout(){
-    const top0=small?34:48,dh0=bird*.62+s*100+20,need=top0+4+dh0+(dh0+6)*(n-1)+18;view.style.height=n<=8&&need>(small?310:320)?need+'px':'';
+    const top0=small?34:48,dh0=bird*.62+s*(100+HAIR_ROOM)+20,need=top0+4+dh0+(dh0+6)*(n-1)+18;view.style.height=n<=8&&need>(small?310:320)?need+'px':'';
     const W=view.clientWidth||600,H=view.clientHeight||300,top=top0,L=Math.max(W*(2.2+Math.min(dur,60)/25),820),sx=Math.min(110,W*.16);
     G={W,H,L,sx,fx:sx+L,ww:sx+L+W*.8};world.style.width=G.ww+'px';start.style.left=sx+'px';fin.style.left=G.fx+'px';bank.style.height=top+'px';
     bank.innerHTML='';for(let x=sx+(small?150:220),k=0;x<G.fx-140;x+=small?250:340,k++){const sg=el('span','rsign',BANKS[k%BANKS.length]);sg.style.left=x+'px';sg.style.setProperty('--c',BANK_C[k%BANK_C.length]);bank.append(sg);}
@@ -799,7 +862,7 @@ function renderRace(isHost){
   if(isHost){$('hRaceFact').hidden=!r.fact;$('hRaceFact').textContent=r.fact?'2San fact: '+r.fact:'';$('raceDoneBtn').textContent=r.game&&STATE.idx+1<STATE.total?'Show leaderboard':'Show final results';}
   else $('pRaceWait').textContent=r.game&&STATE.idx+1<STATE.total?'Waiting for the host to show the leaderboard.':'Waiting for the host to show the final results.';
   const live=isHost?null:$('pRaceLive');if(live){live.hidden=!r.ids.includes(me);live.textContent='';}
-  const riders=r.ids.map(id=>{const p=PLAYERS[id]||{};return {id,name:playerName(id),color:p.color||COLORS[0],face:p.face,me:id===me};});
+  const riders=r.ids.map(id=>{const p=PLAYERS[id]||{};return {id,name:playerName(id),...look(p),me:id===me};});
   const RV=buildRiver($(P_+'RaceLanes'),riders,{small:!isHost,board:isHost&&n>3,dur:r.dur});
   const plan=racePlan(r),el0=Date.now()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<600000?el0:0);
   let lastCount=null,done=false,lastLive=0;
@@ -826,7 +889,7 @@ function showRaceResult(P_,r,me){
 function drawPodium(id,rows){
   const pod=$(id);pod.innerHTML='';const s=innerWidth<560?.66:1,H3={1:150*s,2:105*s,3:70*s};
   const t=rows.slice(0,3),order=[t[1],t[0],t[2]].filter(Boolean);
-  order.forEach(r=>{const p=PLAYERS[r.id]||{},rank=Math.min(r.place,3),col=el('div','col');col.style.setProperty('--i',rank===1?2:rank===2?1:0);col.append(podiumScene(p.color||COLORS[0],p.face,rank,H3[rank],s),el('div','pname',playerName(r.id)),el('div','pscore',r.score+' pts'));pod.append(col);});
+  order.forEach(r=>{const p=PLAYERS[r.id]||{},rank=Math.min(r.place,3),col=el('div','col');col.style.setProperty('--i',rank===1?2:rank===2?1:0);col.append(podiumScene(look(p),rank,H3[rank],s),el('div','pname',playerName(r.id)),el('div','pscore',r.score+' pts'));pod.append(col);});
 }
 $('newGameBtn').onclick=async()=>{const session=rid();try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await setState({session,phase:'lobby'},true);}catch(e){}finalKey='';rosterKey='';};
 
@@ -836,8 +899,8 @@ let pKey='';
 function renderPlayer(){
   const uid=ME.player_id,me=PLAYERS[uid];if(!me)return;
   const s=STATE,ph=s?s.phase:'lobby';
-  if(ph==='lobby'){const host=Object.values(PLAYERS).find(p=>p.role==='host'),n=playerIds().length,k='wait'+me.color+me.face+me.nick+n+LOBBY.name+(host&&host.nick);
-    if(pKey!==k){pKey=k;put('pWaitChar',charScene(me.color,me.face,1.5,true));$('pWaitTitle').textContent=`You're in ${LOBBY.name}!`;
+  if(ph==='lobby'){const host=Object.values(PLAYERS).find(p=>p.role==='host'),n=playerIds().length,k='wait'+me.color+me.face+me.hair+me.weapon+me.nick+n+LOBBY.name+(host&&host.nick);
+    if(pKey!==k){pKey=k;put('pWaitChar',charScene(look(me),1.5,true));$('pWaitTitle').textContent=`You're in ${LOBBY.name}!`;
       $('pWaitText').textContent=`Waiting for ${host?host.nick:'the host'} to start. ${n} ${n===1?'player':'players'} in this lobby.`;}
     playerShow('pWait');return;}
   if(ph==='question')return renderPlayerQ();
@@ -914,7 +977,7 @@ function renderPlayerFinal(){
   if(pKey===k+JSON.stringify(STATE.tb||{}))return;pKey=k+JSON.stringify(STATE.tb||{});clearInterval(P.tick);
   const tie=nextTie(rows),inTie=tie&&tie.ids.includes(uid);
   $('pFinalTitle').textContent=inTie?`Tie for ${ordinal(tie.place)}! Watch the duck race.`:r&&r.place===1?'You won!':r&&r.place<=3?`Podium! You placed ${ordinal(r.place)}.`:'Thanks for playing!';
-  put('pFinalChar',charScene(me.color,me.face,1.5,r&&r.place<=3));
+  put('pFinalChar',charScene(look(me),1.5,r&&r.place<=3));
   $('pFinalScore').textContent=r?r.score:0;$('pFinalRank').textContent=r?`${r.place} / ${rows.length}`:'–';
   boardRows('pTop',rows,{showGain:false,limit:5,highlight:uid});if(r&&r.place<=3&&!inTie){confetti();fanfare();}
 }

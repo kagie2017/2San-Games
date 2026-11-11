@@ -62,6 +62,28 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .face.cool .eye{height:12%;top:34%;width:20%}.face.cool .eye.l{left:18%}.face.cool .eye.r{right:18%}
 .face.cool .bridge{position:absolute;left:38%;right:38%;top:37%;height:4%;background:var(--ink)}
 .face.wow .mouth{left:40%;right:40%;height:18%;border-width:3px;border-radius:50%}
+.face.grin .mouth{left:24%;right:24%;top:56%;height:22%;border:0;background:var(--ink);border-radius:2px 2px 60% 60%;box-shadow:inset 0 2px 0 1px #fff}
+.face.wink .eye.r{height:5%;top:40%;width:17%;right:24%}
+.face.laugh .eye{background:none;height:12%;top:30%;width:18%;border:solid var(--ink);border-width:3px 0 0;border-radius:50% 50% 0 0}
+.face.laugh .eye.l{left:22%}.face.laugh .eye.r{right:22%}
+.face.laugh .mouth{left:26%;right:26%;top:54%;height:24%;border:0;background:var(--ink);border-radius:2px 2px 60% 60%}
+.face.love .eye{background:#E5334B;width:22%;height:22%;top:28%;border-radius:0;clip-path:polygon(50% 100%,0 45%,0 15%,20% 0,50% 22%,80% 0,100% 15%,100% 45%)}
+.face.love .eye.l{left:19%}.face.love .eye.r{right:19%}
+.face.sleepy .eye{height:5%;top:42%;width:18%}.face.sleepy .eye.l{left:22%}.face.sleepy .eye.r{right:22%}
+.face.sleepy .mouth{left:43%;right:43%;top:60%;height:13%;border-width:3px;border-radius:50%}
+.face.cheeky .mouth::after{content:"";position:absolute;right:6%;top:55%;width:40%;height:150%;background:#FF6B8A;border:2px solid var(--ink);border-top:0;border-radius:0 0 50% 50%}
+.face.fierce .eye{height:20%;top:33%;width:16%}
+.face.fierce .eye.l{left:23%;clip-path:polygon(0 0,100% 55%,100% 100%,0 100%)}
+.face.fierce .eye.r{right:23%;clip-path:polygon(0 55%,100% 0,100% 100%,0 100%)}
+.face.fierce .mouth{top:64%;height:12%;border-width:3px 0 0;border-radius:50% 50% 0 0}
+/* decals on the 2San device weapons */
+.wd{position:absolute;display:block}
+.wd.win{left:18%;right:18%;top:22%;height:30%;background:linear-gradient(180deg,#fff 0 28%,#FB7569 28% 42%,#fff 42% 58%,#0084DB 58% 72%,#fff 72%);border:1px solid var(--ink)}
+.wd.plus{inset:0;background:linear-gradient(#fff,#fff) center/56% 16% no-repeat,linear-gradient(#fff,#fff) center/16% 56% no-repeat}
+.wd.drop{left:0;right:0;top:34%;height:44%;background:radial-gradient(circle at 50% 50%,#0084DB 0 26%,transparent 28%),#fff}
+.wd.lcd{left:16%;right:16%;top:42%;height:28%;background:#fff;border:1px solid var(--ink)}
+.wd.dot{left:30%;right:30%;top:20%;bottom:20%;background:#fff;border-radius:50%}
+.wd.tri{left:18%;right:18%;top:12%;height:54%;background:repeating-linear-gradient(180deg,#FB7569 0 10%,#fff 10% 33.33%);border:1px solid var(--ink)}
 .stepnum{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-size:3rem;color:var(--white);-webkit-text-stroke:2px var(--navy);paint-order:stroke fill}
 /* lobby doors */
 .doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:28px}
@@ -264,9 +286,18 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .sw{all:unset;width:38px;height:38px;border-radius:9px;border:3px solid var(--navy);background:var(--c);cursor:pointer;box-shadow:0 3px 0 var(--navy)}
 .sw[aria-pressed=true]{outline:4px solid var(--white);outline-offset:0;box-shadow:0 0 0 7px var(--navy)}
 .sw:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
-.faces{display:flex;gap:8px}
-.fbtn{font:inherit;font-weight:700;border:3px solid var(--navy);border-radius:10px;background:var(--paper);padding:6px 12px;cursor:pointer;box-shadow:0 3px 0 var(--navy);color:var(--navy)}
-.fbtn[aria-pressed=true]{background:var(--blue);color:var(--white)}
+.faces{display:flex;flex-wrap:wrap;gap:8px}
+.ftile{all:unset;position:relative;width:38px;height:38px;border-radius:9px;border:3px solid var(--navy);background:#FFCF5C;cursor:pointer;box-shadow:0 3px 0 var(--navy)}
+.ftile[aria-pressed=true]{outline:4px solid var(--white);outline-offset:0;box-shadow:0 0 0 7px var(--navy)}
+.ftile:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.ctabs{display:flex;gap:6px;margin-bottom:12px}
+.ctabs button{flex:1 1 0;min-width:0;font:inherit;font-weight:700;font-size:.82rem;padding:6px 2px;border:3px solid var(--navy);border-radius:10px;background:var(--paper);color:var(--navy);cursor:pointer;box-shadow:0 3px 0 var(--navy)}
+.ctabs button[aria-selected=true]{background:var(--navy);color:var(--white)}
+.cgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ctile{font:inherit;font-weight:700;font-size:.74rem;line-height:1.2;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;min-width:0;padding:6px 2px;border:3px solid var(--navy);border-radius:10px;background:var(--paper);color:var(--navy);cursor:pointer;box-shadow:0 3px 0 var(--navy)}
+.ctile[aria-pressed=true]{background:var(--sun);color:var(--ink)}
+.ctile .scene,.ctile .tprev{pointer-events:none}.ctile .tprev{display:block}
+.wnone{font-size:1.5rem;line-height:1}
 .center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
 .status{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:var(--white);border-radius:10px;padding:8px 14px;font-weight:700;font-size:.9rem;z-index:30;max-width:calc(100% - 32px)}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:20}
@@ -308,8 +339,8 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--navy)}
 .btn:not(:disabled):active{transform:translateY(4px);box-shadow:0 1px 0 var(--navy)}
 .btn.big:not(:disabled):hover{box-shadow:0 10px 0 var(--navy)}
-.sw,.fbtn{transition:transform .12s}
-.sw:hover,.fbtn:hover{transform:translateY(-2px)}
+.sw,.ftile,.ctile,.ctabs button{transition:transform .12s}
+.sw:hover,.ftile:hover,.ctile:hover{transform:translateY(-2px)}
 .screenflash{position:fixed;inset:0;pointer-events:none;z-index:25;opacity:0}
 .screenflash.good{background:var(--mint)}.screenflash.bad{background:var(--coral)}
 .screenflash.go{animation:tint .7s ease-out both}
@@ -351,9 +382,18 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
         <div class="blk" style="display:flex;flex-direction:column;gap:14px">
           <h3 style="margin:0">Your character</h3>
           <div class="scene" id="pPreview"></div>
+          <p class="hint" id="charLine" style="margin:0;text-align:center"></p>
           <div><label class="lbl" for="nick">Nickname</label><input type="text" id="nick" maxlength="18" autocomplete="nickname" placeholder="Type your nickname"></div>
-          <div><span class="lbl">Shirt color</span><div class="swatches" id="swatches" style="margin-top:6px"></div></div>
-          <div><span class="lbl">Face</span><div class="faces" id="faces" style="margin-top:6px"></div></div>
+          <div>
+            <div class="ctabs" id="charTabs" role="group" aria-label="Customize your character">
+              <button type="button" data-t="tabShirt" aria-selected="true">Shirt</button><button type="button" data-t="tabFace" aria-selected="false">Face</button><button type="button" data-t="tabHair" aria-selected="false">Hair</button><button type="button" data-t="tabWeapon" aria-selected="false">Weapon</button>
+            </div>
+            <div id="tabShirt"><div class="swatches" id="swatches"></div></div>
+            <div id="tabFace" hidden><div class="faces" id="faces"></div></div>
+            <div id="tabHair" hidden><div class="cgrid" id="hairs"></div><p class="hint" style="margin:8px 0 0">Hair color matches your shirt.</p></div>
+            <div id="tabWeapon" hidden><div class="cgrid" id="weapons"></div><p class="hint" style="margin:8px 0 0">Every weapon is a 2San device.</p></div>
+          </div>
+          <button class="btn sm" id="randChar" type="button">🎲 Surprise me</button>
         </div>
         <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
           <div class="actions" style="justify-content:space-between">
