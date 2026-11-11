@@ -193,9 +193,16 @@ const GAMES={
      return {q:{type:'choice',text:'Which one was NOT on the big screen?',cat:'Memory Flash · 2San kit',options:opts,display:{kind:'flash',items:shown,ms:5000,hostOnly:true}},key:{correct:opts.indexOf(missing),answer:missing}};}},
  slide:{name:'Sliding Puzzle',icon:'🧩',bg:'var(--blue)',desc:'Slide the tiles to spell 2SAN HOME. Same puzzle for everyone; fastest wins.',secs:90,count:3,gen:true,
    make:()=>({q:{type:'slide',text:'Slide the tiles to spell 2SAN HOME!',cat:'Sliding Puzzle',tiles:slideStart()},key:{answer:'2 S A / N H O / M E'}})},
+ duck:{name:'2San Duck Race',icon:'🦆',bg:'var(--sun)',desc:'Everyone rides a duck in their 2San colors. Pure luck: any duck can win! 1st scores 1000, 2nd 900, 3rd 800 and so on.',secs:15,count:3,race:true,gen:true,
+   make:()=>({q:{type:'race',text:'Cheer for your duck!',cat:'2San Duck Race'},key:{answer:''}})},
  num:{name:'Closest Number',icon:'#',bg:'var(--mint)',desc:'Guess the 2San number. The closer you are, the more points.',secs:30,count:8,pool:NUM,
    make:it=>({q:{type:'number',text:it.q,cat:it.c},key:{value:it.a,answer:String(it.a),closest:true}})}
 };
+/* Duck race names and fun facts, all from 2san.com. */
+const RACE_NAMES=['The Agility Sprint','The Fearlessness Dash','The Integrity Cup','The Rigor Regatta','The Excellence Classic','The Swimcount Swim',
+ 'The Safe Sip+ Splash','The 10-Minute Results Race','Better Care, Better Life Cup','Journey to Self-testing for All','The Four Continents Relay','The Green Office Paddle','The Home Water Test Trial','The Reusable Cup Race'];
+const RACE_FACTS=()=>TF.filter(t=>t.a).map(t=>t.q);
+const DEMO_BOTS=[['Agility','#0084DB','cool'],['Rigor','#1DD6A5','smile'],['Integrity','#7E43CA','wow']];
 const OPT_STYLE=[{c:'var(--coral)',s:'▲'},{c:'var(--blue)',s:'◆'},{c:'var(--mint)',s:'●',fg:'var(--ink)'},{c:'var(--purple)',s:'■'}];
 const COLORS=['#FB7569','#0084DB','#1DD6A5','#7E43CA','#FFC83D','#FF7AB6','#FF9A3D','#19B5C9','#8FD14F','#5A6FD6'];
 const FACES=[['smile','Smile'],['cool','Shades'],['wow','Wow']];
@@ -225,6 +232,14 @@ function charScene(color,face,s,hop){
   const sc=el('div','scene'),w=el('div','world sway'),inner=el('div','bx'+(hop?' hop':''));
   w.style.width=72*s+'px';w.style.height=124*s+'px';inner.style.width='100%';inner.style.height='100%';inner.append(character(color,face,s));w.append(inner);sc.append(w);return sc;
 }
+/* The player's character sitting down, for riding a duck. Turned toward the finish line. */
+function riderScene(color,face,s){
+  const k=v=>v*s,sc=el('div','scene rider'),w=el('div','world'),p=el('div','bx');
+  w.style.width=k(72)+'px';w.style.height=k(100)+'px';w.style.transform='rotateX(-12deg) rotateY(38deg)';
+  p.append(box(k(19),k(18),k(30),'#1D1D4F',k(16),k(82)),box(k(19),k(18),k(30),'#1D1D4F',k(37),k(82)),box(k(14),k(40),k(20),'#FFCF5C',k(0),k(38)),box(k(14),k(40),k(20),'#FFCF5C',k(58),k(38)),box(k(40),k(46),k(22),color,k(16),k(38)),box(k(36),k(36),k(36),'#FFCF5C',k(18),0,faceHTML(face)));
+  w.append(p);sc.style.width=k(72)+'px';sc.style.height=k(100)+'px';sc.append(w);return sc;
+}
+function duckRider(color,face,s){const d=el('div','duck');d.setAttribute('aria-hidden','true');d.append(riderScene(color,face,s),el('span','bird','🦆'));return d;}
 function headScene(color,face,size){
   const sc=el('div','scene'),w=el('div','world');w.style.width=size+'px';w.style.height=size+'px';w.style.transform='rotateX(-18deg) rotateY(-30deg)';
   w.append(box(size,size,size,'#FFCF5C',0,0,faceHTML(face)));sc.style.width=size*1.5+'px';sc.style.height=size*1.5+'px';sc.style.borderBottom=`6px solid ${color}`;sc.style.borderRadius='4px';sc.append(w);return sc;
@@ -357,7 +372,7 @@ function drawPreview(){put('pPreview',charScene(myColor,myFace,innerWidth<760?.9
 function needNick(){const n=$('nick').value.trim().slice(0,18);if(!n){$('browserErr').textContent='Type your nickname first.';$('nick').focus();return null;}$('browserErr').textContent='';return n;}
 
 let browserKey='';
-function lobbyStatus(st){if(!st||st.phase==='lobby')return['wait','Waiting'];if(st.phase==='final')return['done','Finished'];if(st.phase==='race')return['play','🦆 Duck race'];return['play',`${(GAMES[st.game]||{}).name||'In game'} · ${(st.idx||0)+1}/${st.total||'?'}`];}
+function lobbyStatus(st){if(!st||st.phase==='lobby')return['wait','Waiting'];if(st.phase==='final')return['done','Finished'];if(st.phase==='race'&&!(st.race&&st.race.game))return['play','🦆 Duck race'];return['play',`${(GAMES[st.game]||{}).name||'In game'} · ${(st.idx||0)+1}/${st.total||'?'}`];}
 function renderBrowser(){
   const rows=LOBBIES.map(l=>{const ps=ALLP.filter(p=>p.lobby_id===l.id);return {...l,host:ps.find(p=>p.role==='host'),count:ps.filter(p=>p.role==='player').length};}).filter(l=>l.host);
   $('lobbyCount').textContent=rows.length?`${rows.length} open ${rows.length===1?'lobby':'lobbies'}`:'Open lobbies';
@@ -398,13 +413,13 @@ $('createForm').addEventListener('submit',async e=>{
 
 /* ================= GAME GUIDE + PRACTICE ROUNDS (lobby browser) ================= */
 const HOW={choice:'Tap one of the choices',text:'Type the word',number:'Type a number',slide:'Solve the puzzle on your phone'};
-function howFor(id){const g=GAMES[id],s=g.make(g.pool?g.pool[0]:0).q;return s.tf?'Tap True or False':HOW[s.type];}
+function howFor(id){if(GAMES[id].race)return 'Just watch and cheer';const g=GAMES[id],s=g.make(g.pool?g.pool[0]:0).q;return s.tf?'Tap True or False':HOW[s.type];}
 function buildGameCards(){
   const box=$('gameCards');if(box.firstChild)return;
   Object.entries(GAMES).forEach(([id,g])=>{
     const c=el('div','gcard');const ic=el('i',null,g.icon);ic.style.background=g.bg;
     const t=el('div');t.style.minWidth='0';t.append(el('b',null,g.name),el('p',null,g.desc));
-    const meta=el('div','gmeta');meta.append(el('span','st wait',howFor(id)),el('span',null,`${g.secs}s per round`));
+    const meta=el('div','gmeta');meta.append(el('span','st wait',howFor(id)),el('span',null,g.race?`About ${g.secs}s per race`:`${g.secs}s per round`));
     const b=el('button','btn sm blue','Try a sample');b.type='button';b.onclick=()=>openDemo(id);
     const top=el('div','gtop');top.append(ic,t);c.append(top,meta,b);box.append(c);
   });stagger(box);
@@ -412,8 +427,10 @@ function buildGameCards(){
 /* A practice round runs only on this device: nothing is sent or scored. */
 const DM={id:null,q:null,key:null,start:0,tick:null,done:false,slide:null,opener:null};
 function openDemo(id){DM.opener=document.activeElement;DM.id=id;$('demo').hidden=false;document.body.style.overflow='hidden';newDemo();$('demoClose').focus();}
-function closeDemo(){clearInterval(DM.tick);clearTimeout(flashT);$('demo').hidden=true;document.body.style.overflow='';if(DM.opener&&DM.opener.focus)DM.opener.focus();}
+function closeDemo(){DM.run=(DM.run||0)+1;clearInterval(DM.tick);clearTimeout(flashT);$('demo').hidden=true;document.body.style.overflow='';if(DM.opener&&DM.opener.focus)DM.opener.focus();}
 function newDemo(){
+  DM.run=(DM.run||0)+1;if(GAMES[DM.id].race)return demoRace();
+  $('dCard').classList.remove('racecard');
   const g=GAMES[DM.id],pick=g.pool?g.pool[Math.floor(Math.random()*g.pool.length)]:0,{q,key}=g.make(pick);
   Object.assign(DM,{q,key,start:performance.now(),done:false});
   const ic=$('demoIcon');ic.textContent=g.icon;ic.style.background=g.bg;$('demoTitle').textContent=g.name;$('demoDesc').textContent=g.desc;
@@ -428,6 +445,30 @@ function newDemo(){
   $('dSlideWrap').hidden=q.type!=='slide';if(q.type==='slide'){DM.slide={t:q.tiles.slice(),moves:0};paintDemoSlide();}
   $('dResult').hidden=true;
   clearInterval(DM.tick);const tick=()=>{const left=Math.max(0,g.secs-(performance.now()-DM.start)/1000);$('dClock').textContent=Math.ceil(left)+'s';if(left<=0){clearInterval(DM.tick);if(!DM.done)demoAnswer(null);}};tick();DM.tick=setInterval(tick,250);
+}
+/* Practice duck race: you and three 2San value ducks, only on this device. */
+function demoRace(){
+  const g=GAMES[DM.id],run=DM.run;clearInterval(DM.tick);DM.done=false;
+  const ic=$('demoIcon');ic.textContent=g.icon;ic.style.background=g.bg;$('demoTitle').textContent=g.name;$('demoDesc').textContent=g.desc;
+  $('dCard').classList.add('racecard');
+  $('dCat').textContent='Practice race';$('dText').textContent=RACE_NAMES[rnd(0,RACE_NAMES.length-1)];$('dHint').hidden=true;$('dNote').hidden=true;
+  ['dOpts','dTxt','dNum','dSlideWrap','dResult'].forEach(i=>$(i).hidden=true);$('dClock').textContent='🦆';
+  const nick=($('nick').value.trim()||'You').slice(0,18),riders=[['me',nick,myColor,myFace],...DEMO_BOTS.map(b=>[b[0],b[0]+' duck',b[1],b[2]])];
+  const r={ids:shuffle(riders.map(x=>x[0])),order:shuffle(riders.map(x=>x[0])),place:1,seed:rid(),dur:7};
+  const race=el('div','race small'),cnt=el('div','race-count'),lanes=el('div');race.append(cnt,lanes);
+  const disp=$('dDisp');disp.innerHTML='';disp.append(race);
+  animIn($('dCard'));
+  const RV=buildRiver(lanes,riders.map(x=>({id:x[0],name:x[1].replace(' (you)',''),color:x[2],face:x[3],me:x[0]==='me'})),{small:true});
+  const plan=racePlan(r),t0=performance.now();let last=null;
+  (function f(){if(run!==DM.run)return;const t=(performance.now()-t0)/1000-3,c=t<0?String(Math.ceil(-t)):t<.8?'GO!':'';
+    if(c!==last){last=c;cnt.textContent=c;if(c)beep(c==='GO!'?990:520,.1);}
+    RV.update(calm()&&t>0?plan.end:t,plan,r);
+    if(t<plan.end)return requestAnimationFrame(f);
+    DM.done=true;const pos=r.order.indexOf('me');
+    $('dVerdict').textContent=pos===0?'Your duck won! 🎉':`Your duck finished ${ordinal(pos+1)}.`;$('dVerdict').className='dverdict '+(pos===0?'ok':'no');
+    $('dAnswer').textContent=`In a real game that is ${Math.max(100,1000-100*pos)} points.`;$('dResult').hidden=false;animIn($('dResult'));pos===0?fanfare():beep(660,.12);
+    requestAnimationFrame(()=>{try{$('demoAgain').scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(e){}});
+  })();
 }
 function paintDemoSlide(){
   const g=$('dSlide');g.innerHTML='';const S=DM.slide,blank=S.t.indexOf(0);
@@ -503,8 +544,9 @@ function buildGameList(){
   applyGameDefaults();
 }
 function setSelect(sel,v){const s=$(sel);if(![...s.options].some(o=>o.value==String(v))){const o=el('option',null,String(v));o.value=v;s.append(o);}s.value=String(v);}
-function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);updatePoolInfo();}
+function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);$('hTimeBox').hidden=!!g.race;$('hCountLbl').textContent=g.race?'Races':'Questions';updatePoolInfo();}
 function updatePoolInfo(){const id=selGame(),g=GAMES[id];
+  if(g.race){$('poolInfo').textContent='Every race is random, so anyone can win. Points per race: 1st 1000, 2nd 900, 3rd 800, down to 100.';return;}
   if(!g.pool){$('poolInfo').textContent=`${g.name} makes a new round every time. No round repeats in this lobby.`;return;}
   const played=new Set((H.used[id]||[]).filter(s=>s[0]==='p')).size,left=g.pool.length-played;
   $('poolInfo').textContent=left>0?`${left} of ${g.pool.length} ${g.name} rounds not played yet in this lobby.`:`All ${g.pool.length} ${g.name} rounds have been played here. They will start over.`;}
@@ -535,6 +577,7 @@ $('startBtn').onclick=async()=>{
   if(G.pool){const used=new Set(H.used[g]||[]),all=G.pool.map((_,i)=>i);order=shuffle(all.filter(i=>!used.has('p'+i))).slice(0,n);
     if(order.length<n){order=order.concat(shuffle(all.filter(i=>!order.includes(i))).slice(0,n-order.length));H.used[g]=[];
       status(`Every ${G.name} round has been played in this lobby, so some start over.`,5000);}}
+  if(G.race){const session=rid(),names=shuffle(RACE_NAMES.slice());try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await goDuck(0,{session,total:n,names:Array.from({length:n},(_,i)=>names[i%names.length])});}catch(e){}$('startBtn').disabled=false;return;}
   H.deck={session:rid(),game:g,order,dur:+$('hTime').value};
   try{await setScores({session:H.deck.session,scores:{},last:{},ok:{},idx:-1});await goQuestion(0);}catch(e){}
   $('startBtn').disabled=false;
@@ -548,6 +591,13 @@ async function goQuestion(i){
   key.idx=i;H.key=key;H.revealing=false;H.localStart=performance.now();H.startFor=d.session+':'+i;ANSWERS={};
   await hostCall('host_set_key',{p_data:{deck:d,idx:i,...key,used:H.used}});
   await setState({session:d.session,phase:'question',game:d.game,idx:i,total:d.order.length,dur:d.dur,q},true);
+}
+/* One race of the 2San Duck Race game. Every player in the lobby rides; the host draws a random finishing order. */
+async function goDuck(i,base){
+  const b=base||{session:STATE.session,total:STATE.total,names:STATE.names},ids=shuffle(playerIds()),facts=RACE_FACTS();
+  if(!ids.length){status('Wait for at least one player to join.');return;}
+  await setState({session:b.session,phase:'race',game:'duck',idx:i,total:b.total,names:b.names,
+    race:{game:true,ids,order:shuffle(ids.slice()),place:1,seed:rid(),dur:9,name:(b.names||[])[i]||RACE_NAMES[0],fact:facts[rnd(0,facts.length-1)]}},true);
 }
 function answeredIds(){const s=STATE;return playerIds().filter(id=>ANSWERS[id]&&ANSWERS[id].session===s.session&&ANSWERS[id].idx===s.idx);}
 function onAnswers(){
@@ -649,8 +699,8 @@ async function reveal(){
 }
 $('toBoardBtn').onclick=async()=>{try{await setState({phase:STATE.idx+1>=STATE.total?'final':'board'});}catch(e){}};
 let boardKey='';
-function renderHostBoard(){hostShow('hBoard');$('hBoardNum').textContent=`After round ${STATE.idx+1} of ${STATE.total}`;const rows=ranking(),k=STATE.session+STATE.idx+JSON.stringify(rows.slice(0,10).map(r=>[r.id,r.score,playerName(r.id)]));if(k===boardKey)return;boardKey=k;boardRows('hBoardList',rows,{limit:10});}
-$('nextBtn').onclick=async()=>{if(!H.deck||H.deck.session!==STATE.session)await restoreHost();if(!H.deck){status('Could not load the question list. Start a new game.');return;}$('nextBtn').disabled=true;try{await goQuestion(STATE.idx+1);}catch(e){}$('nextBtn').disabled=false;};
+function renderHostBoard(){hostShow('hBoard');const duck=STATE.game==='duck';$('hBoardNum').textContent=`After ${duck?'race':'round'} ${STATE.idx+1} of ${STATE.total}`;$('nextBtn').textContent=duck?'Next race':'Next question';const rows=ranking(),k=STATE.session+STATE.idx+JSON.stringify(rows.slice(0,10).map(r=>[r.id,r.score,playerName(r.id)]));if(k===boardKey)return;boardKey=k;boardRows('hBoardList',rows,{limit:10});}
+$('nextBtn').onclick=async()=>{if(STATE.game==='duck'){$('nextBtn').disabled=true;try{await goDuck(STATE.idx+1);}catch(e){}$('nextBtn').disabled=false;return;}if(!H.deck||H.deck.session!==STATE.session)await restoreHost();if(!H.deck){status('Could not load the question list. Start a new game.');return;}$('nextBtn').disabled=true;try{await goQuestion(STATE.idx+1);}catch(e){}$('nextBtn').disabled=false;};
 async function endGame(){try{await setState({phase:'final'});}catch(e){}}
 $('hEndBtn').onclick=endGame;$('hEndBtn2').onclick=endGame;
 let finalKey='';
@@ -680,46 +730,95 @@ async function startRace(tie){
   try{await setState({...cur,phase:'race',race:{ids:shuffle(tie.ids.slice()),order:shuffle(tie.ids.slice()),place:tie.place,seed:rid(),dur:8}},true);}catch(e){}
   $('raceBtn').disabled=false;
 }
-$('raceDoneBtn').onclick=async()=>{const r=STATE.race;if(!r)return;const tb={...(STATE.tb||{})};r.order.forEach((id,i)=>tb[id]=i);
+$('raceDoneBtn').onclick=async()=>{const r=STATE.race;if(!r)return;
+  if(r.game){const s=STATE;$('raceDoneBtn').disabled=true;
+    try{if(!(SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx)){const scores={...((SCORES&&SCORES.session===s.session&&SCORES.scores)||{})},last={},ok={};
+        r.order.forEach((id,pos)=>{const pts=Math.max(100,1000-100*pos);last[id]=pts;ok[id]=pos<3;scores[id]=(scores[id]||0)+pts;});
+        await setScores({session:s.session,scores,last,ok,idx:s.idx});}
+      await setState({phase:s.idx+1>=s.total?'final':'board'});}catch(e){}
+    $('raceDoneBtn').disabled=false;return;}const tb={...(STATE.tb||{})};r.order.forEach((id,i)=>tb[id]=i);
   $('raceDoneBtn').disabled=true;try{await setState({phase:'final',race:null,tb});}catch(e){}$('raceDoneBtn').disabled=false;};
 function seeded(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19;}
   return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return (h>>>0)/4294967296;};}
 /* Each duck: progress checkpoints that wobble (so the lead changes) and reach the line at its finishing time. */
 function racePlan(r){
   const rnd=seeded(r.seed),fin={},paths={};let t=r.dur*.82;
-  r.order.forEach((id,k)=>{if(k)t+=.35+rnd()*.35;fin[id]=t;});
+  const n=r.order.length;r.order.forEach((id,k)=>{if(k)t+=n<=6?.35+rnd()*.35:(4/(n-1))*(.6+rnd()*.8);fin[id]=t;});
   r.ids.forEach(id=>{const n=10,w=[];for(let j=0;j<n;j++)w.push(.35+rnd()*1.4);const tot=w.reduce((a,b)=>a+b,0);let c=0;paths[id]=[0,...w.map(x=>(c+=x)/tot)];});
   return {fin,paths,end:Math.max(...Object.values(fin))+.4};
 }
 function duckX(plan,id,t){const f=plan.fin[id];if(t<=0)return 0;if(t>=f)return 1;const p=plan.paths[id],u=t/f*(p.length-1),j=Math.floor(u);return p[j]+(p[j+1]-p[j])*(u-j);}
 const RACE={key:'',run:0};
+/* ---- the 2San river: one wide river, every duck in it, the camera follows the leader ---- */
+const BANKS=['Better care, better life','Safe Sip+','Swimcount','Journey to Self-testing for All','2SAN','Excellence','Integrity','Agility','Rigor','Fearlessness','Home Water Test','UTI Test','Hydration Test','Easy Pen Test'];
+const BANK_C=['#FB7569','#0084DB','#1DD6A5','#7E43CA','#FFC83D'];
+const RIVERS=new Map();addEventListener('resize',()=>{for(const c of RIVERS.values())c.relayout();});
+function riverSize(n,small){return n<=6?(small?[44,.4]:[56,.52]):n<=16?(small?[38,.34]:[46,.42]):(small?[30,.26]:[36,.32]);}
+function buildRiver(box,riders,{small=false,board=false}={}){
+  box.innerHTML='';box.classList.add('riverbox');
+  const view=el('div','rview'),world=el('div','rworld'),bank=el('div','rbank'),start=el('div','rstart'),fin=el('div','rfinish');
+  fin.append(el('span','rflag','FINISH'));world.append(el('div','rwater'),bank,el('div','rshore'),start,fin);view.append(world);box.append(view);
+  const n=riders.length,[bird,s]=riverSize(n,small),D={},me=riders.find(p=>p.me);
+  view.classList.toggle('crowd',n>16);
+  const lead=board?el('ol','rlead'):null;if(lead){lead.hidden=true;view.append(lead);}
+  const you=el('div','ryou');you.hidden=true;view.append(you);
+  riders.forEach((p,i)=>{const w=el('div','dk'+(p.me?' me':'')),tag=el('span','dtag',p.name+(p.me?' (you)':''));tag.style.setProperty('--c',p.color);
+    const d=duckRider(p.color,p.face,s);d.style.setProperty('--bird',bird+'px');d.style.animationDelay=(-(i*.17)%.6).toFixed(2)+'s';
+    w.append(tag,d);w.style.zIndex=10+i;world.append(w);D[p.id]={w,tag,name:p.name,y:0,fin:false};});
+  let G={W:600,H:300,L:1400,sx:80,fx:1480,ww:1800},last=null,lastLead=0;
+  function relayout(){
+    const top0=small?34:48,dh0=bird*.62+s*100+20,need=top0+4+dh0+(dh0+6)*(n-1)+18;view.style.height=n<=8&&need>(small?310:320)?need+'px':'';
+    const W=view.clientWidth||600,H=view.clientHeight||300,top=top0,L=Math.max(W*2.4,820),sx=Math.min(110,W*.16);
+    G={W,H,L,sx,fx:sx+L,ww:sx+L+W*.8};world.style.width=G.ww+'px';start.style.left=sx+'px';fin.style.left=G.fx+'px';bank.style.height=top+'px';
+    bank.innerHTML='';for(let x=sx+(small?150:220),k=0;x<G.fx-140;x+=small?250:340,k++){const sg=el('span','rsign',BANKS[k%BANKS.length]);sg.style.left=x+'px';sg.style.setProperty('--c',BANK_C[k%BANK_C.length]);bank.append(sg);}
+    const dh=dh0,y0=top+dh+4,y1=H-16;
+    riders.forEach((p,i)=>{D[p.id].y=n===1?(y0+y1)/2:y0+(y1-y0)*(i/(n-1));});
+    if(last)update(...last);
+  }
+  function standings(plan,r,tt){const sc=id=>tt>=plan.fin[id]?2-r.order.indexOf(id)/n:duckX(plan,id,tt);return riders.map(p=>p.id).sort((a,b)=>sc(b)-sc(a));}
+  function update(tt,plan,r,onFin){
+    last=[tt,plan,r,onFin];let front=0;
+    for(const p of riders){const o=D[p.id],f=plan.fin[p.id],drift=tt>f?Math.min(1,(tt-f)/1.4)*G.W*.3*(1-r.order.indexOf(p.id)/n):0,x=G.sx+duckX(plan,p.id,tt)*G.L+drift;if(x>front)front=x;o.x=x;
+      o.w.style.transform=`translate3d(${x.toFixed(1)}px,${o.y.toFixed(1)}px,0)`;
+      if(tt>=plan.fin[p.id]&&!o.fin){o.fin=true;const pos=r.order.indexOf(p.id);o.tag.textContent=ordinal(r.place+pos)+' · '+o.name+(p.me?' (you)':'');o.w.classList.add('fin');if(!pos)o.w.classList.add('won');if(onFin)onFin(p.id,pos);}}
+    const cam=Math.max(0,Math.min(front-G.W*.6,G.ww-G.W));world.style.transform=`translate3d(${(-cam).toFixed(1)}px,0,0)`;
+    if(me){const sx=D[me.id].x-cam,off=sx<20?'l':sx>G.W-12?'r':'';you.hidden=!off||tt<=0;if(off){you.className='ryou '+off;you.textContent=off==='l'?'◀ You':'You ▶';you.style.top=Math.max(20,D[me.id].y-30)+'px';}}
+    if(lead&&tt>0&&performance.now()-lastLead>250){lastLead=performance.now();lead.hidden=false;lead.innerHTML='';standings(plan,r,tt).slice(0,3).forEach((id,i)=>{const li=el('li');li.append(el('b',null,ordinal(r.place+i)),document.createTextNode(D[id].name));lead.append(li);});}
+  }
+  const ctl={relayout,update,standings};RIVERS.set(box,ctl);relayout();return ctl;
+}
 function renderRace(isHost){
   const r=STATE.race;if(!r)return;
   if(isHost)hostShow('hRace');else playerShow('pRace');
   const k=(isHost?'h':'p')+STATE.session+r.seed;if(RACE.key===k)return;RACE.key=k;const run=++RACE.run;stopConfetti();
-  const P_=isHost?'h':'p',lanes=$(P_+'RaceLanes'),me=ME&&ME.player_id;
-  $(P_+'RaceTitle').textContent=`🦆 Duck race for ${ordinal(r.place)} place`;$(P_+'RaceResult').hidden=true;$(P_+'RaceCount').textContent='';
-  lanes.innerHTML='';const ducks={};
-  r.ids.forEach((id,i)=>{const p=PLAYERS[id]||{},lane=el('div','lane'+(id===me?' me':''));lane.style.setProperty('--c',p.color||COLORS[0]);lane.style.setProperty('--i',i);
-    const tag=el('span','tag',playerName(id)+(id===me?' (you)':''));const d=el('span','duck','🦆');d.setAttribute('aria-hidden','true');const pl=el('span','place');lane.append(tag,pl,d);lanes.append(lane);ducks[id]=d;d._lane=lane;d._badge=pl;});
-  const plan=racePlan(r),el0=Date.now()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<120000?el0:0);
-  let lastCount=null,done=false;
+  const P_=isHost?'h':'p',me=ME&&ME.player_id,n=r.ids.length;
+  $(P_+'RaceTitle').textContent=r.game?`🦆 Race ${STATE.idx+1} of ${STATE.total}: ${r.name}`:`🦆 Duck race for ${ordinal(r.place)} place`;
+  $(P_+'RaceResult').hidden=true;$(P_+'RaceCount').textContent='';
+  if(isHost){$('hRaceFact').hidden=!r.fact;$('hRaceFact').textContent=r.fact?'2San fact: '+r.fact:'';$('raceDoneBtn').textContent=r.game&&STATE.idx+1<STATE.total?'Show leaderboard':'Show final results';}
+  else $('pRaceWait').textContent=r.game&&STATE.idx+1<STATE.total?'Waiting for the host to show the leaderboard.':'Waiting for the host to show the final results.';
+  const live=isHost?null:$('pRaceLive');if(live){live.hidden=!r.ids.includes(me);live.textContent='';}
+  const riders=r.ids.map(id=>{const p=PLAYERS[id]||{};return {id,name:playerName(id),color:p.color||COLORS[0],face:p.face,me:id===me};});
+  const RV=buildRiver($(P_+'RaceLanes'),riders,{small:!isHost,board:isHost&&n>3});
+  const plan=racePlan(r),el0=Date.now()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<600000?el0:0);
+  let lastCount=null,done=false,lastLive=0;
   (function frame(){
     if(run!==RACE.run||!STATE||STATE.phase!=='race'||!STATE.race||STATE.race.seed!==r.seed)return;
-    const t=(performance.now()-startLocal)/1000-3;
+    const t=(performance.now()-startLocal)/1000-3,tt=calm()&&t>0?plan.end:t;
     const c=t<0?String(Math.ceil(-t)):t<.8?'GO!':'';if(c!==lastCount){lastCount=c;$(P_+'RaceCount').textContent=c;if(c)beep(c==='GO!'?990:520,.12);}
-    for(const id of r.ids){const tt=calm()&&t>0?plan.end:t,d=ducks[id];d.style.setProperty('--x',duckX(plan,id,tt).toFixed(4));
-      if(tt>=plan.fin[id]&&!d._lane.classList.contains('fin')){const pos=r.order.indexOf(id);d._badge.textContent=ordinal(r.place+pos);d._lane.classList.add('fin');if(!pos){d._lane.classList.add('won');beep(1320,.15);}}}
-    if(!done&&t>=plan.end){done=true;showRaceResult(P_,r,me);}
+    RV.update(tt,plan,r,(id,pos)=>{if(!pos)beep(1320,.15);});
+    if(live&&!live.hidden&&t>0&&performance.now()-lastLive>250){lastLive=performance.now();const st=RV.standings(plan,r,tt),mine=st.indexOf(me);
+      live.textContent=`You: ${ordinal(mine+1)} of ${n}`+(mine?` · Leading: ${playerName(st[0])}`:' · You are leading!');}
+    if(!done&&t>=plan.end){done=true;if(live&&!live.hidden)live.textContent=`You finished ${ordinal(r.order.indexOf(me)+1)} of ${n}`;showRaceResult(P_,r,me);}
     if(!done)requestAnimationFrame(frame);
   })();
 }
 function showRaceResult(P_,r,me){
   const box=$(P_+'RaceResult');box.hidden=false;animIn(box);
   $(P_+'RaceWinner').textContent=`${playerName(r.order[0])}'s duck wins!`;
-  const ol=$(P_+'RaceOrder');ol.innerHTML='';r.order.forEach((id,i)=>{const li=el('li',id===me?'me':'');li.append(el('b',null,ordinal(r.place+i)),el('span',null,' '+playerName(id)));ol.append(li);});stagger(ol);
+  const ol=$(P_+'RaceOrder'),top=P_==='h'?10:5,list=r.order.map((id,i)=>[id,i]).filter(([id,i])=>i<top||id===me);ol.innerHTML='';
+  list.forEach(([id,i])=>{const li=el('li',id===me?'me':'');li.append(el('b',null,ordinal(r.place+i)),el('span',null,' '+playerName(id)));ol.append(li);});stagger(ol);
   const mine=$(P_+'RaceMine');
-  if(mine)mine.textContent=me&&r.order.includes(me)?(r.order.indexOf(me)===0?'Your duck won! 🎉':`Your duck came ${ordinal(r.order.indexOf(me)+1)} in the race.`):'';
+  if(mine)mine.textContent=me&&r.order.includes(me)?(r.order.indexOf(me)===0?'Your duck won! 🎉':`Your duck came ${ordinal(r.order.indexOf(me)+1)}${r.game?' of '+r.order.length:''} in the race.`):'';
   confetti();fanfare();
 }
 function drawPodium(id,rows){
@@ -799,9 +898,10 @@ function renderPlayerReveal(){
   const k='r'+s.session+s.idx+(sc?'y':'n')+s.phase;
   $('pResult').className='result '+(ok?'ok':'no');
   $('pGain').textContent=answered?'+'+gain:sc?'+0':'…';
-  const closestGame=q.type==='number'&&!q.exact;
-  $('pVerdict').textContent=!sc?'Scoring…':!answered?(q.type==='slide'?'Not solved in time':'No answer this time'):closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!':ok?'Correct!':'Not this time';
-  $('pAnswer').textContent=s.answer||'';
+  const closestGame=q.type==='number'&&!q.exact,duck=s.game==='duck'&&s.race&&s.race.game,dpos=duck?s.race.order.indexOf(uid):-1;
+  $('pAnswerLbl').textContent=duck?'Race winner':'Answer';
+  $('pVerdict').textContent=duck?(dpos<0?'You joined after this race':dpos===0?'Your duck won! 🎉':`Your duck finished ${ordinal(dpos+1)}`):!sc?'Scoring…':!answered?(q.type==='slide'?'Not solved in time':'No answer this time'):closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!':ok?'Correct!':'Not this time';
+  $('pAnswer').textContent=duck?`${playerName(s.race.order[0])} won ${s.race.name}`:s.answer||'';
   const rows=ranking(),r=rows.find(x=>x.id===uid),total=r?r.score:0;$('pRank').textContent=r?`${r.place} / ${rows.length}`:'–';
   const rk=s.session+':'+s.idx;
   if(pKey!==k){pKey=k;if(sc&&P.counted!==rk){P.counted=rk;animIn($('pResult'));countUp($('pScore'),total-(gain||0),total);if(answered){ok?beep(1040,.12):beep(240,.18);flashScreen(!!ok);}}else if(!$('pScore').dataset.busy)$('pScore').textContent=total;}

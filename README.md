@@ -32,8 +32,11 @@ Every game uses 2San content from [2san.com](https://2san.com): products, values
 | Memory Flash | 4 choices | Six 2San kit icons flash for 5 seconds; which was missing? |
 | Sliding Puzzle | solve on phone | Slide the tiles to spell 2SAN HOME; fastest wins |
 | Closest Number | type a number | Guess the 2San number |
+| 2San Duck Race | just watch | Every character rides a duck down the 2San river. Random winner; 1st 1000, 2nd 900, 3rd 800 … at least 100 |
 
 Correct answers score 500 to 1000 points: the faster, the more. Closest Number scores by how near the guess is.
+
+If players tie for a podium place (top 3) at the end of any game, the host starts a duck race between them to decide the order.
 
 ## Stack
 
