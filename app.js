@@ -239,8 +239,9 @@ function put(id,node){const e=$(id);e.innerHTML='';e.append(node);}
 const calm=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 function animIn(e){if(!e)return;e.classList.remove('enter');void e.offsetWidth;e.classList.add('enter');}
 function stagger(box){[...box.children].forEach((c,i)=>c.style.setProperty('--i',i));}
-function countUp(e,from,to){if(calm()||from===to){e.textContent=to;return;}const t0=performance.now(),d=700;e.dataset.busy='1';
-  (function f(t){const p=Math.min(1,(t-t0)/d),v=Math.round(from+(to-from)*(1-Math.pow(1-p,3)));e.textContent=v;if(p<1)requestAnimationFrame(f);else delete e.dataset.busy;})(t0);}
+/* Counts a number up once. A newer call cancels an older one, and it never starts below zero. */
+function countUp(e,from,to){const run=(e._run||0)+1;e._run=run;from=Math.max(0,Math.min(from,to));if(calm()||from===to){e.textContent=to;delete e.dataset.busy;return;}const t0=performance.now(),d=700;e.dataset.busy='1';
+  (function f(t){if(e._run!==run)return;const p=Math.min(1,(t-t0)/d),v=Math.round(from+(to-from)*(1-Math.pow(1-p,3)));e.textContent=v;if(p<1)requestAnimationFrame(f);else delete e.dataset.busy;})(t0);}
 function flashScreen(good){if(calm())return;const f=$('screenFlash');f.className='screenflash '+(good?'good':'bad');void f.offsetWidth;f.classList.add('go');}
 let hostSub='',playerSub='';
 
@@ -444,7 +445,7 @@ function demoAnswer(a){
   if(q.display&&q.display.kind==='flash'){clearTimeout(flashT);const gr=$('dDisp').querySelector('.egrid');if(gr)gr.querySelectorAll('span').forEach((s,i)=>{s.textContent=q.display.items[i];});gr&&gr.classList.remove('gone');}
   $('dVerdict').textContent=msg;$('dVerdict').className='dverdict '+(good?'ok':'no');
   $('dAnswer').textContent=q.type==='slide'?'':'Answer: '+key.answer;
-  $('dResult').hidden=false;animIn($('dResult'));good?beep(1040,.12):beep(240,.18);
+  $('dResult').hidden=false;animIn($('dResult'));requestAnimationFrame(()=>{try{$('demoAgain').scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(e){}});good?beep(1040,.12):beep(240,.18);
 }
 $('demoClose').onclick=closeDemo;$('demoDone').onclick=closeDemo;$('demoAgain').onclick=newDemo;
 $('demo').addEventListener('click',e=>{if(e.target===$('demo'))closeDemo();});
@@ -714,7 +715,8 @@ function renderPlayerReveal(){
   $('pVerdict').textContent=!sc?'Scoring…':!answered?(q.type==='slide'?'Not solved in time':'No answer this time'):closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!':ok?'Correct!':'Not this time';
   $('pAnswer').textContent=s.answer||'';
   const rows=ranking(),r=rows.find(x=>x.id===uid),total=r?r.score:0;$('pRank').textContent=r?`${r.place} / ${rows.length}`:'–';
-  if(pKey!==k){pKey=k;if(sc){animIn($('pResult'));countUp($('pScore'),total-(gain||0),total);}else $('pScore').textContent=total;if(answered){ok?beep(1040,.12):beep(240,.18);flashScreen(!!ok);}}
+  const rk=s.session+':'+s.idx;
+  if(pKey!==k){pKey=k;if(sc&&P.counted!==rk){P.counted=rk;animIn($('pResult'));countUp($('pScore'),total-(gain||0),total);if(answered){ok?beep(1040,.12):beep(240,.18);flashScreen(!!ok);}}else if(!$('pScore').dataset.busy)$('pScore').textContent=total;}
   else if(!$('pScore').dataset.busy)$('pScore').textContent=total;
 }
 function renderPlayerFinal(){
