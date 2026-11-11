@@ -78,6 +78,19 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .door[aria-disabled=true]:hover{transform:none;box-shadow:0 12px 0 var(--navy)}
 .lock{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:var(--navy);color:var(--white);border-radius:8px;padding:3px 10px;width:max-content}
 .lock.open{background:var(--mint);color:var(--ink)}
+/* lobby browser */
+.bcols{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:760px){.bcols{grid-template-columns:1fr}}
+.lobbies{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:14px}
+.lcard{background:var(--white);border:3px solid var(--navy);border-radius:14px;box-shadow:0 6px 0 var(--navy);padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;animation:pop .35s ease-out}
+.lcard .top{display:flex;gap:10px;align-items:center;min-width:0}
+.lcard .nm{font-family:var(--display);font-size:1.3rem;line-height:1.05;overflow-wrap:anywhere}
+.lcard .meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.86rem;font-weight:500}
+.st{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-radius:8px;padding:2px 8px;border:2px solid var(--navy);width:max-content}
+.st.wait{background:var(--mint)}.st.play{background:var(--sun)}.st.done{background:var(--paper)}
+.pwrow{display:flex;gap:8px}.pwrow input{padding:8px 10px}
+.crown{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:6px;border:2px solid var(--navy);background:var(--sun);cursor:pointer;line-height:1;padding:0;font-size:.75rem}
+.crown[data-confirm="1"]{background:var(--coral)}
 /* host lobby */
 .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px;align-items:start}
 @media (max-width:860px){.cols{grid-template-columns:1fr}}
@@ -173,13 +186,13 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
     <div class="hdr-actions">
       <span class="whoami" id="whoami" hidden style="padding:6px 12px"><span id="meName"></span></span>
       <button class="btn sm" id="fsBtn" type="button">Full screen</button>
-      <button class="btn sm" id="toLobbyBtn" type="button" hidden>Lobby</button>
+      <button class="btn sm coral" id="leaveTop" type="button" hidden>Leave lobby</button>
     </div>
   </header>
 
   <main>
     <section id="loading" class="center" style="padding-top:60px">
-      <h2>Opening the lobby…</h2>
+      <h2>Opening the lobbies…</h2>
       <p class="hint" id="loadingNote">Connecting to the game.</p>
     </section>
 
@@ -191,31 +204,46 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
       </div>
     </section>
 
-    <!-- LOBBY -->
-    <section id="lobby" hidden style="display:flex;flex-direction:column;gap:22px">
-      <h2>Welcome to the lobby. Pick your room.</h2>
-      <div class="doors">
-        <button class="door" id="doorHost" type="button" style="--c:var(--purple)">
-          <div class="frame" id="doorHostArt"></div>
-          <span class="lock" id="hostLock">Facilitator only</span>
-          <b>Facilitator Room</b>
-          <p id="hostDoorText">Choose the game, start rounds, reveal answers and show the leaderboard on the big screen.</p>
-        </button>
-        <button class="door" id="doorPlayer" type="button" style="--c:var(--mint)">
-          <div class="frame" id="doorPlayerArt"></div>
-          <span class="lock open">Open to everyone</span>
-          <b>Player Room</b>
-          <p>Make your blocky character, join the game and answer on your own phone or laptop.</p>
-        </button>
+    <!-- LOBBY BROWSER -->
+    <section id="browser" hidden style="display:flex;flex-direction:column;gap:22px">
+      <h2>Game lobbies</h2>
+      <div class="bcols">
+        <div class="blk" style="display:flex;flex-direction:column;gap:14px">
+          <h3 style="margin:0">Your character</h3>
+          <div class="scene" id="pPreview" style="min-height:200px"></div>
+          <div><label class="lbl" for="nick">Nickname</label><input type="text" id="nick" maxlength="18" autocomplete="nickname" placeholder="Type your nickname"></div>
+          <div><span class="lbl">Shirt color</span><div class="swatches" id="swatches" style="margin-top:6px"></div></div>
+          <div><span class="lbl">Face</span><div class="faces" id="faces" style="margin-top:6px"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+          <div class="actions" style="justify-content:space-between">
+            <span class="qcount" id="lobbyCount">Open lobbies</span>
+            <button class="btn coral" id="createOpen" type="button">+ Create lobby</button>
+          </div>
+          <form class="blk" id="createForm" hidden style="display:flex;flex-direction:column;gap:12px">
+            <h3 style="margin:0">Create a lobby</h3>
+            <div class="row">
+              <div><label class="lbl" for="lobbyName">Lobby name</label><input type="text" id="lobbyName" maxlength="30"></div>
+              <div><label class="lbl" for="lobbyPw">Password (optional)</label><input type="text" id="lobbyPw" maxlength="30" autocomplete="off" placeholder="Leave empty for open lobby"></div>
+            </div>
+            <p class="hint">You become the host. You can hand the host role to someone else later.</p>
+            <div class="actions"><button class="btn big coral" id="createBtn" type="submit">Create and host</button><button class="btn" id="createCancel" type="button">Cancel</button></div>
+          </form>
+          <span class="warn" id="browserErr" role="alert"></span>
+          <div class="lobbies" id="lobbyList"></div>
+          <div class="blk center" id="lobbyEmpty" hidden>
+            <b class="out" style="font-size:1.6rem">No lobbies yet</b>
+            <p class="hint">Create one, and everyone else can pick it from this list.</p>
+          </div>
+        </div>
       </div>
-      <p class="hint" id="lobbyStatus"></p>
     </section>
 
     <!-- HOST -->
     <section id="host" class="host" hidden>
       <!-- host lobby -->
       <div id="hLobby" style="display:flex;flex-direction:column;gap:22px">
-        <h2>Facilitator Room</h2>
+        <div class="qhead"><h2 id="hLobbyName">Lobby</h2><span class="lock open" id="hRoleTag">You are the host</span></div>
         <div class="cols">
           <div class="blk" style="display:flex;flex-direction:column;gap:16px">
             <h3 style="margin:0">Choose a game</h3>
@@ -239,15 +267,16 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
           <div class="blk">
             <div style="display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap">
               <div><span class="lbl">Players in the room</span><div class="big-count" id="pCount">0</div></div>
-              <button class="btn sm" id="clearBtn" type="button">Remove everyone</button>
+              <span class="lock" id="hPwTag" hidden>Password protected</span>
             </div>
             <div class="joinbox" style="margin-top:12px">
               <b>How players join</b>
-              <ol><li>Open <b id="playerLink" style="word-break:break-all;user-select:all"></b> on a phone or laptop.</li><li>Tap <b>Player Room</b>, make a character, press Join.</li></ol>
+              <ol><li>Open <b id="playerLink" style="word-break:break-all;user-select:all"></b> on a phone or laptop.</li><li>Make a character, then pick <b id="joinLobbyName">this lobby</b> from the list.</li></ol>
               <button class="btn sm" id="copyLinkBtn" type="button" style="margin-top:8px">Copy player link</button>
             </div>
             <div class="roster" id="roster"></div>
             <p class="hint" id="rosterEmpty" style="margin-top:12px">Nobody has joined yet. Characters pop in here as people join.</p>
+            <p class="hint" style="margin-top:10px">Tap 👑 on a player to make them the host. Tap × to remove them.</p>
           </div>
         </div>
       </div>
@@ -287,24 +316,10 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 
     <!-- PLAYER -->
     <section id="player" hidden>
-      <div id="pJoin" style="display:flex;flex-direction:column;gap:20px">
-        <h2>Player Room</h2>
-        <div class="blk join">
-          <div class="scene" id="pPreview" style="min-height:220px"></div>
-          <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
-            <div><label class="lbl" for="nick">Your nickname</label><input type="text" id="nick" maxlength="18" autocomplete="nickname"></div>
-            <div><span class="lbl">Shirt color</span><div class="swatches" id="swatches" style="margin-top:6px"></div></div>
-            <div><span class="lbl">Face</span><div class="faces" id="faces" style="margin-top:6px"></div></div>
-            <div class="actions"><button class="btn big mint" id="joinBtn" type="button">Join the game</button><span class="warn" id="joinErr" role="alert"></span></div>
-          </div>
-        </div>
-      </div>
-
       <div id="pWait" hidden class="center">
         <div class="scene" id="pWaitChar" style="min-height:260px"></div>
         <h2 id="pWaitTitle">You're in!</h2>
-        <p class="blk" style="margin:0" id="pWaitText">Waiting for the facilitator to start the game.</p>
-        <button class="btn sm" id="editBtn" type="button">Change character</button>
+        <p class="blk" style="margin:0" id="pWaitText">Waiting for the host to start the game.</p>
       </div>
 
       <div id="pQ" hidden style="display:flex;flex-direction:column;gap:20px">
@@ -334,7 +349,6 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
         </div>
         <div class="board" id="pTop" style="width:min(100%,560px)"></div>
       </div>
-      <div style="margin-top:28px;text-align:center"><button class="btn sm" id="leaveBtn" type="button" hidden>Leave the game</button></div>
     </section>
   </main>
 </div>
