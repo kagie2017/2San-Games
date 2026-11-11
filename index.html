@@ -106,6 +106,8 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .slide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:min(100%,320px);aspect-ratio:1}
 .slide.mini{width:min(100%,220px)}
 .slide button,.slide span{all:unset;box-sizing:border-box;display:grid;place-items:center;border:3px solid var(--navy);border-radius:12px;box-shadow:0 4px 0 var(--navy);font-family:var(--display);font-size:2rem;background:var(--c);color:var(--white);-webkit-text-stroke:1.5px var(--navy);paint-order:stroke fill;cursor:pointer}
+.slide [data-n]{position:relative}
+.slide [data-n]::after{content:attr(data-n);position:absolute;top:4px;left:7px;font-size:.8rem;-webkit-text-stroke:0;color:rgba(255,255,255,.85)}
 .slide .blank{background:transparent;border:3px dashed rgba(29,29,79,.35);box-shadow:none;cursor:default}
 .slide.done{opacity:.6;pointer-events:none}
 #pSlideWrap:has(#pSlide[hidden]){display:none}

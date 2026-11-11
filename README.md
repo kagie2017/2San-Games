@@ -15,21 +15,23 @@ One device is in one lobby at a time. Lobbies with no activity for 12 hours are 
 
 ### Games
 
+Every game uses 2San content from [2san.com](https://2san.com): products, values, offices and sustainability.
+
 | Game | How players answer | What it is |
 | --- | --- | --- |
-| 2San Quiz | 4 choices | Facts from [2san.com](https://2san.com) |
+| 2San Quiz | 4 choices | Facts about 2San |
 | True or False | 2 choices | Quick 2San facts |
-| 4 Pics 1 Word | type a word | Four emoji pictures, one linking word |
+| 4 Pics 1 Word | type a word | Four emoji pictures, one 2San word |
 | Word Scramble | type a word | Unscramble a 2San word |
-| Emoji Riddle | 4 choices | Read the emojis, pick the phrase |
-| Odd One Out | 4 choices | Spot the one that does not belong |
-| Riddles | 4 choices | Classic brain teasers |
-| Quick Math | type a number | Mental math sprint |
-| Color Clash | 4 choices | Tap the ink color, not the word |
-| Count It | type a number | Count icons on the big screen |
-| Memory Flash | 4 choices | Six icons flash for 5 seconds; which was missing? |
-| Sliding Puzzle | solve on phone | Same 3×3 puzzle for everyone; fastest wins |
-| Closest Number | type a number | The closer, the more points |
+| Emoji Riddle | 4 choices | Read the emojis, pick the 2San phrase |
+| Odd One Out | 4 choices | Spot what is not true to 2San |
+| 2San Riddles | 4 choices | Guess the 2San product or value from the clue |
+| Quick Math | type a number | 2San word problems |
+| Color Clash | 4 choices | 2San brand colors: tap the ink color, not the word |
+| Count It | type a number | Count 2San kit icons on the big screen |
+| Memory Flash | 4 choices | Six 2San kit icons flash for 5 seconds; which was missing? |
+| Sliding Puzzle | solve on phone | Slide the tiles to spell 2SAN HOME; fastest wins |
+| Closest Number | type a number | Guess the 2San number |
 
 Correct answers score 500 to 1000 points: the faster, the more. Closest Number scores by how near the guess is.
 

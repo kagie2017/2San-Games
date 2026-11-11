@@ -54,78 +54,105 @@ const TF=[
 const NUM=[
  {c:'Products',q:'How many tests are in the Ovulation & Early Result Pregnancy Value Pack?',a:70},
  {c:'Products',q:'How many strips are in the Ovulation Rapid Test Strip pack?',a:50},
+ {c:'Products',q:'How many strips are in the Early Result Pregnancy Test Strip pack?',a:50},
  {c:'Products',q:'How many panels does 2San\'s largest home drug test have?',a:16},
  {c:'Products',q:'How many tests are in the UK Family Planning Value Pack?',a:11},
  {c:'Products',q:'How many tests are in the Hydration Test pack?',a:10},
+ {c:'Products',q:'How many tests are in the UK LH Ovulation Rapid Test pack?',a:10},
+ {c:'Products',q:'How many tests come in a Safe Sip+ Drink Test Sticker pack?',a:4},
+ {c:'Products',q:'How many tests are in the Breath Alcohol Test pack?',a:3},
  {c:'Products',q:'How many minutes until you get 3 results from 1 test?',a:10},
+ {c:'Products',q:'How many infections does the "5 in 1" combo test check for?',a:5},
  {c:'About 2San',q:'In what year was the 2San Scientific Advisory Committee set up?',a:2022},
  {c:'About 2San',q:'How many international offices does 2San have?',a:5},
+ {c:'About 2San',q:'On how many continents does 2San operate?',a:4},
  {c:'About 2San',q:'How many core values does 2San have?',a:5},
- {c:'Health',q:'How many bones are in the adult human body?',a:206},
- {c:'Health',q:'Roughly what is normal body temperature in °C?',a:37},
- {c:'Health',q:'How many teeth does an adult have, including wisdom teeth?',a:32},
- {c:'Health',q:'How many minutes are in one day?',a:1440}
+ {c:'About 2San',q:'How many product categories does 2San have?',a:4}
 ];
 const PICS=[
- {e:['🌡️','🤒','🥵','🔥'],a:'FEVER'},{e:['💧','🚰','🥛','🌊'],a:'WATER'},{e:['🧰','🩹','📦','🧪'],a:'KIT'},
- {e:['🍷','🍺','🥃','🍸'],a:'ALCOHOL'},{e:['🤰','👶','🍼','🧸'],a:'BABY'},{e:['🦠','🔬','🧫','😷'],a:'GERM'},
- {e:['😴','🛏️','🌙','💤'],a:'SLEEP'},{e:['🥗','🥬','🥒','🍅'],a:'SALAD'},{e:['🩺','👩‍⚕️','🏥','💉'],a:'DOCTOR'},
- {e:['🌍','✈️','🗺️','🧳'],a:'TRAVEL'},{e:['📦','🚚','📬','🏭'],a:'DELIVERY'},{e:['♻️','🌱','🌍','🍃'],a:'GREEN'},
- {e:['🎉','🎂','🎈','🥳'],a:'PARTY'},{e:['💡','🧠','🚀','✨'],a:'IDEA'},{e:['🤝','👥','💬','🙌'],a:'TEAM'},
- {e:['⏱️','⚡','🏎️','💨'],a:'FAST'},{e:['🗽','🍎','🚕','🌃'],a:'NEW YORK'},{e:['🦘','🐨','🏄','🌏'],a:'AUSTRALIA'},
- {e:['🍁','🏒','❄️','🏔️'],a:'CANADA'},{e:['🎤','🎶','🍻','🕺'],a:'KARAOKE'},{e:['📱','🔋','🔌','⚡'],a:'CHARGER'},
- {e:['🏋️','💪','🏃','🧘'],a:'FIT'},{e:['☕','💻','📊','🗓️'],a:'WORK'},{e:['🧪','🔬','🥼','⚗️'],a:'LAB'}
+ {e:['🧪','🏠','✅','📦'],a:'SELF TEST'},{e:['🌡️','🤒','👂','🧠'],a:'THERMOMETER'},{e:['💧','🚰','🔬','❓'],a:'WATER'},
+ {e:['🍺','🍷','💨','🧪'],a:'ALCOHOL'},{e:['🥤','🍹','🛡️','🏷️'],a:'DRINK'},{e:['🤰','👶','🍼','➕'],a:'PREGNANCY'},
+ {e:['🤧','🦠','🤒','😷'],a:'FLU'},{e:['💊','🏪','🧴','🛒'],a:'PHARMACY'},{e:['🗽','🍎','🚕','🌃'],a:'NEW YORK'},
+ {e:['🦘','🐨','🏄','🌏'],a:'AUSTRALIA'},{e:['🍁','🏒','❄️','🏔️'],a:'CANADA'},{e:['🥝','🐑','🏉','🌋'],a:'NEW ZEALAND'},
+ {e:['♻️','📦','🌱','🌍'],a:'RECYCLING'},{e:['💡','🚀','🧠','✨'],a:'INNOVATION'},{e:['🤝','🌍','🏢','🔗'],a:'PARTNERSHIP'},
+ {e:['🏊','🔢','🔬','👨'],a:'SWIMCOUNT'},{e:['💧','🥤','🚰','💪'],a:'HYDRATION'},{e:['🔬','🧫','👩‍🔬','📋'],a:'SCIENCE'},
+ {e:['⏱️','🔟','✅','📋'],a:'RESULTS'},{e:['🏡','💻','🏢','🔁'],a:'HYBRID'},{e:['🦁','💪','🚫','😨'],a:'FEARLESS'},
+ {e:['🐆','🔄','⚡','🤸'],a:'AGILITY'},{e:['🏆','⭐','🥇','💯'],a:'EXCELLENCE'},{e:['🤝','✅','🔒','💎'],a:'INTEGRITY'}
 ];
 const SCRAMBLE=['SELF TEST','SAFE SIP','HYDRATION','OVULATION','PREGNANCY','THERMOMETER','PHARMACY','INNOVATION','AGILITY','INTEGRITY',
  'EXCELLENCE','FEARLESSNESS','RIGOR','RECYCLING','WELLNESS','INFECTION','DIAGNOSTICS','PARTNERSHIP','SWIMCOUNT','SUSTAINABILITY'];
 const EMOJI=[
  {e:'🏠🧪',o:['Home test','House party','Lab work','Kitchen science']},
  {e:'🥤🛡️',o:['Safe Sip','Juice box','Water bottle','Cup holder']},
- {e:'🍷💨🧪',o:['Breath alcohol test','Wine tasting','Smoke alarm','Air freshener']},
+ {e:'🍺💨🧪',o:['Breath alcohol test','Beer tasting','Smoke alarm','Air freshener']},
  {e:'🏊🔢',o:['Swimcount','Pool party','Swim lessons','Lap timer']},
- {e:'☕⏸️',o:['Coffee break','Morning rush','Night shift','Tea party']},
- {e:'🌙🎮',o:['Game night','Moon landing','Night shift','Space race']},
+ {e:'🧪⏱️🔟',o:['Results in 10 minutes','Ten tests a day','Lab opens at 10','Ten-minute break']},
+ {e:'🤧3️⃣1️⃣',o:['3 in 1 test','Three sneezes','First of three','One cold, three days']},
+ {e:'🖐️🧪',o:['5 in 1 test','High five','Hand sanitizer','Five fingers']},
+ {e:'🗽🏢',o:['New York office','Statue museum','City hall','Tall building']},
  {e:'🏢🏡💻',o:['Hybrid work','House hunting','Office party','Home office move']},
  {e:'🔋🧛📺',o:['Vampire electronics','Horror movie','Dead battery','TV marathon']},
- {e:'⏰💀',o:['Deadline','Night owl','Overtime','Wake-up call']},
- {e:'🧠⛈️',o:['Brainstorm','Headache','Weather report','Mind reader']},
- {e:'🧊🔨',o:['Icebreaker','Cold call','Ice cream','Frozen lunch']},
- {e:'🤝🌍',o:['Global partnership','World cup','Handshake deal','Travel buddy']},
  {e:'♻️📦',o:['Recyclable packaging','Moving day','Gift box','Online order']},
- {e:'👀🎯',o:['Eye on the goal','Bullseye','Eye test','Target practice']}
+ {e:'🌍✈️📉',o:['Fewer events, less travel','Cheaper flights','World tour','Jet lag']},
+ {e:'🔬👩‍🔬👨‍🔬📋',o:['Scientific Advisory Committee','Science fair','Lab coat sale','Chemistry class']},
+ {e:'💊🏪📍',o:['Store locator','Pill box','Shopping list','Map app']},
+ {e:'🛒🖤🏷️',o:['Black Friday sale','Night shopping','Dark mode','Price tag']},
+ {e:'🤝🏛️',o:['Government partner','Handshake deal','Museum visit','Court case']}
 ];
 const ODD=[
  {q:'Which is NOT a 2San core value?',o:['Simplicity','Agility','Integrity','Rigor']},
  {q:'Which is NOT a 2San product category?',o:['Dental Care','Infection','Family Planning','Drugs of Abuse']},
  {q:'Which is NOT a place where 2San operates?',o:['Japan','United Kingdom','Australia','New Zealand']},
- {q:'Which is NOT a virus?',o:['Diabetes','Flu A','RSV','Adenovirus']},
- {q:'Which is NOT a health test?',o:['Stapler','Hydration test','Water test','UTI test']},
- {q:'Which is NOT a fruit?',o:['Carrot','Apple','Banana','Mango']},
- {q:'Which is NOT an organ?',o:['Femur','Heart','Lungs','Kidney']},
- {q:'Which is NOT a planet?',o:['Moon','Mercury','Venus','Mars']},
- {q:'Which is NOT a day of the week?',o:['March','Monday','Friday','Sunday']},
- {q:'Which is NOT a flat shape?',o:['Cube','Square','Triangle','Circle']},
- {q:'Which is NOT a prime number?',o:['9','2','3','5']},
+ {q:'Which country is NOT a 2San region?',o:['Brazil','Canada','United States','Australia']},
  {q:'Which is NOT a 2San product?',o:['Zoom','Swimcount','Safe Sip+','Easy Pen Test']},
- {q:'Which is NOT a real vitamin?',o:['Vitamin Z','Vitamin C','Vitamin D','Vitamin B12']},
- {q:'Which is NOT a single element?',o:['Water','Hydrogen','Oxygen','Carbon']}
+ {q:'Which does the 5 in 1 test NOT check for?',o:['Measles','SARS-CoV-2','Flu B','RSV']},
+ {q:'Which is NOT one of 2San\'s green office habits?',o:['Printing every email','Reusable cups','Hybrid work','Recycling']},
+ {q:'Which is NOT in the Drugs of Abuse range?',o:['Hydration Test','Breath Alcohol Test','16 Panel Drug Test','Safe Sip+']},
+ {q:'Which is NOT a Family Planning test?',o:['UTI Test','Ovulation Test','Pregnancy Test','Swimcount']},
+ {q:'Which is NOT a Health & Wellness product?',o:['Fentanyl Drug Test','Home Water Test','Hydration Test','Digital Thermometer']},
+ {q:'Which is NOT an Infection test?',o:['Ovulation Test','Covid-19 Test','UTI Test','Flu A/B Test']},
+ {q:'Which word is NOT in the 2San mission "Better care, better life"?',o:['Cheap','Better','Care','Life']},
+ {q:'Which is NOT a thermometer 2San sells?',o:['Mercury thermometer','Digital thermometer','Infrared forehead thermometer','Ear and forehead thermometer']},
+ {q:'Which is NOT a 2San home drug test size?',o:['20 panel','16 panel','8 panel','4 panel']}
 ];
 const RIDDLES=[
- {q:'What has keys but can\'t open locks?',o:['A keyboard','A door','A car','A map']},
- {q:'What gets wetter the more it dries?',o:['A towel','A sponge','Rain','A river']},
- {q:'What has hands but can\'t clap?',o:['A clock','A glove','A robot','A statue']},
- {q:'What can you catch but not throw?',o:['A cold','A ball','A fish','A bus']},
- {q:'What has a neck but no head?',o:['A bottle','A shirt','A giraffe','A guitar']},
- {q:'What goes up but never comes down?',o:['Your age','A balloon','The sun','An elevator']},
- {q:'The more you take, the more you leave behind. What are they?',o:['Footsteps','Photos','Breaths','Coins']},
- {q:'What has many teeth but can\'t bite?',o:['A comb','A zipper','A saw','A shark toy']},
- {q:'What runs but never walks?',o:['Water','A clock','A car','A nose']},
- {q:'What has one eye but can\'t see?',o:['A needle','A storm','A potato','A camera']},
- {q:'What belongs to you, but others use it more than you?',o:['Your name','Your phone','Your car','Your desk']},
- {q:'What can fill a room but takes up no space?',o:['Light','Air','Water','Music']}
+ {q:'I stick to your cup and warn you before you sip. What am I?',o:['Safe Sip+ Drink Test Sticker','Hydration Test','Breath Alcohol Test','Home Water Test']},
+ {q:'One swab, three answers: Covid-19, Flu A and Flu B. What am I?',o:['The 3 in 1 Self-Test','The 5 in 1 Combo Test','The UTI Test','The Pen Test']},
+ {q:'I count swimmers, but never in a pool. What am I?',o:['Swimcount','Hydration Test','Ovulation Test','Home Water Test']},
+ {q:'Blow into me after the party and I will tell you the truth. What am I?',o:['Breath Alcohol Test','Safe Sip+','Digital Thermometer','Saliva Drug Test']},
+ {q:'I check what comes out of your tap. What am I?',o:['Home Water Test','Hydration Test','UTI Test','Safe Sip+']},
+ {q:'I tell you the best days to try for a baby. What am I?',o:['Ovulation Test','Pregnancy Test','Swimcount','Hydration Test']},
+ {q:'I read your temperature without touching you. What am I?',o:['Infrared forehead thermometer','Digital thermometer','Ear thermometer','Hydration Test']},
+ {q:'I am 16 tests in one cup. What am I?',o:['16 Panel Home Drug Test','5 in 1 Combo Test','Value Pack','Hydration Test']},
+ {q:'I am a box that doubles as a test tube holder. What am I?',o:['The Covid-19 test kit carton','A pharmacy shelf','The Safe Sip+ pack','A lunch box']},
+ {q:'I am the 2San value for adapting fast when healthcare changes. Who am I?',o:['Agility','Rigor','Integrity','Excellence']},
+ {q:'I am the 2San value for never cutting corners on quality checks. Who am I?',o:['Rigor','Agility','Fearlessness','Excellence']},
+ {q:'I am the 2San value for doing the right thing, even when nobody is watching. Who am I?',o:['Integrity','Agility','Rigor','Fearlessness']},
+ {q:'I am the 2San value for challenging the norm without fear. Who am I?',o:['Fearlessness','Excellence','Integrity','Rigor']},
+ {q:'I am the city where 2San LLC has its US office. Where am I?',o:['New York','Boston','Chicago','Miami']}
 ];
-const STROOP=[['RED','#E53935'],['BLUE','#1E88E5'],['GREEN','#2E9E4F'],['YELLOW','#F2B705'],['PURPLE','#8E24AA']];
-const ICONS=['🧪','💊','🩹','🌡️','💧','🦠','🍎','☕','📦','🔬','🩺','🧬','🏃','🥗','😴','💡'];
+/* Color Clash uses the 2San brand palette. */
+const STROOP=[['CORAL','#FB7569'],['BLUE','#0084DB'],['MINT','#1DD6A5'],['PURPLE','#7E43CA'],['NAVY','#1D1D4F']];
+/* 2San kit icons for Count It and Memory Flash. */
+const KIT=[['🧪','test tubes'],['🌡️','thermometers'],['🥤','Safe Sip drinks'],['💧','water drops'],['🦠','germs'],['📦','2San boxes'],
+ ['🍺','beer glasses'],['🤰','mums-to-be'],['💊','pills'],['🏪','pharmacies'],['🗽','New York statues'],['🦘','kangaroos'],
+ ['🍁','maple leaves'],['♻️','recycling signs'],['💡','light bulbs'],['🔬','microscopes']];
+const ICONS=KIT.map(k=>k[0]);
+/* Quick Math: 2San word problems. Each returns [question, answer]. */
+const MATH=[
+ ()=>{const n=rnd(3,12);return[`A Safe Sip+ pack has 4 tests. How many tests are in ${n} packs?`,4*n];},
+ ()=>{const n=rnd(3,12);return[`The Hydration Test pack has 10 tests. How many tests are in ${n} packs?`,10*n];},
+ ()=>{const n=rnd(4,15);return[`1 test gives 3 results. How many results do ${n} tests give?`,3*n];},
+ ()=>{const n=rnd(3,9);return[`The 16 panel drug test checks 16 drugs. How many checks in ${n} tests?`,16*n];},
+ ()=>{const n=rnd(3,12);return[`2San has 5 international offices. If each sends ${n} people to game night, how many come?`,5*n];},
+ ()=>{const a=rnd(40,99),b=rnd(10,a-8);return[`A pharmacy had ${a} 2San tests and sold ${b}. How many are left?`,a-b];},
+ ()=>{const b=rnd(6,44);return[`The Ovulation pack has 50 strips. You used ${b}. How many are left?`,50-b];},
+ ()=>{const a=rnd(12,60),b=rnd(12,60);return[`A store got ${a} Covid tests and ${b} Flu tests. How many tests in total?`,a+b];},
+ ()=>{const n=rnd(2,6);return[`The Value Pack has 70 tests. How many tests are in ${n} Value Packs?`,70*n];},
+ ()=>{const n=rnd(3,9);return[`Each 5 in 1 test checks 5 infections. How many checks do ${n} tests make?`,5*n];}
+];
+/* Sliding Puzzle tiles spell 2SAN HOME (home tests). Tile numbers stay the solving order. */
+const SLIDE_LABEL=['','2','S','A','N','H','O','M','E'];
 
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const norm=s=>String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
@@ -142,32 +169,31 @@ const GAMES={
    make:it=>choiceQ(it.q,it.c,it.o[0],it.o.slice(1))},
  tf:{name:'True or False',icon:'T/F',bg:'var(--blue)',desc:'Quick 2San facts. Pick one of two.',secs:15,count:10,pool:TF,
    make:it=>({q:{type:'choice',tf:true,text:it.q,cat:it.c,options:['True','False']},key:{correct:it.a?0:1,answer:(it.a?'True':'False')+(it.why?'. '+it.why:'')}})},
- pics:{name:'4 Pics 1 Word',icon:'🖼️',bg:'var(--sun)',desc:'Four emoji pictures, one word that links them. Type it in.',secs:30,count:10,pool:PICS,
+ pics:{name:'4 Pics 1 Word',icon:'🖼️',bg:'var(--sun)',desc:'Four emoji pictures, one 2San word. Type it in.',secs:30,count:10,pool:PICS,
    make:it=>({q:{type:'text',text:'What one word links all four pictures?',cat:'4 Pics 1 Word',hint:pattern(it.a),display:{kind:'four',items:it.e}},key:{accept:[it.a],answer:it.a}})},
  scramble:{name:'Word Scramble',icon:'🔤',bg:'var(--mint)',desc:'Unscramble the letters to find a 2San word.',secs:30,count:10,pool:SCRAMBLE,
    make:w=>({q:{type:'text',text:'Unscramble the 2San word',cat:'Word Scramble',hint:pattern(w),display:{kind:'tiles',text:w.split(' ').map(scrambleWord).join(' ')}},key:{accept:[w],answer:w}})},
- emoji:{name:'Emoji Riddle',icon:'😎',bg:'var(--purple)',desc:'Read the emojis and pick the phrase they spell.',secs:20,count:10,pool:EMOJI,
+ emoji:{name:'Emoji Riddle',icon:'😎',bg:'var(--purple)',desc:'Read the emojis and pick the 2San phrase they spell.',secs:20,count:10,pool:EMOJI,
    make:it=>choiceQ('What do these emojis mean?','Emoji Riddle',it.o[0],it.o.slice(1),{display:{kind:'big',text:it.e,emoji:true}})},
- odd:{name:'Odd One Out',icon:'🙃',bg:'var(--coral)',desc:'Three belong together. Spot the one that does not.',secs:15,count:10,pool:ODD,
+ odd:{name:'Odd One Out',icon:'🙃',bg:'var(--coral)',desc:'Three are true to 2San. Spot the one that is not.',secs:15,count:10,pool:ODD,
    make:it=>choiceQ(it.q,'Odd One Out',it.o[0],it.o.slice(1))},
- riddle:{name:'Riddles',icon:'🤔',bg:'var(--blue)',desc:'Classic brain teasers with four choices.',secs:25,count:10,pool:RIDDLES,
-   make:it=>choiceQ(it.q,'Riddle',it.o[0],it.o.slice(1))},
- math:{name:'Quick Math',icon:'➗',bg:'var(--mint)',desc:'Mental math sprint. Type the exact answer, fast.',secs:15,count:10,gen:true,
-   make:()=>{const op=['+','−','×'][rnd(0,2)];let a,b,v;if(op==='+'){a=rnd(12,89);b=rnd(12,89);v=a+b;}else if(op==='−'){a=rnd(40,99);b=rnd(10,a-5);v=a-b;}else{a=rnd(3,12);b=rnd(6,19);v=a*b;}
-     return {q:{type:'number',exact:true,text:'Solve it!',cat:'Quick Math',display:{kind:'big',text:`${a} ${op} ${b}`}},key:{value:v,answer:String(v)}};}},
- stroop:{name:'Color Clash',icon:'🎨',bg:'var(--purple)',desc:'Tap the COLOR of the word, not what it says. Harder than it looks.',secs:10,count:10,gen:true,
+ riddle:{name:'2San Riddles',icon:'🤔',bg:'var(--blue)',desc:'Guess the 2San product or value from the clue.',secs:25,count:10,pool:RIDDLES,
+   make:it=>choiceQ(it.q,'2San Riddle',it.o[0],it.o.slice(1))},
+ math:{name:'Quick Math',icon:'➗',bg:'var(--mint)',desc:'Fast 2San word problems. Type the exact answer.',secs:20,count:10,gen:true,
+   make:()=>{const [text,v]=MATH[rnd(0,MATH.length-1)]();return {q:{type:'number',exact:true,text,cat:'Quick Math'},key:{value:v,answer:String(v)}};}},
+ stroop:{name:'Color Clash',icon:'🎨',bg:'var(--purple)',desc:'2San brand colors. Tap the COLOR of the word, not what it says.',secs:10,count:10,gen:true,
    make:()=>{const s=shuffle(STROOP.slice()),ink=s[0],word=s[1];const opts=shuffle([ink[0],word[0],s[2][0],s[3][0]]);
-     return {q:{type:'choice',text:'Tap the COLOR of the word',cat:'Color Clash',options:opts,display:{kind:'stroop',text:word[0],color:ink[1]}},key:{correct:opts.indexOf(ink[0]),answer:ink[0]}};}},
- count:{name:'Count It',icon:'👀',bg:'var(--sun)',desc:'Count the icons on the big screen. Exact answers only.',secs:20,count:8,gen:true,
-   make:()=>{const kinds=shuffle(ICONS.slice(0,6)).slice(0,4),target=kinds[0],n=rnd(5,12),items=Array(n).fill(target);
-     while(items.length<30)items.push(kinds[rnd(1,3)]);
-     return {q:{type:'number',exact:true,text:`How many ${target} are on the big screen?`,cat:'Count It',display:{kind:'grid',items:shuffle(items),hostOnly:true}},key:{value:n,answer:String(n)}};}},
- memory:{name:'Memory Flash',icon:'🧠',bg:'var(--coral)',desc:'Six icons flash on the big screen for 5 seconds. Which one was missing?',secs:20,count:8,gen:true,
+     return {q:{type:'choice',text:'Tap the COLOR of the word',cat:'2San Colors',options:opts,display:{kind:'stroop',text:word[0],color:ink[1]}},key:{correct:opts.indexOf(ink[0]),answer:ink[0]}};}},
+ count:{name:'Count It',icon:'👀',bg:'var(--sun)',desc:'Count the 2San kit icons on the big screen. Exact answers only.',secs:20,count:8,gen:true,
+   make:()=>{const kinds=shuffle(KIT.slice()).slice(0,4),target=kinds[0],n=rnd(5,12),items=Array(n).fill(target[0]);
+     while(items.length<30)items.push(kinds[rnd(1,3)][0]);
+     return {q:{type:'number',exact:true,text:`How many ${target[1]} ${target[0]} are on the big screen?`,cat:'Count It · 2San kit',display:{kind:'grid',items:shuffle(items),hostOnly:true}},key:{value:n,answer:String(n)}};}},
+ memory:{name:'Memory Flash',icon:'🧠',bg:'var(--coral)',desc:'Six 2San kit icons flash on the big screen for 5 seconds. Which was missing?',secs:20,count:8,gen:true,
    make:()=>{const pick=shuffle(ICONS.slice()),shown=pick.slice(0,6),missing=pick[6];const opts=shuffle([missing,...shuffle(shown.slice()).slice(0,3)]);
-     return {q:{type:'choice',text:'Which one was NOT on the big screen?',cat:'Memory Flash',options:opts,display:{kind:'flash',items:shown,ms:5000,hostOnly:true}},key:{correct:opts.indexOf(missing),answer:missing}};}},
- slide:{name:'Sliding Puzzle',icon:'🧩',bg:'var(--blue)',desc:'Everyone gets the same 3×3 puzzle. Fastest to solve it wins.',secs:90,count:3,gen:true,
-   make:()=>({q:{type:'slide',text:'Solve the sliding puzzle on your phone!',cat:'Sliding Puzzle',tiles:slideStart()},key:{answer:'1 2 3 / 4 5 6 / 7 8'}})},
- num:{name:'Closest Number',icon:'#',bg:'var(--mint)',desc:'Type a number. The closer you are, the more points.',secs:30,count:8,pool:NUM,
+     return {q:{type:'choice',text:'Which one was NOT on the big screen?',cat:'Memory Flash · 2San kit',options:opts,display:{kind:'flash',items:shown,ms:5000,hostOnly:true}},key:{correct:opts.indexOf(missing),answer:missing}};}},
+ slide:{name:'Sliding Puzzle',icon:'🧩',bg:'var(--blue)',desc:'Slide the tiles to spell 2SAN HOME. Same puzzle for everyone; fastest wins.',secs:90,count:3,gen:true,
+   make:()=>({q:{type:'slide',text:'Slide the tiles to spell 2SAN HOME!',cat:'Sliding Puzzle',tiles:slideStart()},key:{answer:'2 S A / N H O / M E'}})},
+ num:{name:'Closest Number',icon:'#',bg:'var(--mint)',desc:'Guess the 2San number. The closer you are, the more points.',secs:30,count:8,pool:NUM,
    make:it=>({q:{type:'number',text:it.q,cat:it.c},key:{value:it.a,answer:String(it.a),closest:true}})}
 };
 const OPT_STYLE=[{c:'var(--coral)',s:'▲'},{c:'var(--blue)',s:'◆'},{c:'var(--mint)',s:'●',fg:'var(--ink)'},{c:'var(--purple)',s:'■'}];
@@ -398,8 +424,8 @@ function newDemo(){
 }
 function paintDemoSlide(){
   const g=$('dSlide');g.innerHTML='';const S=DM.slide,blank=S.t.indexOf(0);
-  S.t.forEach((v,i)=>{const b=el('button',v?'':'blank',v||'');b.type='button';b.disabled=!v||DM.done;
-    if(v){b.style.setProperty('--c',COLORS[v]);b.setAttribute('aria-label','Tile '+v);
+  S.t.forEach((v,i)=>{const b=el('button',v?'':'blank',v?SLIDE_LABEL[v]:'');b.type='button';b.disabled=!v||DM.done;
+    if(v){b.style.setProperty('--c',COLORS[v]);b.dataset.n=v;b.setAttribute('aria-label',`Tile ${SLIDE_LABEL[v]}, number ${v}`);
       b.onclick=()=>{const r=Math.floor(i/3),c=i%3,br=Math.floor(blank/3),bc=blank%3;if(Math.abs(r-br)+Math.abs(c-bc)!==1||DM.done)return;
         S.t[blank]=v;S.t[i]=0;S.moves++;beep(600,.03);paintDemoSlide();if(S.t.join('')==='123456780')demoAnswer({value:S.moves});};}
     g.append(b);});
@@ -507,7 +533,7 @@ function onAnswers(){
 let flashT;
 function renderDisplay(box,q,forHost,start){
   box.innerHTML='';clearTimeout(flashT);const d=q.display;
-  if(q.type==='slide'&&forHost){const g=el('div','slide mini');q.tiles.forEach(t=>{const b=el('span',t?'':'blank',t||'');if(t)b.style.setProperty('--c',COLORS[t]);g.append(b);});box.append(g);return;}
+  if(q.type==='slide'&&forHost){const g=el('div','slide mini');q.tiles.forEach(t=>{const b=el('span',t?'':'blank',t?SLIDE_LABEL[t]:'');if(t){b.style.setProperty('--c',COLORS[t]);b.dataset.n=t;}g.append(b);});box.append(g);return;}
   if(!d)return;
   if(d.hostOnly&&!forHost){box.append(el('div','lookup','👀 Look at the big screen!'));return;}
   if(d.kind==='four'){const g=el('div','four');d.items.forEach(e=>g.append(el('span',null,e)));stagger(g);box.append(g);}
@@ -658,8 +684,8 @@ let SL={t:[],moves:0};
 function startSlide(tiles){SL={t:tiles.slice(),moves:0};paintSlide();}
 function paintSlide(){
   const g=$('pSlide');g.innerHTML='';const blank=SL.t.indexOf(0);
-  SL.t.forEach((v,i)=>{const b=el('button',v?'':'blank',v||'');b.type='button';b.disabled=!v;
-    if(v){b.style.setProperty('--c',COLORS[v]);b.setAttribute('aria-label','Tile '+v);
+  SL.t.forEach((v,i)=>{const b=el('button',v?'':'blank',v?SLIDE_LABEL[v]:'');b.type='button';b.disabled=!v;
+    if(v){b.style.setProperty('--c',COLORS[v]);b.dataset.n=v;b.setAttribute('aria-label',`Tile ${SLIDE_LABEL[v]}, number ${v}`);
       b.onclick=()=>{const r=Math.floor(i/3),c=i%3,br=Math.floor(blank/3),bc=blank%3;if(Math.abs(r-br)+Math.abs(c-bc)!==1||g.classList.contains('done'))return;
         SL.t[blank]=v;SL.t[i]=0;SL.moves++;beep(600,.03);paintSlide();if(SL.t.join('')==='123456780')answer({value:SL.moves});};}
     g.append(b);});
