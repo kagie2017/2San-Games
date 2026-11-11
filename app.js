@@ -419,7 +419,7 @@ function buildGameCards(){
   Object.entries(GAMES).forEach(([id,g])=>{
     const c=el('div','gcard');const ic=el('i',null,g.icon);ic.style.background=g.bg;
     const t=el('div');t.style.minWidth='0';t.append(el('b',null,g.name),el('p',null,g.desc));
-    const meta=el('div','gmeta');meta.append(el('span','st wait',howFor(id)),el('span',null,g.race?`About ${g.secs}s per race`:`${g.secs}s per round`));
+    const meta=el('div','gmeta');meta.append(el('span','st wait',howFor(id)),el('span',null,g.race?'10s, 30s or 1 min races':`${g.secs}s per round`));
     const b=el('button','btn sm blue','Try a sample');b.type='button';b.onclick=()=>openDemo(id);
     const top=el('div','gtop');top.append(ic,t);c.append(top,meta,b);box.append(c);
   });stagger(box);
@@ -458,7 +458,7 @@ function demoRace(){
   const race=el('div','race small'),cnt=el('div','race-count'),lanes=el('div');race.append(cnt,lanes);
   const disp=$('dDisp');disp.innerHTML='';disp.append(race);
   animIn($('dCard'));
-  const RV=buildRiver(lanes,riders.map(x=>({id:x[0],name:x[1].replace(' (you)',''),color:x[2],face:x[3],me:x[0]==='me'})),{small:true});
+  const RV=buildRiver(lanes,riders.map(x=>({id:x[0],name:x[1].replace(' (you)',''),color:x[2],face:x[3],me:x[0]==='me'})),{small:true,dur:r.dur});
   const plan=racePlan(r),t0=performance.now();let last=null;
   (function f(){if(run!==DM.run)return;const t=(performance.now()-t0)/1000-3,c=t<0?String(Math.ceil(-t)):t<.8?'GO!':'';
     if(c!==last){last=c;cnt.textContent=c;if(c)beep(c==='GO!'?990:520,.1);}
@@ -544,9 +544,9 @@ function buildGameList(){
   applyGameDefaults();
 }
 function setSelect(sel,v){const s=$(sel);if(![...s.options].some(o=>o.value==String(v))){const o=el('option',null,String(v));o.value=v;s.append(o);}s.value=String(v);}
-function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);$('hTimeBox').hidden=!!g.race;$('hCountLbl').textContent=g.race?'Races':'Questions';updatePoolInfo();}
+function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);$('hTimeBox').hidden=!!g.race;$('hRaceLenBox').hidden=!g.race;$('hCountLbl').textContent=g.race?'Races':'Questions';updatePoolInfo();}
 function updatePoolInfo(){const id=selGame(),g=GAMES[id];
-  if(g.race){$('poolInfo').textContent='Every race is random, so anyone can win. Points per race: 1st 1000, 2nd 900, 3rd 800, down to 100.';return;}
+  if(g.race){$('poolInfo').textContent='Every race is random, so anyone can win. Points per race: 1st 1000, 2nd 900, 3rd 800, down to 100. Pick how long each race lasts.';return;}
   if(!g.pool){$('poolInfo').textContent=`${g.name} makes a new round every time. No round repeats in this lobby.`;return;}
   const played=new Set((H.used[id]||[]).filter(s=>s[0]==='p')).size,left=g.pool.length-played;
   $('poolInfo').textContent=left>0?`${left} of ${g.pool.length} ${g.name} rounds not played yet in this lobby.`:`All ${g.pool.length} ${g.name} rounds have been played here. They will start over.`;}
@@ -577,7 +577,7 @@ $('startBtn').onclick=async()=>{
   if(G.pool){const used=new Set(H.used[g]||[]),all=G.pool.map((_,i)=>i);order=shuffle(all.filter(i=>!used.has('p'+i))).slice(0,n);
     if(order.length<n){order=order.concat(shuffle(all.filter(i=>!order.includes(i))).slice(0,n-order.length));H.used[g]=[];
       status(`Every ${G.name} round has been played in this lobby, so some start over.`,5000);}}
-  if(G.race){const session=rid(),names=shuffle(RACE_NAMES.slice());try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await goDuck(0,{session,total:n,names:Array.from({length:n},(_,i)=>names[i%names.length])});}catch(e){}$('startBtn').disabled=false;return;}
+  if(G.race){const session=rid(),names=shuffle(RACE_NAMES.slice());try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await goDuck(0,{session,total:n,len:+$('hRaceLen').value||30,names:Array.from({length:n},(_,i)=>names[i%names.length])});}catch(e){}$('startBtn').disabled=false;return;}
   H.deck={session:rid(),game:g,order,dur:+$('hTime').value};
   try{await setScores({session:H.deck.session,scores:{},last:{},ok:{},idx:-1});await goQuestion(0);}catch(e){}
   $('startBtn').disabled=false;
@@ -594,10 +594,10 @@ async function goQuestion(i){
 }
 /* One race of the 2San Duck Race game. Every player in the lobby rides; the host draws a random finishing order. */
 async function goDuck(i,base){
-  const b=base||{session:STATE.session,total:STATE.total,names:STATE.names},ids=shuffle(playerIds()),facts=RACE_FACTS();
+  const b=base||{session:STATE.session,total:STATE.total,len:STATE.len,names:STATE.names},ids=shuffle(playerIds()),facts=RACE_FACTS();
   if(!ids.length){status('Wait for at least one player to join.');return;}
-  await setState({session:b.session,phase:'race',game:'duck',idx:i,total:b.total,names:b.names,
-    race:{game:true,ids,order:shuffle(ids.slice()),place:1,seed:rid(),dur:9,name:(b.names||[])[i]||RACE_NAMES[0],fact:facts[rnd(0,facts.length-1)]}},true);
+  await setState({session:b.session,phase:'race',game:'duck',idx:i,total:b.total,len:b.len,names:b.names,
+    race:{game:true,ids,order:shuffle(ids.slice()),place:1,seed:rid(),dur:b.len||30,name:(b.names||[])[i]||RACE_NAMES[0],fact:facts[rnd(0,facts.length-1)]}},true);
 }
 function answeredIds(){const s=STATE;return playerIds().filter(id=>ANSWERS[id]&&ANSWERS[id].session===s.session&&ANSWERS[id].idx===s.idx);}
 function onAnswers(){
@@ -727,7 +727,7 @@ function renderHostFinal(){
 async function startRace(tie){
   $('raceBtn').disabled=true;
   const cur={...STATE};delete cur.startedAt;
-  try{await setState({...cur,phase:'race',race:{ids:shuffle(tie.ids.slice()),order:shuffle(tie.ids.slice()),place:tie.place,seed:rid(),dur:8}},true);}catch(e){}
+  try{await setState({...cur,phase:'race',race:{ids:shuffle(tie.ids.slice()),order:shuffle(tie.ids.slice()),place:tie.place,seed:rid(),dur:+$('tieLen').value||10}},true);}catch(e){}
   $('raceBtn').disabled=false;
 }
 $('raceDoneBtn').onclick=async()=>{const r=STATE.race;if(!r)return;
@@ -742,9 +742,11 @@ function seeded(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h
   return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return (h>>>0)/4294967296;};}
 /* Each duck: progress checkpoints that wobble (so the lead changes) and reach the line at its finishing time. */
 function racePlan(r){
-  const rnd=seeded(r.seed),fin={},paths={};let t=r.dur*.82;
-  const n=r.order.length;r.order.forEach((id,k)=>{if(k)t+=n<=6?.35+rnd()*.35:(4/(n-1))*(.6+rnd()*.8);fin[id]=t;});
-  r.ids.forEach(id=>{const n=10,w=[];for(let j=0;j<n;j++)w.push(.35+rnd()*1.4);const tot=w.reduce((a,b)=>a+b,0);let c=0;paths[id]=[0,...w.map(x=>(c+=x)/tot)];});
+  // The winner crosses a little before the chosen length; the rest follow so the last duck finishes near it.
+  const rnd=seeded(r.seed),fin={},paths={},n=r.order.length,spread=Math.min(r.dur*.18,.55*(n-1)),gaps=r.order.slice(1).map(()=>.6+rnd()*.8),gs=gaps.reduce((a,b)=>a+b,0)||1;
+  let t=r.dur*.97-spread;r.order.forEach((id,k)=>{if(k)t+=spread*gaps[k-1]/gs;fin[id]=t;});
+  const cps=Math.round(Math.min(30,Math.max(10,r.dur/2)));
+  r.ids.forEach(id=>{const n=cps,w=[];for(let j=0;j<n;j++)w.push(.35+rnd()*1.4);const tot=w.reduce((a,b)=>a+b,0);let c=0;paths[id]=[0,...w.map(x=>(c+=x)/tot)];});
   return {fin,paths,end:Math.max(...Object.values(fin))+.4};
 }
 function duckX(plan,id,t){const f=plan.fin[id];if(t<=0)return 0;if(t>=f)return 1;const p=plan.paths[id],u=t/f*(p.length-1),j=Math.floor(u);return p[j]+(p[j+1]-p[j])*(u-j);}
@@ -754,7 +756,7 @@ const BANKS=['Better care, better life','Safe Sip+','Swimcount','Journey to Self
 const BANK_C=['#FB7569','#0084DB','#1DD6A5','#7E43CA','#FFC83D'];
 const RIVERS=new Map();addEventListener('resize',()=>{for(const c of RIVERS.values())c.relayout();});
 function riverSize(n,small){return n<=6?(small?[44,.4]:[56,.52]):n<=16?(small?[38,.34]:[46,.42]):(small?[30,.26]:[36,.32]);}
-function buildRiver(box,riders,{small=false,board=false}={}){
+function buildRiver(box,riders,{small=false,board=false,dur=10}={}){
   box.innerHTML='';box.classList.add('riverbox');
   const view=el('div','rview'),world=el('div','rworld'),bank=el('div','rbank'),start=el('div','rstart'),fin=el('div','rfinish');
   fin.append(el('span','rflag','FINISH'));world.append(el('div','rwater'),bank,el('div','rshore'),start,fin);view.append(world);box.append(view);
@@ -768,7 +770,7 @@ function buildRiver(box,riders,{small=false,board=false}={}){
   let G={W:600,H:300,L:1400,sx:80,fx:1480,ww:1800},last=null,lastLead=0;
   function relayout(){
     const top0=small?34:48,dh0=bird*.62+s*100+20,need=top0+4+dh0+(dh0+6)*(n-1)+18;view.style.height=n<=8&&need>(small?310:320)?need+'px':'';
-    const W=view.clientWidth||600,H=view.clientHeight||300,top=top0,L=Math.max(W*2.4,820),sx=Math.min(110,W*.16);
+    const W=view.clientWidth||600,H=view.clientHeight||300,top=top0,L=Math.max(W*(2.2+Math.min(dur,60)/25),820),sx=Math.min(110,W*.16);
     G={W,H,L,sx,fx:sx+L,ww:sx+L+W*.8};world.style.width=G.ww+'px';start.style.left=sx+'px';fin.style.left=G.fx+'px';bank.style.height=top+'px';
     bank.innerHTML='';for(let x=sx+(small?150:220),k=0;x<G.fx-140;x+=small?250:340,k++){const sg=el('span','rsign',BANKS[k%BANKS.length]);sg.style.left=x+'px';sg.style.setProperty('--c',BANK_C[k%BANK_C.length]);bank.append(sg);}
     const dh=dh0,y0=top+dh+4,y1=H-16;
@@ -798,7 +800,7 @@ function renderRace(isHost){
   else $('pRaceWait').textContent=r.game&&STATE.idx+1<STATE.total?'Waiting for the host to show the leaderboard.':'Waiting for the host to show the final results.';
   const live=isHost?null:$('pRaceLive');if(live){live.hidden=!r.ids.includes(me);live.textContent='';}
   const riders=r.ids.map(id=>{const p=PLAYERS[id]||{};return {id,name:playerName(id),color:p.color||COLORS[0],face:p.face,me:id===me};});
-  const RV=buildRiver($(P_+'RaceLanes'),riders,{small:!isHost,board:isHost&&n>3});
+  const RV=buildRiver($(P_+'RaceLanes'),riders,{small:!isHost,board:isHost&&n>3,dur:r.dur});
   const plan=racePlan(r),el0=Date.now()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<600000?el0:0);
   let lastCount=null,done=false,lastLive=0;
   (function frame(){
