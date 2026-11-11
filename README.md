@@ -13,11 +13,25 @@ Live: https://2san-games.vercel.app/
 
 One device is in one lobby at a time. Lobbies with no activity for 12 hours are cleaned up automatically.
 
-### Games (content from [2san.com](https://2san.com))
+### Games
 
-- **2San Quiz**: four choices; faster correct answers score more (500 to 1000 points).
-- **True or False**: quick 2San facts.
-- **Closest Number**: type a number; exact answers get 1000 points.
+| Game | How players answer | What it is |
+| --- | --- | --- |
+| 2San Quiz | 4 choices | Facts from [2san.com](https://2san.com) |
+| True or False | 2 choices | Quick 2San facts |
+| 4 Pics 1 Word | type a word | Four emoji pictures, one linking word |
+| Word Scramble | type a word | Unscramble a 2San word |
+| Emoji Riddle | 4 choices | Read the emojis, pick the phrase |
+| Odd One Out | 4 choices | Spot the one that does not belong |
+| Riddles | 4 choices | Classic brain teasers |
+| Quick Math | type a number | Mental math sprint |
+| Color Clash | 4 choices | Tap the ink color, not the word |
+| Count It | type a number | Count icons on the big screen |
+| Memory Flash | 4 choices | Six icons flash for 5 seconds; which was missing? |
+| Sliding Puzzle | solve on phone | Same 3×3 puzzle for everyone; fastest wins |
+| Closest Number | type a number | The closer, the more points |
+
+Correct answers score 500 to 1000 points: the faster, the more. Closest Number scores by how near the guess is.
 
 ## Stack
 

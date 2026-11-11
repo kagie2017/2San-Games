@@ -9,7 +9,7 @@ drop table if exists public.answers, public.player_tokens, public.players, publi
   public.lobbies, public.host_key, public.scores, public.game_state, public.config cascade;
 drop function if exists public.is_host(text), public.host_check(text), public.player_me(text),
   public.player_join(text,text,text,text), public.player_leave(text),
-  public.player_answer(text,text,int,int,double precision),
+  public.player_answer(text,text,int,int,double precision,text),
   public.host_set_state(text,jsonb,boolean), public.host_set_scores(text,jsonb),
   public.host_set_key(text,jsonb), public.host_get_key(text), public.host_answers(text),
   public.host_kick(text,uuid), public.host_clear(text) cascade;
@@ -55,6 +55,7 @@ create table public.answers (
   idx int not null,
   choice int,
   value double precision,
+  text text check (char_length(text) <= 40),
   answered_at timestamptz not null default now()
 );
 
@@ -166,9 +167,9 @@ language sql security definer set search_path = public as $$
   select public._leave(p_token);
 $$;
 
--- First answer per question is final; only accepted while that question is open in the player's lobby.
+-- First answer per round is final; only accepted while that round is open in the player's lobby.
 create or replace function public.player_answer(p_token text, p_session text, p_idx int,
-  p_choice int, p_value double precision) returns boolean
+  p_choice int, p_value double precision, p_text text default null) returns boolean
 language plpgsql security definer set search_path = public as $$
 declare me players; v_state jsonb;
 begin
@@ -178,11 +179,11 @@ begin
   if v_state->>'phase' <> 'question' or v_state->>'session' <> p_session or (v_state->>'idx')::int <> p_idx then
     return false;
   end if;
-  insert into answers (player_id, lobby_id, session, idx, choice, value, answered_at)
-  values (me.id, me.lobby_id, p_session, p_idx, p_choice, p_value, now())
+  insert into answers (player_id, lobby_id, session, idx, choice, value, text, answered_at)
+  values (me.id, me.lobby_id, p_session, p_idx, p_choice, p_value, left(p_text, 40), now())
   on conflict (player_id) do update
     set lobby_id = excluded.lobby_id, session = excluded.session, idx = excluded.idx,
-        choice = excluded.choice, value = excluded.value, answered_at = excluded.answered_at
+        choice = excluded.choice, value = excluded.value, text = excluded.text, answered_at = excluded.answered_at
     where answers.session is distinct from excluded.session or answers.idx is distinct from excluded.idx;
   return true;
 end $$;
@@ -214,14 +215,14 @@ language plpgsql stable security definer set search_path = public as $$
 declare lid uuid := public._host_lobby(p_token);
 begin return (select key from lobby_secrets where lobby_id = lid); end $$;
 
--- Answers in the host's lobby, with ms after the question opened (server clock).
+-- Answers in the host's lobby, with ms after the round opened (server clock).
 create or replace function public.host_answers(p_token text)
-returns table (player_id uuid, session text, idx int, choice int, value double precision, ms double precision)
+returns table (player_id uuid, session text, idx int, choice int, value double precision, text text, ms double precision)
 language plpgsql stable security definer set search_path = public as $$
 declare lid uuid := public._host_lobby(p_token);
 begin
   return query
-    select a.player_id, a.session, a.idx, a.choice, a.value,
+    select a.player_id, a.session, a.idx, a.choice, a.value, a.text,
            (extract(epoch from (a.answered_at - l.started_at)) * 1000)::double precision
       from answers a join lobbies l on l.id = a.lobby_id
      where a.lobby_id = lid;
@@ -257,7 +258,7 @@ grant execute on function
   public.lobby_join(text,uuid,text,text,text,text),
   public.player_update(text,text,text,text),
   public.lobby_leave(text),
-  public.player_answer(text,text,int,int,double precision),
+  public.player_answer(text,text,int,int,double precision,text),
   public.host_set_state(text,jsonb,boolean), public.host_set_scores(text,jsonb),
   public.host_set_key(text,jsonb), public.host_get_key(text), public.host_answers(text),
   public.host_kick(text,uuid), public.host_transfer(text,uuid), public.host_close(text)
