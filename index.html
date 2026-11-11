@@ -96,12 +96,13 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 @media (max-width:860px){.cols{grid-template-columns:1fr}}
 .games{display:grid;gap:10px}
 .game input{position:absolute;opacity:0;pointer-events:none}
-.game span{display:flex;gap:12px;align-items:center;padding:12px 14px;border:3px solid var(--navy);border-radius:12px;background:var(--paper);cursor:pointer;box-shadow:0 4px 0 var(--navy)}
-.game span i{flex:none;width:44px;height:44px;border-radius:10px;border:3px solid var(--navy);display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:1.3rem;background:var(--white)}
+.game>span{display:flex;gap:12px;align-items:center;padding:12px 14px;border:3px solid var(--navy);border-radius:12px;background:var(--paper);cursor:pointer;box-shadow:0 4px 0 var(--navy)}
+.game>span>i{flex:none;width:44px;height:44px;border-radius:10px;border:3px solid var(--navy);display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:1.3rem;background:var(--white)}
+.game>span>span{display:block;min-width:0}
 .game b{font-family:var(--display);font-weight:400;font-size:1.2rem;display:block}
 .game small{color:var(--muted);font-size:.84rem}
 .game input:checked+span{background:var(--coral);color:var(--white)}
-.game input:checked+span small{color:#fff}
+.game input:checked+span small{color:var(--white)}
 .game input:focus-visible+span{outline:3px solid var(--sun);outline-offset:2px}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
 .row>div{flex:1 1 140px;min-width:0}
