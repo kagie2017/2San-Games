@@ -3,16 +3,16 @@ const QUIZ=[
  {c:'About 2San',q:'What does 2San make?',o:['Home health self-tests','Fitness trackers','Hospital beds','Vitamin drinks']},
  {c:'About 2San',q:'Complete the tagline: "Join us on the Journey to…"',o:['Self-testing for All','Better Health Today','A Healthier World','Care Without Limits']},
  {c:'About 2San',q:'Finish the 2San mission: "Better care, better…"',o:['life','world','health','future']},
- {c:'About 2San',q:'How many international offices does 2San have?',o:['Five','Three','Seven','Ten']},
+ {c:'Products',q:'Which 2San test checks for urinary tract infections?',o:['UTI Test','Hydration Test','Swimcount','Safe Sip+']},
  {c:'About 2San',q:'2San\'s operations span how many continents?',o:['Four','Two','Five','Six']},
  {c:'About 2San',q:'In which US city is the 2San LLC office?',o:['New York','Boston','Chicago','Los Angeles']},
  {c:'About 2San',q:'Where is 2San headquartered?',o:['North America','Europe','Australia','Asia']},
- {c:'About 2San',q:'Which of these is NOT one of 2San\'s five core values?',o:['Simplicity','Agility','Integrity','Rigor']},
+ {c:'Products',q:'Which product range is Swimcount in?',o:['Family Planning','Infection','Drugs of Abuse','Health and Wellness']},
  {c:'About 2San',q:'Which value is about adapting quickly as healthcare changes?',o:['Agility','Rigor','Integrity','Excellence']},
  {c:'About 2San',q:'2San was founded on a spirit of…',o:['Entrepreneurship','Tradition','Competition','Adventure']},
  {c:'About 2San',q:'What does SAC stand for at 2San?',o:['Scientific Advisory Committee','Safety Assurance Council','Self-test Approval Center','Sales Action Committee']},
  {c:'About 2San',q:'When was the 2San Scientific Advisory Committee set up?',o:['2022','2019','2020','2024']},
- {c:'About 2San',q:'Which is NOT a 2San product category?',o:['Dental Care','Infection','Family Planning','Drugs of Abuse']},
+ {c:'Products',q:'Where is the Easy Pen Test Covid-19 sold?',o:['United States','Japan','Brazil','South Africa']},
  {c:'About 2San',q:'Where can people buy 2San tests?',o:['Local pharmacies and retail stores','Only in hospitals','Only with a prescription','Only at events']},
  {c:'Products',q:'Which 2San product checks a drink for spiking?',o:['Safe Sip+ Drink Test Sticker','Swimcount','Easy Pen Test','Hydration Test']},
  {c:'Products',q:'How many tests come in a Safe Sip+ pack?',o:['4','1','10','50']},
@@ -22,7 +22,7 @@ const QUIZ=[
  {c:'Products',q:'What does UTI stand for?',o:['Urinary Tract Infection','Upper Throat Inflammation','Universal Test Indicator','Urgent Treatment Item']},
  {c:'Products',q:'"1 test = 3 results, all in…"',o:['10 minutes','1 minute','1 hour','24 hours']},
  {c:'Products',q:'Which product answers "What\'s in your water?"',o:['Home Water Test','Hydration Test','Safe Sip+','UTI Test']},
- {c:'Products',q:'How many tests are in the Hydration Test pack?',o:['10','1','4','50']},
+ {c:'Products',q:'Where is the 2San Breath Alcohol Test sold?',o:['Australia and New Zealand','United States','Japan','Brazil']},
  {c:'Products',q:'What is the largest 2San home drug test?',o:['16 panel','8 panel','10 panel','4 panel']},
  {c:'Products',q:'Which category is the Breath Alcohol Test in?',o:['Drugs of Abuse','Infection','Health and Wellness','Family Planning']},
  {c:'Products',q:'An hCG test is used to check for…',o:['Pregnancy','Vitamin D','Cholesterol','Blood sugar']},
@@ -106,7 +106,7 @@ const ODD=[
  {q:'Which country is NOT a 2San region?',o:['Brazil','Canada','United States','Australia']},
  {q:'Which is NOT a 2San product?',o:['Zoom','Swimcount','Safe Sip+','Easy Pen Test']},
  {q:'Which does the 5 in 1 test NOT check for?',o:['Measles','SARS-CoV-2','Flu B','RSV']},
- {q:'Which is NOT one of 2San\'s green office habits?',o:['Printing every email','Reusable cups','Hybrid work','Recycling']},
+ {q:'Spot the habit 2San offices do NOT practice.',o:['Printing every email','Reusable cups','Hybrid work','Recycling']},
  {q:'Which is NOT in the Drugs of Abuse range?',o:['Hydration Test','Breath Alcohol Test','16 Panel Drug Test','Safe Sip+']},
  {q:'Which is NOT a Family Planning test?',o:['UTI Test','Ovulation Test','Pregnancy Test','Swimcount']},
  {q:'Which is NOT a Health & Wellness product?',o:['Fentanyl Drug Test','Home Water Test','Hydration Test','Digital Thermometer']},
@@ -250,7 +250,13 @@ const CFG=window.GAME_CONFIG||{};
 let sb=null,TOKEN=null,ME=null; // ME = {player_id, lobby_id, role}
 let LOBBIES=[],LOBBY=null,STATE=null,SCORES=null,PLAYERS={},ALLP=[],ANSWERS={};
 let view='loading';
-const H={timer:null,poll:null,revealing:false,deck:null,key:null,localStart:0};
+const H={timer:null,poll:null,revealing:false,deck:null,key:null,localStart:0,used:{},usedLoaded:false};
+/* A short fingerprint of a round, so the same round is never served twice in one lobby. */
+function sigOf(g,item,q,key){if(GAMES[g].pool)return 'p'+item;
+  if(g==='math')return q.text;if(g==='stroop')return q.display.text+'|'+q.display.color;if(g==='count')return q.text+'|'+key.value;
+  if(g==='memory')return [...q.display.items].sort().join('')+'|'+key.answer;if(g==='slide')return q.tiles.join('');return JSON.stringify(q);}
+/* Load what this lobby has already played (kept with the host key, so it survives reloads and host changes). */
+async function loadUsed(){if(H.usedLoaded)return;try{const k=await hostCall('host_get_key',{});H.used=(k&&k.used)||{};H.usedLoaded=true;}catch(e){}}
 let P={tick:null,localStart:0,answered:local.get('answered')||{}};
 /* How far into the round we are, from the server's start time. Clamped so a wrong device clock cannot break the timer. */
 function roundStart(s){const t=Date.parse(s.startedAt||'');if(!isFinite(t))return performance.now();const el=Date.now()-t;return el>=0&&el<=s.dur*1000?performance.now()-el:performance.now();}
@@ -320,7 +326,7 @@ function showNoAccess(why){['loading','browser','host','player'].forEach(s=>$(s)
 /* ================= routing ================= */
 function route(){
   const v=!ME||!LOBBY?'browser':ME.role==='host'?'host':'player';
-  if(v!==view){view=v;['loading','noaccess','browser','host','player'].forEach(s=>$(s).hidden=s!==v);window.scrollTo(0,0);hostQKey='';pKey='';rosterKey='';finalKey='';optsKey='';boardKey='';hostSub='';playerSub='';animIn($(v));}
+  if(v!==view){if(v==='host')H.usedLoaded=false;view=v;['loading','noaccess','browser','host','player'].forEach(s=>$(s).hidden=s!==v);window.scrollTo(0,0);hostQKey='';pKey='';rosterKey='';finalKey='';optsKey='';boardKey='';hostSub='';playerSub='';animIn($(v));}
   const me=ME&&PLAYERS[ME.player_id];
   $('whoami').hidden=!me;if(me)$('meName').textContent=me.nick;
   $('leaveTop').hidden=v==='browser';
@@ -351,7 +357,7 @@ function drawPreview(){put('pPreview',charScene(myColor,myFace,innerWidth<760?.9
 function needNick(){const n=$('nick').value.trim().slice(0,18);if(!n){$('browserErr').textContent='Type your nickname first.';$('nick').focus();return null;}$('browserErr').textContent='';return n;}
 
 let browserKey='';
-function lobbyStatus(st){if(!st||st.phase==='lobby')return['wait','Waiting'];if(st.phase==='final')return['done','Finished'];return['play',`${(GAMES[st.game]||{}).name||'In game'} · ${(st.idx||0)+1}/${st.total||'?'}`];}
+function lobbyStatus(st){if(!st||st.phase==='lobby')return['wait','Waiting'];if(st.phase==='final')return['done','Finished'];if(st.phase==='race')return['play','🦆 Duck race'];return['play',`${(GAMES[st.game]||{}).name||'In game'} · ${(st.idx||0)+1}/${st.total||'?'}`];}
 function renderBrowser(){
   const rows=LOBBIES.map(l=>{const ps=ALLP.filter(p=>p.lobby_id===l.id);return {...l,host:ps.find(p=>p.role==='host'),count:ps.filter(p=>p.role==='player').length};}).filter(l=>l.host);
   $('lobbyCount').textContent=rows.length?`${rows.length} open ${rows.length===1?'lobby':'lobbies'}`:'Open lobbies';
@@ -456,12 +462,20 @@ $('dNumBtn').onclick=()=>{const v=parseFloat($('dNumIn').value);if(!isFinite(v))
 $('dNumIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('dNumBtn').click();});
 
 /* ================= shared rendering ================= */
+/* Places. Equal scores share a place, unless a duck race has already ordered them (STATE.tb: id -> finishing position). */
 function ranking(){
-  const sc=(SCORES&&STATE&&SCORES.session===STATE.session&&SCORES.scores)||{};
-  const rows=playerIds().map(id=>({id,score:sc[id]||0,gain:(SCORES&&SCORES.last&&SCORES.last[id])||0})).sort((a,b)=>b.score-a.score||playerName(a.id).localeCompare(playerName(b.id)));
-  let place=0,prev=null;rows.forEach((r,i)=>{if(r.score!==prev){place=i+1;prev=r.score;}r.place=place;});
+  const sc=(SCORES&&STATE&&SCORES.session===STATE.session&&SCORES.scores)||{},tb=(STATE&&STATE.tb)||{};
+  const rows=playerIds().map(id=>({id,score:sc[id]||0,gain:(SCORES&&SCORES.last&&SCORES.last[id])||0,tb:tb[id]})).sort((a,b)=>b.score-a.score||((a.tb??1e9)-(b.tb??1e9))||playerName(a.id).localeCompare(playerName(b.id)));
+  let place=0,prev=null,prevTb=null;rows.forEach((r,i)=>{if(r.score!==prev||(r.tb!=null&&prevTb!=null&&r.tb!==prevTb))place=i+1;prev=r.score;prevTb=r.tb;r.place=place;});
   return rows;
 }
+/* The first tie that still needs a duck race: equal scores, at least one of them on the podium (top 3), not yet raced. */
+function nextTie(rows){
+  const by={};rows.forEach(r=>(by[r.score]=by[r.score]||[]).push(r));
+  for(const g of Object.values(by).sort((x,y)=>y[0].score-x[0].score))if(g.length>1&&g[0].place<=3&&g.some(r=>r.tb==null))return {ids:g.map(r=>r.id),place:g[0].place};
+  return null;
+}
+const ordinal=n=>n+(n%100>=11&&n%100<=13?'th':{1:'st',2:'nd',3:'rd'}[n%10]||'th');
 function boardRows(container,rows,{showGain=true,limit=10,highlight=null}={}){
   const c=$(container);c.innerHTML='';
   rows.slice(0,limit).forEach(r=>{const p=PLAYERS[r.id]||{};const row=el('div','rrow'+(r.id===highlight?' me':''));
@@ -473,10 +487,10 @@ function boardRows(container,rows,{showGain=true,limit=10,highlight=null}={}){
 async function hostCall(fn,args){try{return await rpc(fn,{p_token:TOKEN,...args});}catch(e){status(errCode(e).includes('not_host')?'You are no longer the host of this lobby.':'Could not save. Check your connection and try again.');throw e;}}
 async function setState(data,restart=false){const cur={...STATE};delete cur.startedAt;const next={...(restart?{}:cur),...data};const started=await hostCall('host_set_state',{p_data:next,p_restart_clock:restart});STATE={...next,startedAt:started};route();}
 async function setScores(data){await hostCall('host_set_scores',{p_data:data});SCORES=data;}
-function hostShow(id){['hLobby','hQ','hBoard','hFinal'].forEach(s=>$(s).hidden=s!==id);if(id!==hostSub){hostSub=id;animIn($(id));if(id!=='hFinal')stopConfetti();}}
+function hostShow(id){['hLobby','hQ','hBoard','hFinal','hRace'].forEach(s=>$(s).hidden=s!==id);if(id!==hostSub){hostSub=id;animIn($(id));if(id!=='hFinal')stopConfetti();}}
 function renderHost(){
   const ph=STATE?STATE.phase:'lobby';
-  if(ph==='lobby')renderHostLobby();else if(ph==='question'||ph==='reveal')renderHostQ();else if(ph==='board')renderHostBoard();else if(ph==='final')renderHostFinal();
+  if(ph==='lobby')renderHostLobby();else if(ph==='question'||ph==='reveal')renderHostQ();else if(ph==='board')renderHostBoard();else if(ph==='final')renderHostFinal();else if(ph==='race')renderRace(true);
 }
 function selGame(){const r=document.querySelector('input[name=game]:checked');return r?r.value:'quiz';}
 function buildGameList(){
@@ -490,10 +504,13 @@ function buildGameList(){
 }
 function setSelect(sel,v){const s=$(sel);if(![...s.options].some(o=>o.value==String(v))){const o=el('option',null,String(v));o.value=v;s.append(o);}s.value=String(v);}
 function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);updatePoolInfo();}
-function updatePoolInfo(){const g=GAMES[selGame()];$('poolInfo').textContent=g.pool?`${g.pool.length} rounds available in ${g.name}.`:`${g.name} makes a fresh round every time.`;}
+function updatePoolInfo(){const id=selGame(),g=GAMES[id];
+  if(!g.pool){$('poolInfo').textContent=`${g.name} makes a new round every time. No round repeats in this lobby.`;return;}
+  const played=new Set((H.used[id]||[]).filter(s=>s[0]==='p')).size,left=g.pool.length-played;
+  $('poolInfo').textContent=left>0?`${left} of ${g.pool.length} ${g.name} rounds not played yet in this lobby.`:`All ${g.pool.length} ${g.name} rounds have been played here. They will start over.`;}
 let rosterKey='';
 function renderHostLobby(){
-  hostShow('hLobby');buildGameList();
+  hostShow('hLobby');buildGameList();if(!H.usedLoaded)loadUsed().then(updatePoolInfo);else updatePoolInfo();
   $('hLobbyName').textContent=LOBBY.name;$('joinLobbyName').textContent=LOBBY.name;$('hPwTag').hidden=!LOBBY.has_password;
   $('playerLink').textContent=location.origin+location.pathname;
   const ids=playerIds().sort((a,b)=>(PLAYERS[a].joined||0)-(PLAYERS[b].joined||0));
@@ -512,16 +529,24 @@ $('copyLinkBtn').onclick=async()=>{try{await navigator.clipboard.writeText($('pl
 $('startBtn').onclick=async()=>{
   if(!playerIds().length){$('hostErr').textContent='Wait for at least one player to join.';return;}
   $('hostErr').textContent='';
+  $('startBtn').disabled=true;await loadUsed();
   const g=selGame(),G=GAMES[g],n=G.pool?Math.min(+$('hCount').value,G.pool.length):+$('hCount').value;
-  H.deck={session:rid(),game:g,order:G.pool?shuffle(G.pool.map((_,i)=>i)).slice(0,n):Array.from({length:n},(_,i)=>i),dur:+$('hTime').value};
-  $('startBtn').disabled=true;
+  let order=Array.from({length:n},(_,i)=>i);
+  if(G.pool){const used=new Set(H.used[g]||[]),all=G.pool.map((_,i)=>i);order=shuffle(all.filter(i=>!used.has('p'+i))).slice(0,n);
+    if(order.length<n){order=order.concat(shuffle(all.filter(i=>!order.includes(i))).slice(0,n-order.length));H.used[g]=[];
+      status(`Every ${G.name} round has been played in this lobby, so some start over.`,5000);}}
+  H.deck={session:rid(),game:g,order,dur:+$('hTime').value};
   try{await setScores({session:H.deck.session,scores:{},last:{},ok:{},idx:-1});await goQuestion(0);}catch(e){}
   $('startBtn').disabled=false;
 };
 async function goQuestion(i){
-  const d=H.deck,G=GAMES[d.game],{q,key}=G.make(G.pool?G.pool[d.order[i]]:i);
+  const d=H.deck,g=d.game,G=GAMES[g],item=G.pool?d.order[i]:i;let made,sig,list=H.used[g]||(H.used[g]=[]);
+  for(let t=0;t<80;t++){made=G.make(G.pool?G.pool[item]:item);sig=sigOf(g,item,made.q,made.key);if(!list.includes(sig))break;}
+  if(list.includes(sig)&&!G.pool){list=H.used[g]=[];} // every possible round used: start over
+  list.push(sig);if(list.length>400)list.splice(0,list.length-400);
+  const {q,key}=made;
   key.idx=i;H.key=key;H.revealing=false;H.localStart=performance.now();H.startFor=d.session+':'+i;ANSWERS={};
-  await hostCall('host_set_key',{p_data:{deck:d,idx:i,...key}});
+  await hostCall('host_set_key',{p_data:{deck:d,idx:i,...key,used:H.used}});
   await setState({session:d.session,phase:'question',game:d.game,idx:i,total:d.order.length,dur:d.dur,q},true);
 }
 function answeredIds(){const s=STATE;return playerIds().filter(id=>ANSWERS[id]&&ANSWERS[id].session===s.session&&ANSWERS[id].idx===s.idx);}
@@ -593,7 +618,7 @@ function paintHostOpts(){
     if(!(s.closest||[]).length)wrap.append(el('p','hint',q.type==='slide'?'Nobody solved this one.':'Nobody got this one.'));
   }
 }
-async function restoreHost(){try{const k=await hostCall('host_get_key',{});if(k&&k.deck){H.deck=k.deck;if(STATE&&k.idx===STATE.idx)H.key=k;}}catch(e){}}
+async function restoreHost(){try{const k=await hostCall('host_get_key',{});if(k&&k.used){H.used=k.used;H.usedLoaded=true;}if(k&&k.deck){H.deck=k.deck;if(STATE&&k.idx===STATE.idx)H.key=k;}}catch(e){}}
 $('revealBtn').onclick=()=>reveal();
 async function reveal(){
   if(H.revealing||!STATE||STATE.phase!=='question'||!isHost())return;H.revealing=true;clearInterval(H.timer);
@@ -630,10 +655,72 @@ async function endGame(){try{await setState({phase:'final'});}catch(e){}}
 $('hEndBtn').onclick=endGame;$('hEndBtn2').onclick=endGame;
 let finalKey='';
 function renderHostFinal(){
-  hostShow('hFinal');const rows=ranking();const k=STATE.session+rows.map(r=>r.id+r.score).join();if(k===finalKey)return;finalKey=k;
-  const top=rows.filter(r=>r.place===1);
-  $('hWinner').textContent=!rows.length?'Game over':top.length>1?`It's a tie! ${top.map(r=>playerName(r.id)).join(', ')}`:`${playerName(top[0].id)} wins!`;
-  animIn($('hWinner'));drawPodium('hPodium',rows);boardRows('hFinalList',rows,{showGain:false,limit:60});confetti();fanfare();
+  hostShow('hFinal');const rows=ranking(),tie=nextTie(rows);const k=STATE.session+JSON.stringify(rows.map(r=>[r.id,r.score,r.place,playerName(r.id)]))+JSON.stringify(tie);if(k===finalKey)return;finalKey=k;
+  $('hTie').hidden=!tie;$('hPodium').hidden=!!tie;
+  if(tie){
+    $('hWinner').textContent=`It's a tie for ${ordinal(tie.place)} place!`;
+    const heads=$('tieHeads');heads.innerHTML='';tie.ids.forEach(id=>{const p=PLAYERS[id]||{},c=el('div','pcard');c.append(headScene(p.color||COLORS[0],p.face,30),el('span',null,playerName(id)));heads.append(c);});stagger(heads);
+    $('tieText').textContent=`${tie.ids.length} players have ${rows.find(r=>r.id===tie.ids[0]).score} points. A duck race decides who places higher. Every duck has the same chance.`;
+    $('raceBtn').onclick=()=>startRace(tie);
+    animIn($('hWinner'));stopConfetti();
+  }else{
+    const top=rows.filter(r=>r.place===1);
+    $('hWinner').textContent=!rows.length?'Game over':top.length>1?`It's a tie! ${top.map(r=>playerName(r.id)).join(', ')}`:`${playerName(top[0].id)} wins!`;
+    animIn($('hWinner'));drawPodium('hPodium',rows);confetti();fanfare();
+  }
+  boardRows('hFinalList',rows,{showGain:false,limit:60});
+}
+
+/* ================= DUCK RACE (tiebreaker) =================
+   The host decides the finishing order up front (random, equal chances) and stores it with a seed.
+   Every screen draws the same race from that seed and the server start time, so everyone sees the same thing. */
+async function startRace(tie){
+  $('raceBtn').disabled=true;
+  const cur={...STATE};delete cur.startedAt;
+  try{await setState({...cur,phase:'race',race:{ids:shuffle(tie.ids.slice()),order:shuffle(tie.ids.slice()),place:tie.place,seed:rid(),dur:8}},true);}catch(e){}
+  $('raceBtn').disabled=false;
+}
+$('raceDoneBtn').onclick=async()=>{const r=STATE.race;if(!r)return;const tb={...(STATE.tb||{})};r.order.forEach((id,i)=>tb[id]=i);
+  $('raceDoneBtn').disabled=true;try{await setState({phase:'final',race:null,tb});}catch(e){}$('raceDoneBtn').disabled=false;};
+function seeded(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19;}
+  return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return (h>>>0)/4294967296;};}
+/* Each duck: progress checkpoints that wobble (so the lead changes) and reach the line at its finishing time. */
+function racePlan(r){
+  const rnd=seeded(r.seed),fin={},paths={};let t=r.dur*.82;
+  r.order.forEach((id,k)=>{if(k)t+=.35+rnd()*.35;fin[id]=t;});
+  r.ids.forEach(id=>{const n=10,w=[];for(let j=0;j<n;j++)w.push(.35+rnd()*1.4);const tot=w.reduce((a,b)=>a+b,0);let c=0;paths[id]=[0,...w.map(x=>(c+=x)/tot)];});
+  return {fin,paths,end:Math.max(...Object.values(fin))+.4};
+}
+function duckX(plan,id,t){const f=plan.fin[id];if(t<=0)return 0;if(t>=f)return 1;const p=plan.paths[id],u=t/f*(p.length-1),j=Math.floor(u);return p[j]+(p[j+1]-p[j])*(u-j);}
+const RACE={key:'',run:0};
+function renderRace(isHost){
+  const r=STATE.race;if(!r)return;
+  if(isHost)hostShow('hRace');else playerShow('pRace');
+  const k=(isHost?'h':'p')+STATE.session+r.seed;if(RACE.key===k)return;RACE.key=k;const run=++RACE.run;stopConfetti();
+  const P_=isHost?'h':'p',lanes=$(P_+'RaceLanes'),me=ME&&ME.player_id;
+  $(P_+'RaceTitle').textContent=`🦆 Duck race for ${ordinal(r.place)} place`;$(P_+'RaceResult').hidden=true;$(P_+'RaceCount').textContent='';
+  lanes.innerHTML='';const ducks={};
+  r.ids.forEach((id,i)=>{const p=PLAYERS[id]||{},lane=el('div','lane'+(id===me?' me':''));lane.style.setProperty('--c',p.color||COLORS[0]);lane.style.setProperty('--i',i);
+    const tag=el('span','tag',playerName(id)+(id===me?' (you)':''));const d=el('span','duck','🦆');d.setAttribute('aria-hidden','true');const pl=el('span','place');lane.append(tag,pl,d);lanes.append(lane);ducks[id]=d;d._lane=lane;d._badge=pl;});
+  const plan=racePlan(r),el0=Date.now()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<120000?el0:0);
+  let lastCount=null,done=false;
+  (function frame(){
+    if(run!==RACE.run||!STATE||STATE.phase!=='race'||!STATE.race||STATE.race.seed!==r.seed)return;
+    const t=(performance.now()-startLocal)/1000-3;
+    const c=t<0?String(Math.ceil(-t)):t<.8?'GO!':'';if(c!==lastCount){lastCount=c;$(P_+'RaceCount').textContent=c;if(c)beep(c==='GO!'?990:520,.12);}
+    for(const id of r.ids){const tt=calm()&&t>0?plan.end:t,d=ducks[id];d.style.setProperty('--x',duckX(plan,id,tt).toFixed(4));
+      if(tt>=plan.fin[id]&&!d._lane.classList.contains('fin')){const pos=r.order.indexOf(id);d._badge.textContent=ordinal(r.place+pos);d._lane.classList.add('fin');if(!pos){d._lane.classList.add('won');beep(1320,.15);}}}
+    if(!done&&t>=plan.end){done=true;showRaceResult(P_,r,me);}
+    if(!done)requestAnimationFrame(frame);
+  })();
+}
+function showRaceResult(P_,r,me){
+  const box=$(P_+'RaceResult');box.hidden=false;animIn(box);
+  $(P_+'RaceWinner').textContent=`${playerName(r.order[0])}'s duck wins!`;
+  const ol=$(P_+'RaceOrder');ol.innerHTML='';r.order.forEach((id,i)=>{const li=el('li',id===me?'me':'');li.append(el('b',null,ordinal(r.place+i)),el('span',null,' '+playerName(id)));ol.append(li);});stagger(ol);
+  const mine=$(P_+'RaceMine');
+  if(mine)mine.textContent=me&&r.order.includes(me)?(r.order.indexOf(me)===0?'Your duck won! 🎉':`Your duck came ${ordinal(r.order.indexOf(me)+1)} in the race.`):'';
+  confetti();fanfare();
 }
 function drawPodium(id,rows){
   const pod=$(id);pod.innerHTML='';const s=innerWidth<560?.66:1,H3={1:150*s,2:105*s,3:70*s};
@@ -643,7 +730,7 @@ function drawPodium(id,rows){
 $('newGameBtn').onclick=async()=>{const session=rid();try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await setState({session,phase:'lobby'},true);}catch(e){}finalKey='';rosterKey='';};
 
 /* ================= PLAYER ================= */
-function playerShow(id){['pWait','pQ','pReveal','pFinal'].forEach(s=>$(s).hidden=s!==id);if(id!==playerSub){playerSub=id;animIn($(id));if(id!=='pFinal')stopConfetti();}}
+function playerShow(id){['pWait','pQ','pReveal','pFinal','pRace'].forEach(s=>$(s).hidden=s!==id);if(id!==playerSub){playerSub=id;animIn($(id));if(id!=='pFinal')stopConfetti();}}
 let pKey='';
 function renderPlayer(){
   const uid=ME.player_id,me=PLAYERS[uid];if(!me)return;
@@ -655,6 +742,7 @@ function renderPlayer(){
   if(ph==='question')return renderPlayerQ();
   if(ph==='reveal'||ph==='board')return renderPlayerReveal();
   if(ph==='final')return renderPlayerFinal();
+  if(ph==='race')return renderRace(false);
 }
 function renderPlayerQ(){
   const s=STATE,q=s.q||{},k='q'+s.session+s.idx;playerShow('pQ');const mine=myAnswerFor(s);
@@ -721,11 +809,12 @@ function renderPlayerReveal(){
 }
 function renderPlayerFinal(){
   const uid=ME.player_id;playerShow('pFinal');const rows=ranking(),r=rows.find(x=>x.id===uid),me=PLAYERS[uid];const k='f'+STATE.session+(r?r.score+':'+r.place:'');
-  if(pKey===k)return;pKey=k;clearInterval(P.tick);
-  $('pFinalTitle').textContent=r&&r.place===1?'You won!':r&&r.place<=3?`Podium! You placed ${r.place}.`:'Thanks for playing!';
+  if(pKey===k+JSON.stringify(STATE.tb||{}))return;pKey=k+JSON.stringify(STATE.tb||{});clearInterval(P.tick);
+  const tie=nextTie(rows),inTie=tie&&tie.ids.includes(uid);
+  $('pFinalTitle').textContent=inTie?`Tie for ${ordinal(tie.place)}! Watch the duck race.`:r&&r.place===1?'You won!':r&&r.place<=3?`Podium! You placed ${ordinal(r.place)}.`:'Thanks for playing!';
   put('pFinalChar',charScene(me.color,me.face,1.5,r&&r.place<=3));
   $('pFinalScore').textContent=r?r.score:0;$('pFinalRank').textContent=r?`${r.place} / ${rows.length}`:'–';
-  boardRows('pTop',rows,{showGain:false,limit:5,highlight:uid});if(r&&r.place<=3){confetti();fanfare();}
+  boardRows('pTop',rows,{showGain:false,limit:5,highlight:uid});if(r&&r.place<=3&&!inTie){confetti();fanfare();}
 }
 
 /* ================= extras ================= */
