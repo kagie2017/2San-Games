@@ -1,6 +1,6 @@
 # 2San Game Night
 
-A live, individual quiz game for 2San team events, with Dota-style lobbies. Everyone plays on their own phone or laptop.
+A live, individual quiz game for 2San team events, with style lobbies. Everyone plays on their own phone or laptop.
 
 Live: https://2san-games.vercel.app/
 
