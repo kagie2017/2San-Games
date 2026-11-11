@@ -228,7 +228,7 @@ const WEAPON_PARTS={none:[],
  pen:[[7,13,7,'#0084DB',61.5,70,13],[13,3,7,'#FB7569',58.5,67,13],[6,32,5,W_,62,35,13,'<span class="wd win"></span>'],[6,6,5,'#FB7569',62,29,13]],
  alcohol:[[6,13,6,'#1D1D4F',62,69,13],[9,9,26,W_,60.5,60,24],[10,10,5,'#FFC83D',60,59.5,22],[5,5,6,'#FB7569',62.5,62,40]],
  water:[[15,19,15,'#7CCBFF',57.5,62,18,'<span class="wd drop"></span>'],[7,5,7,W_,61.5,57,18],[9,4,9,'#0084DB',60.5,53,18]],
- safesip:[[30,30,3,'#1DD6A5',48,46,13,'<span class="wd plus"></span>']],
+ safesip:[[26,28,3,'#1DD6A5',55,48,13,'<span class="wd plus"></span>']],
  thermo:[[6,30,5,'#1DD6A5',62,48,13,'<span class="wd lcd"></span>'],[3,9,3,'#C9D3E0',63.5,39,13]],
  swim:[[5,42,5,W_,62.5,38,13],[18,13,12,'#0084DB',56,26,13,'<span class="wd dot"></span>']],
  combo:[[6,13,5,'#1D1D4F',62,69,13],[17,32,4,W_,56.5,37,13,'<span class="wd tri"></span>']]};
@@ -252,11 +252,14 @@ function box(w,h,d,color,x,y,front,z=0,lite=false){
   for(const[n,fw,fh,l,t,tr,sh] of F){if(lite&&(n==='bk'||n==='bt'))continue;const f=el('i','fc');f.style.cssText=`width:${fw}px;height:${fh}px;left:${l}px;top:${t}px;transform:${tr};background:${color};filter:brightness(${sh})`;if(n==='ft'&&front){f.innerHTML=front;f.style.filter='none';}b.append(f);}
   return b;
 }
+/* White 2San logo for the shirt front, taken from the page header logo. */
+let TEE=null;
+function teeHTML(){if(TEE===null){const s=document.querySelector('.brand svg');TEE=s?`<svg class="tee" viewBox="${s.getAttribute('viewBox')}" aria-hidden="true">${s.innerHTML.replace(/fill="[^"]*"/g,'fill="#fff"')}</svg>`:'';}return TEE;}
 function hairBoxes(L,u,ox,oy){return HAIR_PARTS[L.hair].map(([w,h,d,x,y,z])=>box(w*u,h*u,d*u,L.color,ox+x*u,oy+y*u,null,z*u,true));}
 function weaponBoxes(weapon,s,oy=0,mirror=false){return (WEAPON_PARTS[weapon]||[]).map(([w,h,d,c,x,y,z,f])=>box(w*s,h*s,d*s,c,(mirror?72-x-w:x)*s,y*s+oy,f||null,z*s,true));}
 function character(L,s){
   const k=v=>v*s,p=el('div','bx');
-  p.append(box(k(19),k(40),k(20),'#1D1D4F',k(16),k(84)),box(k(19),k(40),k(20),'#1D1D4F',k(37),k(84)),box(k(14),k(44),k(20),SKIN,k(0),k(38)),box(k(14),k(44),k(20),SKIN,k(58),k(38)),box(k(40),k(46),k(22),L.color,k(16),k(38)),box(k(36),k(36),k(36),SKIN,k(18),0,faceHTML(L.face)),
+  p.append(box(k(19),k(40),k(20),'#1D1D4F',k(16),k(84)),box(k(19),k(40),k(20),'#1D1D4F',k(37),k(84)),box(k(14),k(44),k(20),SKIN,k(0),k(38)),box(k(14),k(44),k(20),SKIN,k(58),k(38)),box(k(40),k(46),k(22),L.color,k(16),k(38),teeHTML()),box(k(36),k(36),k(36),SKIN,k(18),0,faceHTML(L.face)),
     ...hairBoxes(L,s,k(18),0),...weaponBoxes(L.weapon,s));
   return p;
 }
@@ -269,7 +272,7 @@ function charScene(L,s,hop){
 function riderScene(L,s,armed=true){
   const k=v=>v*s,up=HAIR_UP[L.hair],sc=el('div','scene rider'),w=el('div','world'),p=el('div','bx');
   w.style.width=k(72)+'px';w.style.height=k(100+up)+'px';w.style.transform='rotateX(-12deg) rotateY(38deg)';p.style.transform=`translate3d(0,${k(up)}px,0)`;
-  p.append(box(k(19),k(18),k(30),'#1D1D4F',k(16),k(82)),box(k(19),k(18),k(30),'#1D1D4F',k(37),k(82)),box(k(14),k(40),k(20),SKIN,k(0),k(38)),box(k(14),k(40),k(20),SKIN,k(58),k(38)),box(k(40),k(46),k(22),L.color,k(16),k(38)),box(k(36),k(36),k(36),SKIN,k(18),0,faceHTML(L.face)),
+  p.append(box(k(19),k(18),k(30),'#1D1D4F',k(16),k(82)),box(k(19),k(18),k(30),'#1D1D4F',k(37),k(82)),box(k(14),k(40),k(20),SKIN,k(0),k(38)),box(k(14),k(40),k(20),SKIN,k(58),k(38)),box(k(40),k(46),k(22),L.color,k(16),k(38),armed?teeHTML():null),box(k(36),k(36),k(36),SKIN,k(18),0,faceHTML(L.face)),
     ...hairBoxes(L,s,k(18),0),...(armed?weaponBoxes(L.weapon,s,k(-5),true):[]));
   w.append(p);sc.style.width=k(72)+'px';sc.style.height=k(100+up)+'px';sc.append(w);return sc;
 }
