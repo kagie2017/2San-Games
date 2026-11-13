@@ -38,9 +38,13 @@ Correct answers score 500 to 1000 points: the faster, the more. Closest Number s
 
 If players tie for a podium place (top 3) at the end of any game, the host starts a duck race between them to decide the order.
 
+## 3D world
+
+During question rounds the big screen shows a blocky 3D world in 2San colors: the question sits on a giant TV, every player's character walks around, and at the reveal each character runs to the pad of the answer they picked (right pad lights up, right players dance). Phones show the same world in a panel above the answer buttons, following your own character. It uses three.js from jsDelivr (`world.js`); devices without WebGL, and host screens narrower than 760px, keep the normal screens.
+
 ## Stack
 
-- Static site (`index.html`, `app.js`, `config.js`) on Vercel. No build step.
+- Static site (`index.html`, `app.js`, `world.js`, `config.js`) on Vercel. No build step.
 - [Supabase](https://supabase.com) for shared game data, with realtime updates and polling as a fallback.
 
 ## Setup (new Supabase project)

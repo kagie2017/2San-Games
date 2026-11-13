@@ -241,6 +241,24 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .cat{font-family:var(--display);font-size:1rem;letter-spacing:.05em;background:var(--coral);color:var(--white);border:3px solid var(--navy);border-radius:10px;padding:3px 14px;box-shadow:0 4px 0 var(--navy)}
 .qtext{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,4.2vw,3.1rem);line-height:1.1;text-wrap:balance;overflow-wrap:anywhere}
 .side{display:flex;flex-direction:column;gap:14px}
+.tvwrap{display:flex;flex-direction:column;gap:20px;min-width:0}
+.ground{display:none}
+.worldcv{display:block}
+.worldcv.host{position:fixed;inset:0;width:100vw;height:100vh;z-index:0}
+.worldcv.phone{position:absolute;inset:0;width:100%;height:100%}
+body.world-host .wrap{position:relative;z-index:1}
+body.world-host #hQ{gap:14px}
+body.world-host .tvwrap{background:var(--navy);border:4px solid var(--ink);border-radius:22px;padding:12px;gap:12px;box-shadow:0 9px 0 var(--ink)}
+body.world-host .tvwrap .card{box-shadow:none;border-width:3px;min-height:140px;padding:14px 16px 18px}
+body.world-host .tvwrap .qtext{font-size:clamp(1.3rem,2.4vw,2.3rem)}
+body.world-host .tvwrap .answerline{font-size:clamp(1.1rem,1.8vw,1.7rem)}
+body.world-host .tvwrap .opt{font-size:clamp(1rem,1.5vw,1.3rem)}
+body.world-host .tvwrap .opt{min-height:58px;padding:9px 14px;box-shadow:0 5px 0 var(--ink)}
+body.world-host .tvwrap #hNumResult{max-height:34vh;overflow:auto}
+body.world-phone #pQ{gap:12px}body.world-phone #pCard{min-height:110px!important;padding:12px!important}body.world-phone #pOpts .opt{min-height:60px;padding:9px 14px}body.world-phone #pOpts{gap:10px}
+body.world-host .ground{display:block;height:max(24vh,140px)}
+body.world-host .qhead .qcount,body.world-host header .brand{filter:drop-shadow(0 2px 0 rgba(12,9,40,.35))}
+.pworld{position:relative;flex-shrink:0;height:clamp(130px,23vh,230px);margin-bottom:14px;border:4px solid var(--navy);border-radius:18px;overflow:hidden;box-shadow:0 8px 0 var(--navy);background:#A9C8FF}
 .clock{background:var(--navy);color:var(--white);border:3px solid var(--ink);border-radius:16px;box-shadow:0 7px 0 var(--ink);padding:12px;text-align:center}
 .clock .n{font-family:var(--display);font-size:4rem;line-height:1;font-variant-numeric:tabular-nums}
 .clock .bar{height:12px;background:#33337a;border-radius:4px;overflow:hidden;margin-top:8px;border:2px solid var(--ink)}
@@ -469,7 +487,11 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
       <div id="hQ" hidden style="display:flex;flex-direction:column;gap:24px">
         <div class="qhead"><span class="qcount" id="hQNum">Question 1 of 10</span><button class="btn sm" id="hEndBtn" type="button">End game</button></div>
         <div class="stage">
+          <div class="tvwrap" id="hTv">
           <div class="card" id="hCard"><div class="cat" id="hCat"></div><div class="qtext" id="hText"></div><div class="disp" id="hDisp"></div><div class="hintline" id="hHint" hidden></div><div class="answerline" id="hAnswer" hidden></div></div>
+          <div class="opts" id="hOpts"></div>
+          <div class="blk" id="hNumResult" hidden></div>
+          </div>
           <div class="side">
             <div class="clock" id="hClock"><div class="n" id="hClockN">20</div><div class="bar"><i id="hBar"></i></div></div>
             <div class="blk answered"><span class="lbl" id="hAnsweredLbl">Answered</span><div class="big-count" id="hAnswered">0/0</div></div>
@@ -477,8 +499,7 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
             <button class="btn coral" id="toBoardBtn" type="button" hidden>Show leaderboard</button>
           </div>
         </div>
-        <div class="opts" id="hOpts"></div>
-        <div class="blk" id="hNumResult" hidden></div>
+        <div class="ground" id="hGround" aria-hidden="true"></div>
       </div>
 
       <!-- host leaderboard -->
@@ -518,6 +539,7 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 
     <!-- PLAYER -->
     <section id="player" hidden>
+      <div class="pworld" id="pWorld" hidden aria-hidden="true"></div>
       <div id="pWait" hidden class="center">
         <div class="scene" id="pWaitChar" style="min-height:260px"></div>
         <h2 id="pWaitTitle">You're in!</h2>

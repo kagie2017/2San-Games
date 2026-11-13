@@ -395,7 +395,7 @@ function showNoAccess(why){['loading','browser','host','player'].forEach(s=>$(s)
 /* ================= routing ================= */
 function route(){
   const v=!ME||!LOBBY?'browser':ME.role==='host'?'host':'player';
-  if(v!==view){if(v==='host')H.usedLoaded=false;view=v;['loading','noaccess','browser','host','player'].forEach(s=>$(s).hidden=s!==v);window.scrollTo(0,0);hostQKey='';pKey='';rosterKey='';finalKey='';optsKey='';boardKey='';hostSub='';playerSub='';animIn($(v));}
+  if(v!==view){if(v==='host')H.usedLoaded=false;if(v!=='host'&&v!=='player')worldOff();view=v;['loading','noaccess','browser','host','player'].forEach(s=>$(s).hidden=s!==v);window.scrollTo(0,0);hostQKey='';pKey='';rosterKey='';finalKey='';optsKey='';boardKey='';hostSub='';playerSub='';animIn($(v));}
   const me=ME&&PLAYERS[ME.player_id];
   $('whoami').hidden=!me;if(me)$('meName').textContent=me.nick;
   $('leaveTop').hidden=v==='browser';
@@ -594,7 +594,7 @@ function boardRows(container,rows,{showGain=true,limit=10,highlight=null}={}){
 async function hostCall(fn,args){try{return await rpc(fn,{p_token:TOKEN,...args});}catch(e){status(errCode(e).includes('not_host')?'You are no longer the host of this lobby.':'Could not save. Check your connection and try again.');throw e;}}
 async function setState(data,restart=false){const cur={...STATE};delete cur.startedAt;const next={...(restart?{}:cur),...data};const started=await hostCall('host_set_state',{p_data:next,p_restart_clock:restart});STATE={...next,startedAt:started};route();}
 async function setScores(data){await hostCall('host_set_scores',{p_data:data});SCORES=data;}
-function hostShow(id){['hLobby','hQ','hBoard','hFinal','hRace'].forEach(s=>$(s).hidden=s!==id);if(id!==hostSub){hostSub=id;animIn($(id));if(id!=='hFinal')stopConfetti();}}
+function hostShow(id){if(id!=='hQ')worldOff();['hLobby','hQ','hBoard','hFinal','hRace'].forEach(s=>$(s).hidden=s!==id);if(id!==hostSub){hostSub=id;animIn($(id));if(id!=='hFinal')stopConfetti();}}
 function renderHost(){
   const ph=STATE?STATE.phase:'lobby';
   if(ph==='lobby')renderHostLobby();else if(ph==='question'||ph==='reveal')renderHostQ();else if(ph==='board')renderHostBoard();else if(ph==='final')renderHostFinal();else if(ph==='race')renderRace(true);
@@ -689,7 +689,7 @@ function renderDisplay(box,q,forHost,start){
 }
 let hostQKey='';
 function renderHostQ(){
-  hostShow('hQ');const s=STATE,q=s.q||{};const k=s.session+':'+s.idx+':'+s.phase;
+  hostShow('hQ');worldHost();const s=STATE,q=s.q||{};const k=s.session+':'+s.idx+':'+s.phase;
   $('hAnswered').textContent=`${answeredIds().length}/${playerIds().length}`;
   $('hAnsweredLbl').textContent=q.type==='slide'?'Solved':'Answered';
   if(k===hostQKey){if(s.phase==='reveal')paintHostOpts();return;}
@@ -741,7 +741,7 @@ async function reveal(){
   if(!H.key||!H.deck||H.deck.session!==STATE.session||H.key.idx!==STATE.idx)await restoreHost();
   await loadAnswers();
   const s=STATE,q=s.q||{},key=H.key||{};
-  const shown=q.type==='choice'?{phase:'reveal',answer:key.answer||'',correct:key.correct}:{phase:'reveal',answer:key.answer||''};
+  const shown=q.type==='choice'?{phase:'reveal',answer:key.answer||'',correct:key.correct,picks:Object.fromEntries(answeredIds().map(id=>[id,ANSWERS[id].choice]))}:{phase:'reveal',answer:key.answer||''};
   if(SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx){try{await setState(shown);}catch(e){H.revealing=false;}return;} // already scored
   const dur=s.dur*1000,scores={...((SCORES&&SCORES.session===s.session&&SCORES.scores)||{})},last={},ok={};
   const ans=answeredIds().map(id=>({id,a:ANSWERS[id]}));let closest=[],right=0;
@@ -897,7 +897,7 @@ function drawPodium(id,rows){
 $('newGameBtn').onclick=async()=>{const session=rid();try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await setState({session,phase:'lobby'},true);}catch(e){}finalKey='';rosterKey='';};
 
 /* ================= PLAYER ================= */
-function playerShow(id){['pWait','pQ','pReveal','pFinal','pRace'].forEach(s=>$(s).hidden=s!==id);if(id!==playerSub){playerSub=id;animIn($(id));if(id!=='pFinal')stopConfetti();}}
+function playerShow(id){if(id!=='pQ'&&id!=='pReveal')worldOff();['pWait','pQ','pReveal','pFinal','pRace'].forEach(s=>$(s).hidden=s!==id);if(id!==playerSub){playerSub=id;animIn($(id));if(id!=='pFinal')stopConfetti();}}
 let pKey='';
 function renderPlayer(){
   const uid=ME.player_id,me=PLAYERS[uid];if(!me)return;
@@ -912,7 +912,7 @@ function renderPlayer(){
   if(ph==='race')return renderRace(false);
 }
 function renderPlayerQ(){
-  const s=STATE,q=s.q||{},k='q'+s.session+s.idx;playerShow('pQ');const mine=myAnswerFor(s);
+  const s=STATE,q=s.q||{},k='q'+s.session+s.idx;playerShow('pQ');worldPlayer();const mine=myAnswerFor(s);
   if(pKey!==k){
     pKey=k;P.localStart=roundStart(s);animIn($('pCard'));
     $('pQNum').textContent=`Round ${s.idx+1} of ${s.total}`;$('pCat').textContent=q.cat;$('pText').textContent=q.text;
@@ -960,7 +960,7 @@ $('pNumIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('pNumBtn').click
 $('pTxtBtn').onclick=()=>{const v=$('pTxtIn').value.trim().slice(0,40);if(!v){status('Type your answer first.');return;}answer({text:v});};
 $('pTxtIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('pTxtBtn').click();});
 function renderPlayerReveal(){
-  const s=STATE,q=s.q||{},uid=ME.player_id;clearInterval(P.tick);playerShow('pReveal');
+  const s=STATE,q=s.q||{},uid=ME.player_id;clearInterval(P.tick);playerShow('pReveal');if(s.game!=='duck')worldPlayer();else worldOff();
   const sc=SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx?SCORES:null;
   const gain=sc&&sc.last?sc.last[uid]:undefined,ok=sc&&sc.ok?sc.ok[uid]:undefined,answered=sc&&gain!==undefined;
   const k='r'+s.session+s.idx+(sc?'y':'n')+s.phase;
@@ -984,6 +984,38 @@ function renderPlayerFinal(){
   $('pFinalScore').textContent=r?r.score:0;$('pFinalRank').textContent=r?`${r.place} / ${rows.length}`:'–';
   boardRows('pTop',rows,{showGain:false,limit:5,highlight:uid});if(r&&r.place<=3&&!inTie){confetti();fanfare();}
 }
+
+/* ================= 3D world (world.js + three.js, loaded the first time a round is shown) ================= */
+const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
+const W3={state:'idle',want:null};
+function hasWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}
+function loadScript(src){return new Promise((ok,bad)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{s.remove();bad(new Error('load'));};document.head.append(s);});}
+async function loadWorld(){
+  if(W3.state!=='idle')return;W3.state='loading';
+  try{if(!hasWebGL())throw new Error('webgl');if(!window.THREE)await loadScript(THREE_URL);if(!window.World)await loadScript('world.js?v=1');W3.state=window.World&&World.init()?'ready':'failed';}
+  catch(e){W3.state='failed';}
+  const w=W3.want;W3.want=null;if(W3.state==='ready'&&w)w();
+}
+const cssColor=v=>{const m=/var\((--[\w-]+)\)/.exec(v||'');return m?getComputedStyle(document.documentElement).getPropertyValue(m[1]).trim():v;};
+function worldRound(){
+  const s=STATE,q=s.q||{},choice=q.type==='choice',sc=SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx?SCORES:null;
+  return {key:s.session+':'+s.idx,phase:s.phase==='question'?'question':'reveal',text:q.text||'',cat:q.cat||'',answer:s.answer||'',
+    options:choice?q.options.map((t,i)=>{const st=optStyle(s,i);return {c:cssColor(st.c),fg:!!st.fg,s:q.tf?(i===0?'✓':'✗'):st.s,label:t};}):[],
+    correct:s.correct,picks:isHost()&&s.phase!=='question'?Object.fromEntries(answeredIds().map(id=>[id,ANSWERS[id].choice])):(s.picks||{}),
+    ok:sc?sc.ok||{}:{},answered:isHost()?answeredIds():(ME&&myAnswerFor(s)&&s.phase==='question'?[ME.player_id]:[])};
+}
+function worldPlayers(){return playerIds().map(id=>({id,name:playerName(id),look:look(PLAYERS[id]),me:!!(ME&&id===ME.player_id)}));}
+function worldHost(){
+  if(innerWidth<760||innerHeight<520){worldOff();return;}
+  if(W3.state!=='ready'){if(W3.state!=='failed'){W3.want=()=>{if(view==='host'&&hostSub==='hQ'&&STATE&&(STATE.phase==='question'||STATE.phase==='reveal'))worldHost();};loadWorld();}return;}
+  $('pWorld').hidden=true;document.body.classList.remove('world-phone');document.body.classList.add('world-host');World.show('host');World.sync(worldPlayers());World.round(worldRound());
+}
+function worldPlayer(){
+  if(W3.state!=='ready'){if(W3.state!=='failed'){W3.want=()=>{if(view==='player'&&(playerSub==='pQ'||playerSub==='pReveal')&&STATE&&STATE.game!=='duck')worldPlayer();};loadWorld();}return;}
+  document.body.classList.remove('world-host');document.body.classList.add('world-phone');$('pWorld').hidden=false;World.show('phone',$('pWorld'));World.sync(worldPlayers());World.round(worldRound());
+}
+function worldOff(){document.body.classList.remove('world-host','world-phone');const p=$('pWorld');if(p)p.hidden=true;if(W3.state==='ready')World.hide();}
+addEventListener('resize',()=>{if(view==='host'&&hostSub==='hQ'&&STATE&&STATE.phase!=='lobby')worldHost();});
 
 /* ================= extras ================= */
 $('fsBtn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch(e){$('fsBtn').hidden=true;}};
