@@ -77,6 +77,22 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .face.fierce .eye.r{right:23%;clip-path:polygon(0 55%,100% 0,100% 100%,0 100%)}
 .face.fierce .mouth{top:64%;height:12%;border-width:3px 0 0;border-radius:50% 50% 0 0}
 .tee{position:absolute;left:11%;width:78%;top:16%;display:block;filter:drop-shadow(0 1px 0 rgba(12,9,40,.35))}
+.sr{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
+.minebox{flex-shrink:0;display:flex;flex-direction:column;gap:10px;margin-top:12px;padding:14px;border:3px dashed var(--navy);border-radius:12px;background:var(--paper)}
+.minebox.drag{background:#FFF3C7;border-style:solid}
+.minehead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}.minetitle{font-family:var(--display);font-weight:400;font-size:1.15rem}
+.minestatus{margin:0;overflow-wrap:anywhere}
+.mineactions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mineactions label.btn{cursor:pointer}
+#mineFile:focus-visible+*,.mineactions label:focus-within{outline:3px solid var(--sun);outline-offset:2px}
+.mineskips{padding:8px 12px;border:2px solid var(--coral);border-radius:10px;background:#FFF0EE;font-size:.88rem;overflow-wrap:anywhere}
+.mineskips ul{margin:4px 0 0;padding-left:18px}
+.minepreview{padding:8px 12px;border:2px solid var(--navy);border-radius:10px;background:var(--white)}
+.minepreview .lbl{margin:0 0 4px}
+.mine-list{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:.9rem}
+.mine-list li{overflow-wrap:anywhere}.mine-list small{display:block;color:var(--muted)}
+.minehelp{font-size:.88rem}.minehelp summary{cursor:pointer;font-weight:700}
+.minehelp p,.minehelp ul{margin:6px 0}.minehelp code{white-space:nowrap;background:var(--white);border:1px solid var(--muted);border-radius:4px;padding:0 4px;font-size:.85em}
 /* decals on the 2San device weapons */
 .wd{position:absolute;display:block}
 .wd.win{left:18%;right:18%;top:22%;height:30%;background:linear-gradient(180deg,#fff 0 28%,#FB7569 28% 42%,#fff 42% 58%,#0084DB 58% 72%,#fff 72%);border:1px solid var(--ink)}
@@ -434,6 +450,27 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
           <div class="blk" style="display:flex;flex-direction:column;gap:16px">
             <h3 style="margin:0">Choose a game</h3>
             <div class="games" id="gameList"></div>
+            <div class="minebox" id="mineBox" hidden>
+              <div class="minehead"><b class="minetitle">Your questions file</b><span class="hint">Excel, CSV, Word (.docx) or text (.txt) · drop it here</span></div>
+              <p class="minestatus" id="mineStatus" aria-live="polite"></p>
+              <div class="mineskips" id="mineSkips" hidden></div>
+              <div class="minepreview" id="minePreview" hidden></div>
+              <div class="mineactions">
+                <label class="btn blue" for="mineFile" id="mineFileLbl">📂 Upload questions file</label>
+                <input type="file" id="mineFile" accept=".xlsx,.xls,.xlsm,.ods,.csv,.tsv,.docx,.txt" class="sr">
+                <button class="btn sm" id="mineClear" type="button" hidden>Remove file</button>
+              </div>
+              <details class="minehelp"><summary>How to write your file</summary>
+                <p><b>Excel or CSV:</b> one question per row. Columns: <code>Question</code>, <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code>, <code>Answer</code>. You can also add <code>Explanation</code> and <code>Category</code>.</p>
+                <p><b>Word or text:</b> write the question, then the choices <code>A.</code> <code>B.</code> <code>C.</code> <code>D.</code>, then <code>Answer: B</code>. Leave a blank line between questions.</p>
+                <p>The game picks the question type for you:</p>
+                <ul><li>Choices plus an answer letter (or a <code>*</code> after the right choice): <b>multiple choice</b></li>
+                  <li>No choices, answer <code>True</code> or <code>False</code>: <b>True or False</b></li>
+                  <li>No choices, answer is a number: <b>closest number wins</b></li>
+                  <li>No choices, answer is a word: <b>type-in</b> (more right answers: <code>Agility | Agile</code>)</li></ul>
+                <div class="mineactions"><button class="btn sm" id="mineTplXlsx" type="button">Download Excel template</button><button class="btn sm" id="mineTplTxt" type="button">Download text template</button></div>
+              </details>
+            </div>
             <div class="row">
               <div><label class="lbl" for="hCount" id="hCountLbl">Questions</label>
                 <select id="hCount"><option>3</option><option>5</option><option>8</option><option selected>10</option><option>15</option><option>20</option></select></div>
