@@ -64,7 +64,7 @@ Each browser gets a private token. Host functions check that the token belongs t
 Pick **Your Own Questions** in the lobby and upload a file. It is read on the host's device; players only ever see the question that is on screen, never the answers.
 
 - **Excel / CSV:** one question per row with columns `Question`, `A`, `B`, `C`, `D`, `Answer` (optional `Explanation`, `Category`). `Correct answer` + `Wrong 1..3` columns also work.
-- **Word / text:** the question, then `A.` `B.` `C.` `D.` choices, then `Answer: B`. A blank line between questions. A `*` after a choice also marks it right.
+- **Word / text:** the question, then `A.` `B.` `C.` `D.` choices, then `Answer: B`. A blank line between questions. A `*` after a choice also marks it right. An `ANSWER KEY` section at the end (`1. B`, `1-B`, or a table) also works.
 - No choices: `Answer: True/False` → True or False, a number → closest number wins, a word → type-in (`Agility | Agile` for more than one right answer).
 
 Up to 200 questions per file. The lobby page has Excel and text templates to download.

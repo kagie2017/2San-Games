@@ -226,7 +226,7 @@ function toNumber(s){const t=clean(s).replace(/[,$₱€£%\s]/g,'');return /^-?
 /* One question in, one item (or a reason it was skipped) out. */
 function finishItem(b){
   const q=clean(b.q).replace(/^(q(uestion)?\s*\d*\s*[:.)\-]|\d+\s*[.):\-])\s*/i,'');
-  if(!q)return {err:'No question text'};
+  if(!q||!/[a-z].*[a-z]/i.test(q))return {err:'No question text'};
   if(q.length>300)return {err:'Question is longer than 300 letters'};
   let ch=(b.choices||[]).map(c=>clean(c)).filter(Boolean),correct=-1;
   ch=ch.map((c,i)=>{if(MARK.test(c)||MARK0.test(c)){if(correct<0)correct=i;return clean(c.replace(MARK,'').replace(MARK0,''));}return c;});
@@ -255,8 +255,11 @@ function finishItem(b){
 function mineFromText(text){
   const lines=String(text).replace(/\r/g,'').split('\n'),out=[];let b=null,cat='',n=0;
   const close=()=>{if(b&&(b.q||b.choices.length||b.loose.length)){if(!b.choices.length&&b.loose.length){if(b.answer||b.loose.some(x=>MARK.test(x)||MARK0.test(x)))b.choices=b.loose;else b.q+=' '+b.loose.join(' ');}else if(b.loose.length)b.q+=' '+b.loose.join(' ');out.push({where:'Question '+(++n),...b});}b=null;};
-  const fresh=q=>{close();b={q,choices:[],loose:[],answer:'',why:'',cat};};
-  for(const raw of lines){const s=clean(raw);
+  const fresh=q=>{close();const m=q.match(/^(?:q(?:uestion)?\s*)?(\d{1,3})\s*[:.)\-]/i);b={q,choices:[],loose:[],answer:'',why:'',cat,num:m?+m[1]:0,numbered:!!m||/^q(uestion)?\s*[:.)\-]/i.test(q)};};
+  let keyAt=-1;
+  for(let li=0;li<lines.length;li++){const s=clean(lines[li]);
+    // "ANSWER KEY" (or similar) on its own line: everything after it is the key, not questions
+    if(/^(answer\s*key|answer\s*sheet|answers?|correct\s*answers|key\s*(to\s*corrections?)?|mga\s*tubag|susi(\s*sa\s*pagwawasto)?)\s*[:\-]?$/i.test(s)){keyAt=li;break;}
     if(!s){if(b){if(b.answer||b.choices.length)close();else b.gap=true;}continue;}
     let m;
     if((m=s.match(/^(category|topic)\s*[:\-]\s*(.*)$/i))){close();cat=m[2];continue;}
@@ -267,7 +270,12 @@ function mineFromText(text){
     if(!b.q){b.q=s;continue;}
     b.loose.push(s);
   }
-  close();return out;
+  close();
+  // Answer key: "1. B", "1-B 2-C", or a table read cell by cell ("1", "B", "2", "C" …)
+  if(keyAt>=0){const key={},toks=lines.slice(keyAt+1).map(clean).join(' ');let m;const re=/(?:^|[^\w])(\d{1,3})\s*[.):\-]?\s*(true|false|[a-f])(?![\w])/gi;
+    while((m=re.exec(toks)))if(!(m[1] in key))key[m[1]]=m[2];
+    let k=0;for(const b of out){if(b.choices.length||b.answer||b.numbered)k++;const a=key[b.num||k];if(a&&!b.answer&&!b.choices.some(x=>MARK.test(x)||MARK0.test(x)))b.answer=a;}}
+  return out;
 }
 /* Spreadsheets: a header row (Question, A, B, C, D, Answer…) or plain columns. */
 function mineFromRows(rows){
@@ -297,18 +305,18 @@ async function readQuestionFile(file){
     // use the sheet with the most usable questions (skips a 'Read me' or notes sheet)
     blocks=[];let best=-1;for(const n of wb.SheetNames){const b=mineFromRows(X.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:false,defval:''})),good=b.filter(x=>!finishItem(x).err).length;if(good>best){best=good;blocks=b;}}}
   else if(ext==='docx'){const M=await loadLib('mammoth');const html=(await M.convertToHtml({arrayBuffer:await file.arrayBuffer()})).value,doc=new DOMParser().parseFromString(html,'text/html');
-    const tb=[...doc.querySelectorAll('table')].map(t=>[...t.rows].map(r=>[...r.cells].map(c=>c.textContent))).find(r=>r.length>1);
-    if(tb)blocks=mineFromRows(tb);else{
-      // Word lists lose their numbers and letters: nested list items become "A. …" choices again.
-      const own=e=>{const c=e.cloneNode(true);c.querySelectorAll('ol,ul').forEach(x=>x.remove());return c.textContent;},lines=[];
-      doc.body.querySelectorAll('p,li,h1,h2,h3,h4,h5,h6').forEach(e=>{if(e.tagName==='P'&&e.closest('li'))return;
-        if(e.tagName==='LI'&&e.parentElement.closest('li')){const i=[...e.parentElement.children].indexOf(e);lines.push(String.fromCharCode(65+Math.min(i,25))+'. '+own(e));}
-        else lines.push(e.tagName==='LI'?own(e):e.textContent);});
-      blocks=mineFromText(lines.join('\n'));}}
+    // Word lists lose their numbers and letters: nested list items become "A. …" choices again. Table cells are read one per line.
+    const own=e=>{const c=e.cloneNode(true);c.querySelectorAll('ol,ul').forEach(x=>x.remove());return c.textContent;},lines=[];
+    doc.body.querySelectorAll('p,li,h1,h2,h3,h4,h5,h6').forEach(e=>{if(e.tagName==='P'&&e.closest('li'))return;
+      if(e.tagName==='LI'&&e.parentElement.closest('li')){const i=[...e.parentElement.children].indexOf(e);lines.push(String.fromCharCode(65+Math.min(i,25))+'. '+own(e));}
+      else lines.push(e.tagName==='LI'?own(e):e.textContent);});
+    blocks=mineFromText(lines.join('\n'));const good=b=>b.filter(x=>!finishItem(x).err).length;
+    for(const t of doc.querySelectorAll('table')){const rows=[...t.rows].map(r=>[...r.cells].map(c=>c.textContent));
+      if(rows.length>1&&rows.slice(0,6).some(r=>r.some(x=>/question|tanong|pangutana/i.test(x)))){const b=mineFromRows(rows);if(good(b)>good(blocks))blocks=b;}}}
   else if(['txt','text','md'].includes(ext))blocks=mineFromText(await file.text());
   else throw new Error('Use an Excel (.xlsx), CSV, Word (.docx) or text (.txt) file.');
   const items=[],skipped=[],seen=new Set();let cut=0;
-  for(const b of blocks){const r=finishItem(b);if(r.err){if(clean(b.q)||clean(b.answer))skipped.push(b.where+': '+r.err);continue;}
+  for(const b of blocks){const r=finishItem(b);if(r.err){if((b.choices||[]).some(x=>clean(x))||clean(b.answer)||b.numbered||/\?\s*$/.test(clean(b.q))||b.where.startsWith('Row'))skipped.push(b.where+': '+r.err);continue;}
     const sig=r.q.toLowerCase();if(seen.has(sig)){skipped.push(b.where+': Same question as before');continue;}seen.add(sig);
     if(r.cut)cut++;delete r.cut;if(!r.c)delete r.c;if(!r.why)delete r.why;items.push(r);}
   if(items.length>MINE_MAX){skipped.push(`Only the first ${MINE_MAX} questions are used (${items.length-MINE_MAX} more in the file)`);items.length=MINE_MAX;}
