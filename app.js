@@ -196,193 +196,8 @@ const GAMES={
  duck:{name:'2San Duck Race',icon:'🦆',bg:'var(--sun)',desc:'Everyone rides a duck in their 2San colors. Pure luck: any duck can win! 1st scores 1000, 2nd 900, 3rd 800 and so on.',secs:15,count:3,race:true,gen:true,
    make:()=>({q:{type:'race',text:'Cheer for your duck!',cat:'2San Duck Race'},key:{answer:''}})},
  num:{name:'Closest Number',icon:'#',bg:'var(--mint)',desc:'Guess the 2San number. The closer you are, the more points.',secs:30,count:8,pool:NUM,
-   make:it=>({q:{type:'number',text:it.q,cat:it.c},key:{value:it.a,answer:String(it.a),closest:true}})},
- mine:{name:'Your Own Questions',icon:'📂',bg:'var(--sun)',desc:'Upload your own questions: Excel, CSV, Word or text. Choices, True or False, numbers and type-in answers all work.',secs:20,count:10,mine:true,
-   get pool(){return MINE&&MINE.items&&MINE.items.length?MINE.items:MINE_SAMPLE;},make:it=>makeMine(it)}
+   make:it=>({q:{type:'number',text:it.q,cat:it.c},key:{value:it.a,answer:String(it.a),closest:true}})}
 };
-/* ---- Your Own Questions: the host uploads a file and the game turns it into rounds. Read on the host's device only. ---- */
-let MINE=null; // {name, items}; items: {k:'choice'|'tf'|'number'|'text', q, o?, a?, c?, why?}
-const MINE_MAX=200;
-const MINE_SAMPLE=[
- {k:'choice',q:'Which 2San test checks for urinary tract infections?',o:['UTI Test','Swimcount','Safe Sip+','Hydration Test'],c:'Sample question'},
- {k:'tf',q:'2San\'s mission is "Better care, better life."',a:true,c:'Sample question'},
- {k:'number',q:'2San\'s operations span how many continents?',a:4,c:'Sample question'},
- {k:'text',q:'Which 2San value means doing the right thing, even when no one is watching?',a:['Integrity'],c:'Sample question'}];
-function makeMine(it){
-  const cat=it.c||'Your questions',why=it.why?'. '+it.why:'';
-  if(it.k==='choice'){const r=choiceQ(it.q,cat,it.o[0],it.o.slice(1));r.key.answer+=why;return r;}
-  if(it.k==='tf')return {q:{type:'choice',tf:true,text:it.q,cat,options:['True','False']},key:{correct:it.a?0:1,answer:(it.a?'True':'False')+why}};
-  if(it.k==='number')return {q:{type:'number',text:it.q,cat},key:{value:it.a,answer:String(it.a)+why,closest:true}};
-  return {q:{type:'text',text:it.q,cat,hint:it.a[0].length<=24?pattern(it.a[0]):''},key:{accept:it.a,answer:it.a[0]+why}};
-}
-const LIBS={XLSX:'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',mammoth:'https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js'};
-const libWait={};
-function loadLib(name){if(window[name])return Promise.resolve(window[name]);
-  return libWait[name]||(libWait[name]=new Promise((ok,bad)=>{const s=document.createElement('script');s.src=LIBS[name];s.onload=()=>window[name]?ok(window[name]):bad(new Error('lib'));s.onerror=()=>{delete libWait[name];s.remove();bad(new Error('Could not load the file reader. Check your internet and try again.'));};document.head.append(s);}));}
-const clean=s=>String(s==null?'':s).replace(/ /g,' ').replace(/\s+/g,' ').trim();
-const MARK=/\s*(\*+|\(correct\)|\[correct\]|✓|✔|✅)\s*$/i, MARK0=/^\s*(\*+|✓|✔|✅)\s*/;
-const TRUE_W=/^(true|t|yes|y|tama|oo|totoo)$/i, FALSE_W=/^(false|f|no|n|mali|dili|hindi)$/i;
-function toNumber(s){const t=clean(s).replace(/[,$₱€£%\s]/g,'');return /^-?\d+(\.\d+)?$/.test(t)?parseFloat(t):null;}
-/* One question in, one item (or a reason it was skipped) out. */
-function finishItem(b){
-  const q=clean(b.q).replace(/^(q(uestion)?\s*\d*\s*[:.)\-]|\d+\s*[.):\-])\s*/i,'');
-  if(!q||!/[a-z].*[a-z]/i.test(q))return {err:'No question text'};
-  if(q.length>300)return {err:'Question is longer than 300 letters'};
-  let ch=(b.choices||[]).map(c=>clean(c)).filter(Boolean),correct=-1;
-  ch=ch.map((c,i)=>{if(MARK.test(c)||MARK0.test(c)){if(correct<0)correct=i;return clean(c.replace(MARK,'').replace(MARK0,''));}return c;});
-  const ans=clean(b.answer),why=clean(b.why).slice(0,160),c=clean(b.cat).slice(0,40)||undefined;
-  if(ch.length>=2){
-    if(correct<0&&ans){const L=ans.match(/^\(?([a-f])\)?\.?$/i);const byText=ch.findIndex(x=>x.toLowerCase()===ans.toLowerCase());
-      if(byText>=0)correct=byText;else if(L&&L[1].toLowerCase().charCodeAt(0)-97<ch.length)correct=L[1].toLowerCase().charCodeAt(0)-97;
-      else if(/^[1-6]$/.test(ans)&&+ans<=ch.length)correct=+ans-1;}
-    if(correct<0)return {err:ans?`Answer "${ans.slice(0,30)}" is not one of the choices`:'No correct answer marked'};
-    if(ch.length===2&&ch.every(x=>TRUE_W.test(x)||FALSE_W.test(x))&&TRUE_W.test(ch[0])!==TRUE_W.test(ch[1]))return {k:'tf',q,a:TRUE_W.test(ch[correct]),c,why};
-    if(ch.some(x=>x.length>120))return {err:'A choice is longer than 120 letters'};
-    const right=ch[correct],wrong=[...new Set(ch.filter((x,i)=>i!==correct&&x.toLowerCase()!==right.toLowerCase()))].slice(0,3);
-    if(!wrong.length)return {err:'All the choices are the same'};
-    return {k:'choice',q,o:[right,...wrong],c,why,cut:ch.length>4};
-  }
-  if(!ans)return {err:'No answer'};
-  if(TRUE_W.test(ans))return {k:'tf',q,a:true,c,why};
-  if(FALSE_W.test(ans))return {k:'tf',q,a:false,c,why};
-  const n=toNumber(ans);if(n!==null)return {k:'number',q,a:n,c,why};
-  const acc=ans.split(/\s+\/\s+|\s*\|\s*/).map(clean).filter(x=>norm(x));
-  if(!acc.length)return {err:'The answer has no letters or numbers'};
-  if(acc.some(x=>x.length>40))return {err:'Type-in answer is longer than 40 letters. Give it choices instead'};
-  return {k:'text',q,a:acc,c,why};
-}
-/* Plain text (also Word files): blocks of a question, optional A-D choices, and an Answer line. */
-function mineFromText(text){
-  const lines=String(text).replace(/\r/g,'').split('\n'),out=[];let b=null,cat='',n=0;
-  const close=()=>{if(b&&(b.q||b.choices.length||b.loose.length)){if(!b.choices.length&&b.loose.length){if(b.answer||b.loose.some(x=>MARK.test(x)||MARK0.test(x)))b.choices=b.loose;else b.q+=' '+b.loose.join(' ');}else if(b.loose.length)b.q+=' '+b.loose.join(' ');out.push({where:'Question '+(++n),...b});}b=null;};
-  const fresh=q=>{close();const m=q.match(/^(?:q(?:uestion)?\s*)?(\d{1,3})\s*[:.)\-]/i);b={q,choices:[],loose:[],answer:'',why:'',cat,num:m?+m[1]:0,numbered:!!m||/^q(uestion)?\s*[:.)\-]/i.test(q)};};
-  let keyAt=-1;
-  for(let li=0;li<lines.length;li++){const s=clean(lines[li]);
-    // "ANSWER KEY" (or similar) on its own line: everything after it is the key, not questions
-    if(/^(answer\s*key|answer\s*sheet|answers?|correct\s*answers|key\s*(to\s*corrections?)?|mga\s*tubag|susi(\s*sa\s*pagwawasto)?)\s*[:\-]?$/i.test(s)){keyAt=li;break;}
-    if(!s){if(b){if(b.answer||b.choices.length)close();else b.gap=true;}continue;}
-    let m;
-    if((m=s.match(/^(category|topic)\s*[:\-]\s*(.*)$/i))){close();cat=m[2];continue;}
-    if((m=s.match(/^(correct\s*answer|answer|ans|sagot|tubag)\s*[:\-=]\s*(.*)$/i))){if(!b)continue;b.answer=m[2];continue;}
-    if((m=s.match(/^(explanation|why|note|reason)\s*[:\-]\s*(.*)$/i))){if(b)b.why=m[2];continue;}
-    if((m=s.match(/^[\(\[]?([a-fA-F])[\)\.\]:]\s+(.+)$/))&&b&&!b.answer&&(b.choices.length||m[1].toLowerCase()==='a')){b.choices.push(m[2]);continue;}
-    if(/^(q(uestion)?\s*\d*\s*[:.)\-]|\d+\s*[.):\-])\s*\S/i.test(s)||!b||b.answer||b.gap||b.choices.length&&!/^[\(\[]?[a-f][\)\.\]:]\s/i.test(s)){fresh(s);continue;}
-    if(!b.q){b.q=s;continue;}
-    b.loose.push(s);
-  }
-  close();
-  // Answer key: "1. B", "1-B 2-C", or a table read cell by cell ("1", "B", "2", "C" …)
-  if(keyAt>=0){const key={},toks=lines.slice(keyAt+1).map(clean).join(' ');let m;const re=/(?:^|[^\w])(\d{1,3})\s*[.):\-]?\s*(true|false|[a-f])(?![\w])/gi;
-    while((m=re.exec(toks)))if(!(m[1] in key))key[m[1]]=m[2];
-    let k=0;for(const b of out){if(b.choices.length||b.answer||b.numbered)k++;const a=key[b.num||k];if(a&&!b.answer&&!b.choices.some(x=>MARK.test(x)||MARK0.test(x)))b.answer=a;}}
-  return out;
-}
-/* Spreadsheets: a header row (Question, A, B, C, D, Answer…) or plain columns. */
-function mineFromRows(rows){
-  rows=rows.map(r=>(r||[]).map(clean));const out=[];
-  let hi=rows.slice(0,6).findIndex(r=>r.some(x=>/question|tanong|pangutana/i.test(x)));
-  let col={q:0,ch:[],a:-1,why:-1,cat:-1};
-  if(hi>=0){const H_=rows[hi].map(x=>x.toLowerCase());col.q=H_.findIndex(x=>/question|tanong|pangutana/.test(x));
-    H_.forEach((x,i)=>{if(i===col.q)return;
-      if(/^(correct\s*)?(answer|ans|sagot|tubag)\b|^correct$/.test(x)&&col.a<0)col.a=i;
-      else if(/^(choice|option|opt|letter)?\s*[a-f1-6]\)?\.?$|^(choice|option)\s*[a-f1-6]|wrong|incorrect|distractor/.test(x))col.ch.push(i);
-      else if(/explan|why|note|reason/.test(x))col.why=i;else if(/categ|topic/.test(x))col.cat=i;});
-    const wrongOnly=col.ch.length&&col.ch.every(i=>/wrong|incorrect|distractor/.test(H_[i]));
-    rows.slice(hi+1).forEach((r,k)=>{if(!r.some(Boolean))return;const a=col.a>=0?r[col.a]:'';
-      const wr=col.ch.map(i=>r[i]),asWrong=wrongOnly&&a&&wr.some(Boolean);
-      out.push({where:'Row '+(hi+k+2),q:r[col.q],choices:asWrong?[a+' *',...wr]:wrongOnly?[]:wr,answer:asWrong?'':a,why:col.why>=0?r[col.why]:'',cat:col.cat>=0?r[col.cat]:''});});
-  }else rows.forEach((r,k)=>{const v=r.map(x=>x);while(v.length&&!v[v.length-1])v.pop();if(!v.length)return;
-      // no header: Question | Answer, Question | Answer | Explanation, or Question | choices… | Answer
-      out.push({where:'Row '+(k+1),q:v[0],choices:v.length>=4?v.slice(1,-1):[],answer:v.length===3?v[1]:v.length>=2?v[v.length-1]:'',why:v.length===3?v[2]:'',cat:''});});
-  return out;
-}
-async function readQuestionFile(file){
-  const ext=(file.name.split('.').pop()||'').toLowerCase();
-  if(file.size>5*1024*1024)throw new Error('That file is bigger than 5 MB. Use a smaller file.');
-  let blocks;
-  if(['xlsx','xls','xlsm','ods','csv','tsv'].includes(ext)){const X=await loadLib('XLSX');
-    const wb=['csv','tsv'].includes(ext)?X.read(await file.text(),{type:'string',raw:true}):X.read(await file.arrayBuffer(),{type:'array'});
-    // use the sheet with the most usable questions (skips a 'Read me' or notes sheet)
-    blocks=[];let best=-1;for(const n of wb.SheetNames){const b=mineFromRows(X.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:false,defval:''})),good=b.filter(x=>!finishItem(x).err).length;if(good>best){best=good;blocks=b;}}}
-  else if(ext==='docx'){const M=await loadLib('mammoth');const html=(await M.convertToHtml({arrayBuffer:await file.arrayBuffer()})).value,doc=new DOMParser().parseFromString(html,'text/html');
-    // Word lists lose their numbers and letters: nested list items become "A. …" choices again. Table cells are read one per line.
-    const own=e=>{const c=e.cloneNode(true);c.querySelectorAll('ol,ul').forEach(x=>x.remove());return c.textContent;},lines=[];
-    doc.body.querySelectorAll('p,li,h1,h2,h3,h4,h5,h6').forEach(e=>{if(e.tagName==='P'&&e.closest('li'))return;
-      if(e.tagName==='LI'&&e.parentElement.closest('li')){const i=[...e.parentElement.children].indexOf(e);lines.push(String.fromCharCode(65+Math.min(i,25))+'. '+own(e));}
-      else lines.push(e.tagName==='LI'?own(e):e.textContent);});
-    blocks=mineFromText(lines.join('\n'));const good=b=>b.filter(x=>!finishItem(x).err).length;
-    for(const t of doc.querySelectorAll('table')){const rows=[...t.rows].map(r=>[...r.cells].map(c=>c.textContent));
-      if(rows.length>1&&rows.slice(0,6).some(r=>r.some(x=>/question|tanong|pangutana/i.test(x)))){const b=mineFromRows(rows);if(good(b)>good(blocks))blocks=b;}}}
-  else if(['txt','text','md'].includes(ext))blocks=mineFromText(await file.text());
-  else throw new Error('Use an Excel (.xlsx), CSV, Word (.docx) or text (.txt) file.');
-  const items=[],skipped=[],seen=new Set();let cut=0;
-  for(const b of blocks){const r=finishItem(b);if(r.err){if((b.choices||[]).some(x=>clean(x))||clean(b.answer)||b.numbered||/\?\s*$/.test(clean(b.q))||b.where.startsWith('Row'))skipped.push(b.where+': '+r.err);continue;}
-    const sig=r.q.toLowerCase();if(seen.has(sig)){skipped.push(b.where+': Same question as before');continue;}seen.add(sig);
-    if(r.cut)cut++;delete r.cut;if(!r.c)delete r.c;if(!r.why)delete r.why;items.push(r);}
-  if(items.length>MINE_MAX){skipped.push(`Only the first ${MINE_MAX} questions are used (${items.length-MINE_MAX} more in the file)`);items.length=MINE_MAX;}
-  return {name:file.name.slice(0,60),items,skipped,cut};
-}
-const MINE_TPL_ROWS=[['Question','A','B','C','D','Answer','Explanation','Category'],
- ['Which 2San test checks for urinary tract infections?','UTI Test','Swimcount','Safe Sip+','Hydration Test','A','','Products'],
- ['2San\'s mission is "Better care, better life."','','','','','True','','About 2San'],
- ['How many continents do 2San operations span?','','','','','4','Closest guess wins the most points',''],
- ['Which 2San value means doing the right thing?','','','','','Integrity','Type-in answer','Values']];
-const MINE_TPL_TXT=`Category: Products
-1. Which 2San test checks for urinary tract infections?
-A. UTI Test
-B. Swimcount
-C. Safe Sip+
-D. Hydration Test
-Answer: A
-
-2. 2San's mission is "Better care, better life."
-Answer: True
-
-3. How many continents do 2San operations span?
-Answer: 4
-Explanation: Closest guess wins the most points.
-
-Category: Values
-4. Which 2San value means doing the right thing?
-Answer: Integrity
-`;
-function saveFile(name,blob){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);}
-const KIND_LABEL={choice:'with choices',tf:'True or False',number:'number',text:'type-in'};
-function renderMine(){
-  if(!$('mineBox'))return;const has=MINE&&MINE.items&&MINE.items.length;
-  $('mineClear').hidden=!has;$('mineFileLbl').textContent=has?'📂 Upload a different file':'📂 Upload questions file';
-  const st=$('mineStatus');
-  if(!has){st.innerHTML='';st.append(el('b',null,'No file yet.'),document.createTextNode(' Upload your questions, then press Start game.'));$('minePreview').innerHTML='';$('minePreview').hidden=true;return;}
-  const counts={};MINE.items.forEach(i=>counts[i.k]=(counts[i.k]||0)+1);
-  st.innerHTML='';st.append(el('b',null,`${MINE.items.length} question${MINE.items.length>1?'s':''} ready`),document.createTextNode(` from "${MINE.name}": `+Object.keys(KIND_LABEL).filter(k=>counts[k]).map(k=>`${counts[k]} ${KIND_LABEL[k]}`).join(', ')+'.'));
-  const pv=$('minePreview');pv.innerHTML='';pv.hidden=false;
-  const ol=el('ol','mine-list');MINE.items.slice(0,5).forEach(it=>{const li=el('li');li.append(el('span',null,it.q),el('small',null,'Answer: '+(it.k==='choice'?it.o[0]:it.k==='tf'?(it.a?'True':'False'):it.k==='number'?String(it.a):it.a.join(' or '))));ol.append(li);});
-  pv.append(el('p','lbl','Only you can see this'),ol);if(MINE.items.length>5)pv.append(el('p','hint','+ '+(MINE.items.length-5)+' more'));
-}
-function showMineSkips(r){const w=$('mineSkips');w.innerHTML='';
-  const msgs=[...r.skipped];if(r.cut)msgs.unshift(`${r.cut} question${r.cut>1?'s have':' has'} more than 4 choices. The game uses the right answer plus 3 others.`);
-  w.hidden=!msgs.length;if(!msgs.length)return;w.append(el('b',null,r.items.length?'Some lines were skipped:':'Nothing could be read:'));
-  const ul=el('ul');msgs.slice(0,8).forEach(m=>ul.append(el('li',null,m)));if(msgs.length>8)ul.append(el('li',null,`… and ${msgs.length-8} more`));w.append(ul);}
-async function useMineFile(file){
-  if(!file)return;const st=$('mineStatus');st.textContent='Reading '+file.name+'…';$('mineSkips').hidden=true;
-  try{const r=await readQuestionFile(file);showMineSkips(r);
-    if(!r.items.length){renderMine();st.prepend(el('b',null,'No questions found in that file. '));return;}
-    MINE={name:r.name,items:r.items};local.set('mine',MINE);H.used.mine=[];
-    try{await hostCall('host_set_key',{p_data:{used:H.used,mine:MINE}});}catch(e){}
-    renderMine();updatePoolInfo();animIn($('mineBox'));beep(880,.1);status(`${r.items.length} questions loaded.`);}
-  catch(e){renderMine();st.prepend(el('b',null,(e&&e.message&&!/^lib$/.test(e.message)?e.message:'Could not read that file.')+' '));}
-}
-function setupMine(){
-  if(setupMine.done)return;setupMine.done=true;
-  $('mineFile').onchange=e=>{const f=e.target.files[0];e.target.value='';useMineFile(f);};
-  const box=$('mineBox');['dragenter','dragover'].forEach(t=>box.addEventListener(t,e=>{e.preventDefault();box.classList.add('drag');}));
-  ['dragleave','drop'].forEach(t=>box.addEventListener(t,e=>{e.preventDefault();if(t==='drop'||!box.contains(e.relatedTarget))box.classList.remove('drag');}));
-  box.addEventListener('drop',e=>useMineFile(e.dataTransfer.files[0]));
-  $('mineClear').onclick=async()=>{MINE=null;local.set('mine',null);H.used.mine=[];$('mineSkips').hidden=true;try{await hostCall('host_set_key',{p_data:{used:H.used,mine:null}});}catch(e){}renderMine();updatePoolInfo();};
-  $('mineTplTxt').onclick=()=>saveFile('2san-questions-template.txt',new Blob([MINE_TPL_TXT],{type:'text/plain'}));
-  $('mineTplXlsx').onclick=async()=>{try{const X=await loadLib('XLSX'),wb=X.utils.book_new(),ws=X.utils.aoa_to_sheet(MINE_TPL_ROWS);ws['!cols']=[{wch:52},{wch:16},{wch:16},{wch:16},{wch:16},{wch:10},{wch:30},{wch:14}];X.utils.book_append_sheet(wb,ws,'Questions');X.writeFile(wb,'2san-questions-template.xlsx');}catch(e){status('Could not make the Excel file. Try the text template.');}};
-  renderMine();
-}
 /* Duck race names and fun facts, all from 2san.com. */
 const RACE_NAMES=['The Agility Sprint','The Fearlessness Dash','The Integrity Cup','The Rigor Regatta','The Excellence Classic','The Swimcount Swim',
  'The Safe Sip+ Splash','The 10-Minute Results Race','Better Care, Better Life Cup','Journey to Self-testing for All','The Four Continents Relay','The Green Office Paddle','The Home Water Test Trial','The Reusable Cup Race'];
@@ -504,13 +319,10 @@ function sigOf(g,item,q,key){if(GAMES[g].pool)return 'p'+item;
   if(g==='math')return q.text;if(g==='stroop')return q.display.text+'|'+q.display.color;if(g==='count')return q.text+'|'+key.value;
   if(g==='memory')return [...q.display.items].sort().join('')+'|'+key.answer;if(g==='slide')return q.tiles.join('');return JSON.stringify(q);}
 /* Load what this lobby has already played (kept with the host key, so it survives reloads and host changes). */
-async function loadUsed(){if(H.usedLoaded)return;try{const k=await hostCall('host_get_key',{});H.used=(k&&k.used)||{};H.usedLoaded=true;adoptMine(k);}catch(e){}}
-/* A new host (or another device) takes over the lobby's uploaded questions. */
-function adoptMine(k){if(k&&k.mine&&Array.isArray(k.mine.items)&&k.mine.items.length&&JSON.stringify(k.mine)!==JSON.stringify(MINE)&&(!MINE||(k.deck&&k.deck.game==='mine'))){MINE=k.mine;local.set('mine',MINE);renderMine();if($('gameList').firstChild)updatePoolInfo();}}
+async function loadUsed(){if(H.usedLoaded)return;try{const k=await hostCall('host_get_key',{});H.used=(k&&k.used)||{};H.usedLoaded=true;}catch(e){}}
 let P={tick:null,localStart:0,answered:local.get('answered')||{}};
 /* How far into the round we are, from the server's start time. Clamped so a wrong device clock cannot break the timer. */
 function roundStart(s){const t=Date.parse(s.startedAt||'');if(!isFinite(t))return performance.now();const el=Date.now()-t;return el>=0&&el<=s.dur*1000?performance.now()-el:performance.now();}
-{const m=local.get('mine');if(m&&Array.isArray(m.items)&&m.items.length)MINE=m;}
 const anyOf=(list,skip=1)=>list[skip+Math.floor(Math.random()*(list.length-skip))][0];
 let myColor=local.get('color')||COLORS[Math.floor(Math.random()*COLORS.length)],myFace=pickId(FACES,local.get('face'));
 // First visit with the new character maker: start with a random hairstyle and weapon so everyone looks different.
@@ -667,7 +479,7 @@ $('createForm').addEventListener('submit',async e=>{
 
 /* ================= GAME GUIDE + PRACTICE ROUNDS (lobby browser) ================= */
 const HOW={choice:'Tap one of the choices',text:'Type the word',number:'Type a number',slide:'Solve the puzzle on your phone'};
-function howFor(id){if(GAMES[id].race)return 'Just watch and cheer';if(GAMES[id].mine)return 'Any question type';const g=GAMES[id],s=g.make(g.pool?g.pool[0]:0).q;return s.tf?'Tap True or False':HOW[s.type];}
+function howFor(id){if(GAMES[id].race)return 'Just watch and cheer';const g=GAMES[id],s=g.make(g.pool?g.pool[0]:0).q;return s.tf?'Tap True or False':HOW[s.type];}
 function buildGameCards(){
   const box=$('gameCards');if(box.firstChild)return;
   Object.entries(GAMES).forEach(([id,g])=>{
@@ -798,13 +610,11 @@ function buildGameList(){
   applyGameDefaults();
 }
 function setSelect(sel,v){const s=$(sel);if(![...s.options].some(o=>o.value==String(v))){const o=el('option',null,String(v));o.value=v;s.append(o);}s.value=String(v);}
-function applyGameDefaults(e){const g=GAMES[selGame()];$('mineBox').hidden=!g.mine;if(g.mine){setupMine();if(e)requestAnimationFrame(()=>{try{$('mineBox').scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(x){}});}setSelect('hTime',g.secs);setSelect('hCount',g.count);$('hTimeBox').hidden=!!g.race;$('hRaceLenBox').hidden=!g.race;$('hCountLbl').textContent=g.race?'Races':'Questions';updatePoolInfo();}
+function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);$('hTimeBox').hidden=!!g.race;$('hRaceLenBox').hidden=!g.race;$('hCountLbl').textContent=g.race?'Races':'Questions';updatePoolInfo();}
 function updatePoolInfo(){const id=selGame(),g=GAMES[id];
   if(g.race){$('poolInfo').textContent='Every race is random, so anyone can win. Points per race: 1st 1000, 2nd 900, 3rd 800, down to 100. Pick how long each race lasts.';return;}
-  if(g.mine&&!(MINE&&MINE.items.length)){$('poolInfo').textContent='';return;}
   if(!g.pool){$('poolInfo').textContent=`${g.name} makes a new round every time. No round repeats in this lobby.`;return;}
   const played=new Set((H.used[id]||[]).filter(s=>s[0]==='p')).size,left=g.pool.length-played;
-  if(g.mine){$('poolInfo').textContent=left>0?`${left} of ${g.pool.length} questions not played yet in this lobby.`:`All ${g.pool.length} questions have been played here. They will start over.`;return;}
   $('poolInfo').textContent=left>0?`${left} of ${g.pool.length} ${g.name} rounds not played yet in this lobby.`:`All ${g.pool.length} ${g.name} rounds have been played here. They will start over.`;}
 let rosterKey='';
 function renderHostLobby(){
@@ -826,7 +636,6 @@ function renderHostLobby(){
 $('copyLinkBtn').onclick=async()=>{try{await navigator.clipboard.writeText($('playerLink').textContent);status('Game link copied.');}catch(e){const r=document.createRange();r.selectNodeContents($('playerLink'));const s=getSelection();s.removeAllRanges();s.addRange(r);status('Link selected. Press Ctrl+C to copy.');}};
 $('startBtn').onclick=async()=>{
   if(!playerIds().length){$('hostErr').textContent='Wait for at least one player to join.';return;}
-  if(GAMES[selGame()].mine&&!(MINE&&MINE.items.length)){$('hostErr').textContent='Upload a questions file first.';return;}
   $('hostErr').textContent='';
   $('startBtn').disabled=true;await loadUsed();
   const g=selGame(),G=GAMES[g],n=G.pool?Math.min(+$('hCount').value,G.pool.length):+$('hCount').value;
@@ -846,7 +655,7 @@ async function goQuestion(i){
   list.push(sig);if(list.length>400)list.splice(0,list.length-400);
   const {q,key}=made;
   key.idx=i;H.key=key;H.revealing=false;H.localStart=performance.now();H.startFor=d.session+':'+i;ANSWERS={};
-  await hostCall('host_set_key',{p_data:{deck:d,idx:i,...key,used:H.used,mine:MINE}});
+  await hostCall('host_set_key',{p_data:{deck:d,idx:i,...key,used:H.used}});
   await setState({session:d.session,phase:'question',game:d.game,idx:i,total:d.order.length,dur:d.dur,q},true);
 }
 /* One race of the 2San Duck Race game. Every player in the lobby rides; the host draws a random finishing order. */
@@ -925,7 +734,7 @@ function paintHostOpts(){
     if(!(s.closest||[]).length)wrap.append(el('p','hint',q.type==='slide'?'Nobody solved this one.':'Nobody got this one.'));
   }
 }
-async function restoreHost(){try{const k=await hostCall('host_get_key',{});if(k&&k.used){H.used=k.used;H.usedLoaded=true;}adoptMine(k);if(k&&k.deck){H.deck=k.deck;if(STATE&&k.idx===STATE.idx)H.key=k;}}catch(e){}}
+async function restoreHost(){try{const k=await hostCall('host_get_key',{});if(k&&k.used){H.used=k.used;H.usedLoaded=true;}if(k&&k.deck){H.deck=k.deck;if(STATE&&k.idx===STATE.idx)H.key=k;}}catch(e){}}
 $('revealBtn').onclick=()=>reveal();
 async function reveal(){
   if(H.revealing||!STATE||STATE.phase!=='question'||!isHost())return;H.revealing=true;clearInterval(H.timer);
