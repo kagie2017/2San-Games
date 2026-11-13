@@ -897,7 +897,7 @@ function drawPodium(id,rows){
 $('newGameBtn').onclick=async()=>{const session=rid();try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await setState({session,phase:'lobby'},true);}catch(e){}finalKey='';rosterKey='';};
 
 /* ================= PLAYER ================= */
-function playerShow(id){if(id!=='pQ'&&id!=='pReveal')worldOff();['pWait','pQ','pReveal','pFinal','pRace'].forEach(s=>$(s).hidden=s!==id);if(id!==playerSub){playerSub=id;animIn($(id));if(id!=='pFinal')stopConfetti();}}
+function playerShow(id){if(id!=='pQ'&&id!=='pReveal'&&id!=='pWait')worldOff();['pWait','pQ','pReveal','pFinal','pRace'].forEach(s=>$(s).hidden=s!==id);if(id!==playerSub){playerSub=id;animIn($(id));if(id!=='pFinal')stopConfetti();}}
 let pKey='';
 function renderPlayer(){
   const uid=ME.player_id,me=PLAYERS[uid];if(!me)return;
@@ -905,7 +905,10 @@ function renderPlayer(){
   if(ph==='lobby'){const host=Object.values(PLAYERS).find(p=>p.role==='host'),n=playerIds().length,k='wait'+me.color+me.face+me.hair+me.weapon+me.nick+n+LOBBY.name+(host&&host.nick);
     if(pKey!==k){pKey=k;put('pWaitChar',charScene(look(me),1.5,true));$('pWaitTitle').textContent=`You're in ${LOBBY.name}!`;
       $('pWaitText').textContent=`Waiting for ${host?host.nick:'the host'} to start. ${n} ${n===1?'player':'players'} in this lobby.`;}
-    playerShow('pWait');return;}
+    playerShow('pWait');
+    $('pWaitLobby').textContent=LOBBY.name;$('pWaitBig').textContent=`Waiting for ${host?host.nick:'the host'} to start the game`;
+    $('pWaitSub').textContent=`${n} ${n===1?'player':'players'} here. Walk around and say hi!`;
+    worldPlayer(true);return;}
   if(ph==='question')return renderPlayerQ();
   if(ph==='reveal'||ph==='board')return renderPlayerReveal();
   if(ph==='final')return renderPlayerFinal();
@@ -986,7 +989,7 @@ function renderPlayerFinal(){
 }
 
 /* ================= 3D world (world.js + three.js, loaded the first time a round is shown) ================= */
-const BUILD='20261113c';
+const BUILD='20261113d';
 const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
 const W3={state:'idle',want:null};
 function hasWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}
@@ -1012,9 +1015,17 @@ function worldHost(){
   try{$('pWorld').hidden=true;document.body.classList.remove('world-phone');document.body.classList.add('world-host');World.show('host',null,$('hTv'));World.sync(worldPlayers());World.round(worldRound());}
   catch(e){worldBroke(e);}
 }
-function worldPlayer(){
-  if(W3.state!=='ready'){if(W3.state!=='failed'){W3.want=()=>{if(view==='player'&&(playerSub==='pQ'||playerSub==='pReveal')&&STATE&&STATE.game!=='duck')worldPlayer();};loadWorld();}return;}
-  try{document.body.classList.remove('world-host');document.body.classList.add('world-phone');$('pWorld').hidden=false;if($('pCard').parentElement!==$('pWorldIn'))$('pWorldIn').prepend($('pCard'));World.show('phone',$('pWorld'),$('pCard'));World.sync(worldPlayers());World.round(worldRound());}
+/* Phones: the world panel. wait=true is the lobby (the TV says who we are waiting for), otherwise the question sits on the TV. */
+function worldPlayer(wait){
+  if(W3.state!=='ready'){if(W3.state!=='failed'){W3.want=()=>{if(view!=='player')return;if(playerSub==='pWait'&&(!STATE||STATE.phase==='lobby'))worldPlayer(true);else if((playerSub==='pQ'||playerSub==='pReveal')&&STATE&&STATE.game!=='duck')worldPlayer();};loadWorld();}return;}
+  try{
+    document.body.classList.remove('world-host');document.body.classList.add('world-phone');document.body.classList.toggle('world-wait',!!wait);$('pWorld').hidden=false;
+    $('pWaitTv').hidden=!wait;
+    if(wait){const c=$('pCard');if(c.parentElement!==$('pQ'))$('pQ').insertBefore(c,$('pOpts'));}
+    else if($('pCard').parentElement!==$('pWorldIn'))$('pWorldIn').prepend($('pCard'));
+    World.show('phone',$('pWorld'),wait?$('pWaitTv'):$('pCard'));World.sync(worldPlayers());
+    World.round(wait?{key:'lobby:'+(LOBBY&&LOBBY.id)+':'+(STATE&&STATE.session||''),phase:'lobby',options:[],picks:{},ok:{},answered:[]}:worldRound());
+  }
   catch(e){worldBroke(e);}
 }
 /* When a new version is uploaded while the game is open, offer a one-tap update so everyone runs the same code. */
@@ -1023,7 +1034,7 @@ setInterval(checkVersion,90000);setTimeout(checkVersion,5000);
 $('updateBtn').onclick=()=>location.reload();
 /* A problem in the 3D world must never stop the game: switch it off and keep the normal screens. */
 function worldBroke(e){try{console.error('3D world switched off:',e);}catch(x){}try{worldOff();}catch(x){}W3.state='failed';}
-function worldOff(){document.body.classList.remove('world-host','world-phone');const p=$('pWorld');if(p)p.hidden=true;const c=$('pCard');if(c&&c.parentElement!==$('pQ'))$('pQ').insertBefore(c,$('pOpts'));if(window.World)try{World.hide();}catch(e){}}
+function worldOff(){document.body.classList.remove('world-host','world-phone','world-wait');const wt=$('pWaitTv');if(wt)wt.hidden=true;const p=$('pWorld');if(p)p.hidden=true;const c=$('pCard');if(c&&c.parentElement!==$('pQ'))$('pQ').insertBefore(c,$('pOpts'));if(window.World)try{World.hide();}catch(e){}}
 addEventListener('resize',()=>{if(view==='host'&&hostSub==='hQ'&&STATE&&STATE.phase!=='lobby')worldHost();});
 
 /* ================= extras ================= */

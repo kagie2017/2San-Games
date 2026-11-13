@@ -227,6 +227,7 @@
       for (const c of S.chars.values()) { if (c.mode !== 'wander') { c.mode = 'wander'; c.wait = rnd(0, 1); } c.headG.rotation.set(0, 0, 0); c.bub.visible = false; c.answeredOn = false; }
       S.pads.forEach(p => { p.right = false; p.top.emissiveIntensity = 0; p.side.color.set(p.color); p.slab.position.y = .45; });
     }
+    if (r.phase === 'lobby') { if (S.pads.length) { S.padGroup.clear(); S.pads = []; } S.padKey = 'lobby'; return; } // waiting room: no pads, just walking
     const pk = r.key + ':' + r.options.length + ':' + (S.area ? S.area.key : '');
     let moved = false;
     if (S.padKey !== pk) { S.padKey = pk; if (S.area) { buildPads(r); moved = true; if (r.phase === 'reveal') S.revealKey = ''; } }
