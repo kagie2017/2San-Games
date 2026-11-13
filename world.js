@@ -99,7 +99,7 @@
   const SHADOW_GEO = new T.CircleGeometry(.75, 20), SHADOW_MAT = new T.MeshBasicMaterial({ color: 0x0c0928, transparent: true, opacity: .22, depthWrite: false });
 
   /* ---------- world state ---------- */
-  const S = { ok: false, mode: null, box: null, cv: null, ren: null, scene: null, cam: null, chars: new Map(), loop: 0, last: 0, area: null, pads: [], padGroup: null, tv: null, round: null, revealKey: '', visible: false, me: null, camT: new T.Vector3(), lastLayout: '' };
+  const S = { slot: new Map(), padNext: [], roundKey: '', ok: false, mode: null, box: null, cv: null, ren: null, scene: null, cam: null, chars: new Map(), loop: 0, last: 0, area: null, pads: [], padGroup: null, tv: null, round: null, revealKey: '', visible: false, me: null, camT: new T.Vector3(), lastLayout: '' };
 
   function init() {
     try {
@@ -171,7 +171,7 @@
   function buildPads(r) {
     S.padGroup.clear(); S.pads = [];
     const list = r.options.length ? r.options : [{ c: '#FFC83D', s: '★', fg: true, gold: true }];
-    const a = S.area, n = list.length, span = Math.min(a.padSpan, n * 9.5), step = n > 1 ? span / (n - 1) : 0, pw = Math.min(7.5, Math.max(4.5, (n > 1 ? step : 8) * .78)), pd = Math.min(6, pw * .8);
+    const a = S.area, n = list.length, span = Math.min(a.padSpan, n * 9.5), step = n > 1 ? span / (n - 1) : 0, pw = Math.min(7.5, Math.max(4.5, (n > 1 ? step : 8) * .78)), pd = Math.max(1.2, Math.min(6, pw * .8, a.padDepth));
     list.forEach((o, i) => {
       const x = a.padX + (n > 1 ? -span / 2 + i * step : 0), z = a.padZ;
       const base = cube(pw + .7, .3, pd + .7, NAVY, x, .15, z, S.padGroup);
@@ -181,13 +181,24 @@
       S.pads.push({ x, z, w: pw, d: pd, slab, top, side, base, color: o.c, gold: !!o.gold });
     });
   }
-  /* Spots on and around a pad, nearest first, so many players can stand on the same pad without stacking. */
-  function padSpots(p, count) {
-    const out = [], gap = 1.45;
-    for (let ring = 0; out.length < count && ring < 30; ring++) {
-      for (let gx = -ring; gx <= ring; gx++) for (let gz = -ring; gz <= ring; gz++) { if (Math.max(Math.abs(gx), Math.abs(gz)) !== ring) continue; out.push([p.x + gx * gap + (gz % 2 ? gap / 2 : 0), p.z + gz * gap * .9]); }
-    }
-    out.sort((a, b) => Math.hypot(a[0] - p.x, (a[1] - p.z) * 1.3) - Math.hypot(b[0] - p.x, (b[1] - p.z) * 1.3)); return out.slice(0, count);
+  /* Spot number i on a pad: rows across the pad's own lane (middle row first, then in front, then behind), middle column first.
+     A player keeps the same spot all round, so nobody shuffles when others arrive. */
+  function laneSpot(p, i) {
+    const cols = Math.max(2, Math.floor(p.w / 1.05)), gx = p.w / cols, row = Math.floor(i / cols), col = i % cols;
+    const xs = Array.from({ length: cols }, (_, k) => (k - (cols - 1) / 2) * gx).sort((a, b) => Math.abs(a) - Math.abs(b) || a - b);
+    const ro = row === 0 ? 0 : row % 2 ? (row + 1) / 2 : -row / 2;
+    return [p.x + xs[col], p.z + ro * .95];
+  }
+  function claimSpot(c, pad) {
+    let sl = S.slot.get(c.id);
+    if (!sl || sl.pad !== pad) { sl = { pad, i: S.padNext[pad] = (S.padNext[pad] || 0) + 1 }; sl.i--; S.slot.set(c.id, sl); }
+    return laneSpot(S.pads[pad], sl.i);
+  }
+  function runTo(c, spot, after) {
+    const there = Math.hypot(c.x - spot[0], c.z - spot[1]) < .1;
+    c.tx = spot[0]; c.tz = spot[1]; c.after = after;
+    if (c.mode === after && there) return;
+    if (c.mode !== 'goto' || !there) { c.mode = 'goto'; c.speed = rnd(7, 8.2); c.delay = 0; }
   }
 
   /* ---------- characters in and out ---------- */
@@ -211,28 +222,38 @@
   /* ---------- round + reveal ---------- */
   function round(r) {
     S.round = r;
+    if (S.roundKey !== r.key) {   // a new question: everyone back to walking around
+      S.roundKey = r.key; S.slot = new Map(); S.padNext = []; S.revealKey = '';
+      for (const c of S.chars.values()) { if (c.mode !== 'wander') { c.mode = 'wander'; c.wait = rnd(0, 1); } c.headG.rotation.set(0, 0, 0); c.bub.visible = false; c.answeredOn = false; }
+      S.pads.forEach(p => { p.right = false; p.top.emissiveIntensity = 0; p.side.color.set(p.color); p.slab.position.y = .45; });
+    }
     const pk = r.key + ':' + r.options.length + ':' + (S.area ? S.area.key : '');
-    if (S.padKey !== pk) { S.padKey = pk; if (S.area) { buildPads(r); S.revealKey = r.phase === 'reveal' ? '' : S.revealKey; } } // pads moved: send everyone to the new spots
+    let moved = false;
+    if (S.padKey !== pk) { S.padKey = pk; if (S.area) { buildPads(r); moved = true; if (r.phase === 'reveal') S.revealKey = ''; } }
+    if (!S.pads.length) return;
+    const validPick = v => typeof v === 'number' && v >= 0 && v < S.pads.length && r.options.length;
     if (r.phase !== 'reveal') {
-      if (S.revealKey) { S.revealKey = ''; for (const c of S.chars.values()) { c.mode = 'wander'; c.wait = rnd(0, 1.2); c.headG.rotation.set(0, 0, 0); c.bub.visible = false; c.answeredOn = false; } S.pads.forEach(p => { p.top.emissiveIntensity = 0; p.side.color.set(p.color); p.slab.position.y = .45; }); }
+      // tapping a choice sends your character running to that pad (host: everyone; phone: you, the rest at the reveal)
+      for (const c of S.chars.values()) {
+        const pick = r.picks ? r.picks[c.id] : undefined;
+        if (validPick(pick) && (c.mode === 'wander' || moved || !S.slot.has(c.id))) runTo(c, claimSpot(c, pick), 'ready');
+      }
       const ans = new Set(r.answered || []); for (const c of S.chars.values()) { const on = ans.has(c.id); if (on !== c.answeredOn) { c.answeredOn = on; c.bub.material.map = bubble('✓', '#1DD6A5'); c.bub.visible = on; if (on) c.pop = 0; } }
       return;
     }
     const rk = r.key + ':' + JSON.stringify(r.picks || {}) + ':' + JSON.stringify(r.ok || {});
     if (S.revealKey === rk) return; S.revealKey = rk;
     // light the right pad, dim the others
-    S.pads.forEach((p, i) => { const right = p.gold || i === r.correct; p.right = right; if (!right) p.side.color.set(p.color).multiplyScalar(.45); });
-    const groups = new Map(), ids = [...S.chars.keys()].sort();
-    for (const id of ids) {
+    S.pads.forEach((p, i) => { const right = p.gold || i === r.correct; p.right = right; p.side.color.set(p.color); if (!right) p.side.color.multiplyScalar(.45); });
+    for (const id of [...S.chars.keys()].sort()) {
       const c = S.chars.get(id), pick = r.picks ? r.picks[id] : undefined, ok = r.ok ? r.ok[id] : undefined;
-      let pad = -1;
-      if (r.options.length) pad = typeof pick === 'number' && pick >= 0 && pick < S.pads.length ? pick : -1; else pad = ok ? 0 : -1;
+      const pad = r.options.length ? (validPick(pick) ? pick : -1) : (ok ? 0 : -1);
       c.bub.visible = true; c.pop = 0;
-      if (pad < 0) { c.mode = 'goto'; c.tx = c.x; c.tz = c.z; c.after = r.options.length && pick === undefined || (!r.options.length && ok === undefined) ? 'shrug' : 'sad'; c.bub.material.map = c.after === 'shrug' ? bubble('?', '#fff') : bubble('✗', '#FB7569'); continue; }
-      if (!groups.has(pad)) groups.set(pad, []); groups.get(pad).push(c);
-      const good = r.options.length ? pad === r.correct : !!ok; c.after = good ? 'dance' : 'sad'; c.bub.material.map = good ? bubble('✓', '#1DD6A5') : bubble('✗', '#FB7569');
+      if (pad < 0) { const after = (r.options.length && pick === undefined) || (!r.options.length && ok === undefined) ? 'shrug' : 'sad'; c.mode = after; c.tx = c.x; c.tz = c.z; c.bub.material.map = after === 'shrug' ? bubble('?', '#fff') : bubble('✗', '#FB7569'); continue; }
+      const good = r.options.length ? pad === r.correct : !!ok;
+      c.bub.material.map = good ? bubble('✓', '#1DD6A5') : bubble('✗', '#FB7569');
+      runTo(c, claimSpot(c, pad), good ? 'dance' : 'sad');
     }
-    for (const [pad, list] of groups) { const spots = padSpots(S.pads[pad], list.length); list.forEach((c, i) => { c.mode = 'goto'; c.tx = spots[i][0]; c.tz = spots[i][1]; c.speed = rnd(4.6, 5.6); c.delay = rnd(0, .5); }); }
   }
 
   /* ---------- animation ---------- */
@@ -244,13 +265,14 @@
       if (c.mode === 'wander' && c.wait > 0) { c.wait -= dt; actPose(c, tt, dt); if (c.wait <= 0) { const s = spawn(); c.tx = s[0]; c.tz = s[1]; c.speed = rnd(1.8, 2.7); } }
       else {
         const dx = c.tx - c.x, dz = c.tz - c.z, d = Math.hypot(dx, dz), sp = (CALM ? .55 : 1) * c.speed;
-        if (d > .06) { const k = Math.min(d, sp * dt) / d; c.x += dx * k; c.z += dz * k; turnTo(c, Math.atan2(dx, dz), dt * 8); moving = true; walkPose(c, tt, c.mode === 'goto' ? 1.5 : 1); }
-        else if (c.mode === 'goto') { c.mode = c.after || 'idle'; c.since = 0; }
+        if (d > .06) { const k = Math.min(d, sp * dt) / d; c.x += dx * k; c.z += dz * k; turnTo(c, Math.atan2(dx, dz), dt * (c.mode === 'goto' ? 12 : 8)); moving = true; if (c.mode === 'goto') runPose(c, tt, Math.min(1, d / 1.2)); else walkPose(c, tt, 1); }
+        else if (c.mode === 'goto') { c.mode = c.after || 'idle'; c.since = 0; c.t0 = -t; }
         else { c.wait = rnd(.8, 3.2); const r = Math.random(); c.act = r < .55 ? 'idle' : r < .7 ? 'jump' : r < .85 ? 'wave' : 'spin'; c.actT = 0; }
       }
-    } else if (c.mode === 'dance') { turnTo(c, 0, dt * 4); c.since += dt; const j = Math.abs(Math.sin(tt * 6.5)); c.body.position.y = CALM ? 0 : j * .55; c.armL.rotation.z = -2.4 - Math.sin(tt * 13) * .4; c.armR.rotation.z = 2.4 + Math.sin(tt * 13) * .4; c.armL.rotation.x = c.armR.rotation.x = 0; c.legL.rotation.x = c.legR.rotation.x = 0; c.body.rotation.y = CALM ? 0 : Math.sin(tt * 3) * .5; c.headG.rotation.x = 0; }
-    else if (c.mode === 'sad') { turnTo(c, 0, dt * 4); c.body.position.y = 0; c.body.rotation.y = Math.sin(tt * 1.2) * .08; c.headG.rotation.x = .45; c.armL.rotation.set(0, 0, -.08); c.armR.rotation.set(0, 0, .08); c.legL.rotation.x = c.legR.rotation.x = 0; }
-    else if (c.mode === 'shrug') { turnTo(c, 0, dt * 4); const s = (Math.sin(tt * 3) + 1) / 2; c.armL.rotation.set(0, 0, -.5 - s * .5); c.armR.rotation.set(0, 0, .5 + s * .5); c.body.position.y = 0; c.headG.rotation.x = 0; c.headG.rotation.z = Math.sin(tt * 1.5) * .15; }
+    } else if (c.mode === 'ready') { turnTo(c, 0, dt * 5); readyPose(c, tt); }
+    else if (c.mode === 'dance') { turnTo(c, 0, dt * 4); c.since = (c.since || 0) + dt; jumpPose(c, tt); }
+    else if (c.mode === 'sad') { turnTo(c, 0, dt * 4); c.since = (c.since || 0) + dt; kneelPose(c, tt, Math.min(1, c.since / .55)); }
+    else if (c.mode === 'shrug') { turnTo(c, 0, dt * 4); const s = (Math.sin(tt * 3) + 1) / 2; c.armL.rotation.set(0, 0, -.5 - s * .5); c.armR.rotation.set(0, 0, .5 + s * .5); c.body.position.y = 0; c.body.rotation.set(0, 0, 0); c.headG.rotation.x = 0; c.headG.rotation.z = Math.sin(tt * 1.5) * .15; }
     else idlePose(c, tt);
     if (!moving && (c.mode === 'wander')) { /* facing the camera while resting */ turnTo(c, c.restYaw ?? (c.restYaw = rnd(-.5, .5)), dt * 2); }
     if (moving) c.restYaw = undefined;
@@ -258,8 +280,26 @@
     placeChar(c);
   }
   function turnTo(c, yaw, k) { let d = yaw - c.yaw; d = Math.atan2(Math.sin(d), Math.cos(d)); c.yaw += d * Math.min(1, k); }
-  function walkPose(c, tt, f) { const s = Math.sin(tt * 9 * f); c.legL.rotation.x = s * .7; c.legR.rotation.x = -s * .7; c.armL.rotation.set(-s * .6, 0, 0); c.armR.rotation.set(s * .35 - .25, 0, 0); c.body.position.y = Math.abs(Math.cos(tt * 9 * f)) * .1; c.body.rotation.y = 0; c.headG.rotation.set(0, 0, 0); }
-  function idlePose(c, tt) { c.legL.rotation.x = c.legR.rotation.x = 0; c.armL.rotation.set(0, 0, -.04 - Math.sin(tt * 2) * .03); c.armR.rotation.set(-.2, 0, .04); c.body.position.y = 0; c.body.rotation.y = 0; c.headG.rotation.set(0, 0, 0); }
+  /* Running: quick strides, arms pumping, leaning forward; eases off over the last steps so the stop is smooth. */
+  function runPose(c, tt, k) { const s = Math.sin(tt * 15); c.legL.rotation.x = s * .95 * k; c.legR.rotation.x = -s * .95 * k; c.armL.rotation.set(-s * 1.05 * k, 0, 0); c.armR.rotation.set(s * .8 * k - .2, 0, 0); c.body.position.y = Math.abs(Math.cos(tt * 15)) * .16 * k; c.body.rotation.set(CALM ? 0 : .22 * k, 0, 0); c.headG.rotation.set(-.12 * k, 0, 0); }
+  /* Right answer: jump, jump, jump with both arms up; legs tuck while in the air. */
+  function jumpPose(c, tt) {
+    const ph = (tt * 1.6) % 1, air = ph < .62 ? Math.sin(ph / .62 * Math.PI) : 0, h = CALM ? 0 : air * 1.05;
+    c.body.position.y = h; c.body.rotation.set(0, 0, 0); c.headG.rotation.set(-.1 * air, 0, 0);
+    c.legL.rotation.x = -.5 * air; c.legR.rotation.x = -.5 * air;
+    const wave = Math.sin(tt * 12) * .25; c.armL.rotation.set(0, 0, -2.5 - wave); c.armR.rotation.set(0, 0, 2.5 + wave);
+  }
+  /* Wrong answer: sinks to both knees, head hanging, arms limp, a slow sigh. k eases the move from 0 to 1. */
+  function kneelPose(c, tt, k) {
+    const e = k * k * (3 - 2 * k), sigh = (Math.sin(tt * 1.4) + 1) / 2;
+    c.legL.rotation.x = c.legR.rotation.x = 1.25 * e; c.body.position.y = -.74 * e;
+    c.body.rotation.set(.22 * e + sigh * .04 * e, 0, 0); c.headG.rotation.set(.55 * e, 0, 0);
+    c.armL.rotation.set(-.35 * e, 0, -.06); c.armR.rotation.set(-.35 * e, 0, .06);
+  }
+  /* Waiting on the pad: a small bounce, now and then a fist pump. */
+  function readyPose(c, tt) { const b = (Math.sin(tt * 4) + 1) / 2; c.legL.rotation.x = c.legR.rotation.x = 0; c.body.position.y = CALM ? 0 : b * .06; c.body.rotation.set(0, 0, 0); c.headG.rotation.set(0, 0, 0); c.armL.rotation.set(0, 0, -.06); const pump = !CALM && Math.sin(tt * .9) > .82; c.armR.rotation.set(pump ? -2.6 + Math.sin(tt * 14) * .25 : -.2, 0, .04); }
+  function walkPose(c, tt, f) { const s = Math.sin(tt * 9 * f); c.legL.rotation.x = s * .7; c.legR.rotation.x = -s * .7; c.armL.rotation.set(-s * .6, 0, 0); c.armR.rotation.set(s * .35 - .25, 0, 0); c.body.position.y = Math.abs(Math.cos(tt * 9 * f)) * .1; c.body.rotation.set(0, 0, 0); c.headG.rotation.set(0, 0, 0); }
+  function idlePose(c, tt) { c.legL.rotation.x = c.legR.rotation.x = 0; c.armL.rotation.set(0, 0, -.04 - Math.sin(tt * 2) * .03); c.armR.rotation.set(-.2, 0, .04); c.body.position.y = 0; c.body.rotation.set(0, 0, 0); c.headG.rotation.set(0, 0, 0); }
   function actPose(c, tt, dt) {
     c.actT = (c.actT || 0) + dt; idlePose(c, tt); if (CALM) return;
     if (c.act === 'jump') { const p = c.actT % 1.1; c.body.position.y = p < .55 ? Math.sin(p / .55 * Math.PI) * 1 : 0; }
@@ -304,8 +344,11 @@
     const headClear = r.bottom + 6 - H / 2, zHead = headClear > 0 ? d - f * (cy - 4.6) / headClear : -1e9;
     const z0 = Math.min(Math.max(3.5, zHead), zAtY(H * 1.02));
     const yMin = yAt(z0), yMax = Math.max(yMin + 16, H - (phone ? 10 : 30));
-    const zAt = k => zAtY(lerp(yMin, yMin + (yMax - yMin) * .8, k)), hw = z => (W / 2) * (d - z) / f * .9, padZ = zAtY(lerp(yMin, yMax, .22));
-    S.area = { key: S.lastLayout, cx, z0: zAt(0), z1: zAt(1), zAt, hw, padX: 0, padZ, padSpan: Math.min(tvW * .62, hw(padZ) * 1.25) };
+    const zAt = k => zAtY(lerp(yMin, yMin + (yMax - yMin) * .8, k)), hw = z => (W / 2) * (d - z) / f * .9;
+    // Pads sit in the upper part of the walking area, and are never deeper than the space left before the bottom edge.
+    const zFront = zAtY(H - 6); let padZ = zAtY(lerp(yMin, yMax, .3)), padDepth = 2 * (zFront - padZ) - .8;
+    if (padDepth < 1.2) { padDepth = 1.2; padZ = zFront - 1; }
+    S.area = { key: S.lastLayout, cx, z0: zAt(0), z1: zAt(1), zAt, hw, padX: 0, padZ, padDepth, padSpan: Math.min(tvW * .62, hw(padZ) * 1.25) };
   }
   function frame(now) {
     if (!S.visible) { S.loop = 0; return; }

@@ -986,7 +986,7 @@ function renderPlayerFinal(){
 }
 
 /* ================= 3D world (world.js + three.js, loaded the first time a round is shown) ================= */
-const BUILD='20261113b';
+const BUILD='20261113c';
 const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
 const W3={state:'idle',want:null};
 function hasWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}
@@ -1002,7 +1002,7 @@ function worldRound(){
   const s=STATE,q=s.q||{},choice=q.type==='choice',sc=SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx?SCORES:null;
   return {key:s.session+':'+s.idx,phase:s.phase==='question'?'question':'reveal',text:q.text||'',cat:q.cat||'',answer:s.answer||'',
     options:choice?q.options.map((t,i)=>{const st=optStyle(s,i);return {c:cssColor(st.c),fg:!!st.fg,s:q.tf?(i===0?'✓':'✗'):st.s,label:t};}):[],
-    correct:s.correct,picks:isHost()&&s.phase!=='question'?Object.fromEntries(answeredIds().map(id=>[id,ANSWERS[id].choice])):(s.picks||{}),
+    correct:s.correct,picks:isHost()?Object.fromEntries(answeredIds().map(id=>[id,ANSWERS[id].choice])):s.phase==='question'?(ME&&myAnswerFor(s)&&typeof myAnswerFor(s).choice==='number'?{[ME.player_id]:myAnswerFor(s).choice}:{}):(s.picks||{}),
     ok:sc?sc.ok||{}:{},answered:isHost()?answeredIds():(ME&&myAnswerFor(s)&&s.phase==='question'?[ME.player_id]:[])};
 }
 function worldPlayers(){return playerIds().map(id=>({id,name:playerName(id),look:look(PLAYERS[id]),me:!!(ME&&id===ME.player_id)}));}
