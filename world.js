@@ -162,24 +162,6 @@
     for (const [leg, sx] of [[t.legL, -1], [t.legR, 1]]) { leg.scale.set(1.2, legs + .7, 1.2); leg.position.set(sx * w * .32, (legs + .7) / 2, -.6); }
     t.foot.visible = false; t.screen.visible = showScreen; t.screen.scale.set(w, h, 1); t.screen.position.set(0, cy, .02);
   }
-  function paintScreen(r) {
-    const t = S.tv, k = r ? r.key + r.phase : 'none'; if (t.key === k) return; t.key = k;
-    const x = t.sv.getContext('2d'), W = 1024, H = 512; x.fillStyle = '#ffffff'; x.fillRect(0, 0, W, H);
-    if (!r) { drawLogo(x, 212, 190, 600, NAVY); t.screen.material.map.needsUpdate = true; return; }
-    x.fillStyle = '#FB7569'; roundRect(x, W / 2 - 150, 24, 300, 48, 12); x.fill(); x.fillStyle = '#fff'; x.font = '700 28px Lexend, system-ui, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText((r.cat || '').slice(0, 26), W / 2, 50);
-    x.fillStyle = NAVY; let fs = 58; const lines = t => { x.font = `400 ${fs}px "Lilita One", Lexend, system-ui, sans-serif`; const out = []; let line = ''; for (const wd of String(t || '').split(/\s+/)) { const tryL = line ? line + ' ' + wd : wd; if (x.measureText(tryL).width > W - 80 && line) { out.push(line); line = wd; } else line = tryL; } if (line) out.push(line); return out; };
-    let ls = lines(r.text); while ((ls.length > 3 || ls.length * fs * 1.1 > (r.options.length ? 210 : 330)) && fs > 28) { fs -= 4; ls = lines(r.text); }
-    const top = r.options.length ? 92 : 120; ls.slice(0, 4).forEach((l, i) => x.fillText(l, W / 2, top + fs * .6 + i * fs * 1.08));
-    if (r.options.length) {
-      const n = r.options.length, cols = n > 2 ? 2 : n, bw = (W - 60 - (cols - 1) * 18) / cols, bh = n > 2 ? 86 : 110, y0 = H - (n > 2 ? 2 : 1) * (bh + 14) - 12;
-      r.options.forEach((o, i) => { const cx = 30 + (i % cols) * (bw + 18), cy = y0 + Math.floor(i / cols) * (bh + 14);
-        x.globalAlpha = r.phase === 'reveal' && i !== r.correct ? .3 : 1; x.fillStyle = o.c; roundRect(x, cx, cy, bw, bh, 14); x.fill(); x.lineWidth = 5; x.strokeStyle = NAVY; x.stroke();
-        x.fillStyle = o.fg ? INK : '#fff'; x.textAlign = 'left'; x.font = '400 34px "Lilita One", Lexend, system-ui, sans-serif'; let lab = o.s + '  ' + o.label; while (x.measureText(lab).width > bw - 28 && lab.length > 4) lab = lab.slice(0, -2); if (lab !== o.s + '  ' + o.label) lab += '…';
-        x.fillText(lab, cx + 16, cy + bh / 2 + 2); x.textAlign = 'center'; x.globalAlpha = 1; });
-    } else if (r.phase === 'reveal' && r.answer) { x.fillStyle = '#1DD6A5'; roundRect(x, 60, H - 130, W - 120, 96, 16); x.fill(); x.fillStyle = INK; x.font = '400 40px "Lilita One", Lexend, system-ui, sans-serif'; x.fillText(('Answer: ' + r.answer).slice(0, 44), W / 2, H - 80); }
-    t.screen.material.map.needsUpdate = true;
-  }
-
   /* ---------- answer pads ---------- */
   function padTexture(sym, color, fg) {
     const cv = canvas(256, 256), x = cv.getContext('2d'); x.fillStyle = color; x.fillRect(0, 0, 256, 256);
@@ -229,7 +211,6 @@
   /* ---------- round + reveal ---------- */
   function round(r) {
     S.round = r;
-    if (S.mode === 'phone') paintScreen(r);
     const pk = r.key + ':' + r.options.length + ':' + (S.area ? S.area.key : '');
     if (S.padKey !== pk) { S.padKey = pk; if (S.area) { buildPads(r); S.revealKey = r.phase === 'reveal' ? '' : S.revealKey; } } // pads moved: send everyone to the new spots
     if (r.phase !== 'reveal') {
@@ -291,60 +272,66 @@
     const W = S.box === document.body ? innerWidth : S.box.clientWidth, H = S.box === document.body ? innerHeight : S.box.clientHeight;
     if (!W || !H) return false;
     let key = W + 'x' + H;
-    if (S.mode === 'host') { const el = document.getElementById('hTv'); if (!el) return false; const r = el.getBoundingClientRect(); key += ':' + [r.left, r.top, r.width, r.height].map(Math.round).join(','); if (key === S.lastLayout) return true; S.lastLayout = key; hostLayout(W, H, r); }
-    else { if (key === S.lastLayout) return true; S.lastLayout = key; phoneLayout(W, H); }
+    // The HTML question card (host: #hTv, phone: #pCard) is the TV screen; the 3D TV is placed exactly behind it.
+    const el = S.anchor; if (!el || !el.isConnected) return false;
+    const er = el.getBoundingClientRect(), br = S.box === document.body ? { left: 0, top: 0 } : S.box.getBoundingClientRect();
+    const r = { left: er.left - br.left, top: er.top - br.top, width: er.width, height: er.height }; r.bottom = r.top + r.height;
+    if (!r.width || !r.height) return false;
+    key += ':' + [r.left, r.top, r.width, r.height].map(Math.round).join(','); if (key === S.lastLayout) return true; S.lastLayout = key; alignLayout(W, H, r);
     S.ren.setPixelRatio(Math.min(devicePixelRatio || 1, S.mode === 'host' ? 1.5 : 1.25)); S.ren.setSize(W, H, false);
     S.cam.aspect = W / H; S.cam.updateProjectionMatrix();
     if (S.round) { S.padKey = ''; round(S.round); }
-    if (S.respawn) { S.respawn = false; for (const c of S.chars.values()) if (c.mode === 'wander') { const s = spawn(); c.x = c.tx = s[0]; c.z = c.tz = s[1]; placeChar(c); } }
+    // a new card size moves the walking area: anyone now outside it (e.g. behind the card) hops back in
+    const A = S.area;
+    for (const c of S.chars.values()) if (c.mode === 'wander' && (S.respawn || c.z < A.z0 - .3 || c.z > A.z1 + .3 || Math.abs(c.x - A.cx) > halfWidth(c.z) + .5)) { const s = spawn(); c.x = c.tx = s[0]; c.z = c.tz = s[1]; c.wait = rnd(0, 1); placeChar(c); }
+    S.respawn = false;
     return true;
   }
-  /* Host: the camera is placed so the 3D TV lands exactly under the HTML question card, standing on the ground. */
-  function hostLayout(W, H, r) {
-    const fov = 45, f = (H / 2) / Math.tan(fov * Math.PI / 360), tvH = 21, d = f * tvH / Math.max(60, r.height), tvW = tvH * r.width / Math.max(60, r.height);
-    let legs = 2.4, cy = legs + tvH / 2 + (r.top + r.height / 2 - H / 2) * d / f;
-    if (cy < 2.2) { legs += 2.2 - cy; cy = 2.2; }
+  /* The camera is placed so the 3D TV lands exactly under the HTML question card, standing on the ground. */
+  function alignLayout(W, H, r) {
+    // The camera distance is fixed, so characters always look the same size on screen (about 12% of the height at the TV,
+    // 18% on phones). The TV is then sized to the card, and stands on legs; a low card lifts the eye height instead.
+    const fov = 45, f = (H / 2) / Math.tan(fov * Math.PI / 360), rh = Math.max(40, r.height), phone = S.mode === 'phone';
+    const d = 3.5 * f / ((phone ? .18 : .12) * H), below = r.bottom - H / 2;
+    let cy = phone ? 9 : 10, legs = cy - below * d / f; if (legs < 1) { cy += 1 - legs; legs = 1; }
+    const tvH = rh * d / f, tvW = tvH * r.width / rh;
     const cx = -(r.left + r.width / 2 - W / 2) * d / f;
-    S.cam.fov = fov; S.cam.position.set(cx, cy, d); S.cam.lookAt(cx, cy, 0);
+    S.cam.fov = fov; S.cam.position.set(cx, cy, d); S.cam.lookAt(cx, cy, 0); // TV centre lands on the card centre: cy - (rCY - H/2)·d/f = legs + tvH/2
     placeTV(tvW, tvH, legs, false);
     // Spread characters and pads by where they land on screen (not by depth), so they fill the ground under the TV on any screen size.
     const yAt = z => H / 2 + f * cy / Math.max(.5, d - z), zAtY = y => d - f * cy / Math.max(1, y - H / 2);
-    const yMin = Math.max(yAt(3.5), Math.min(r.bottom + 26, H - 90)), yMax = Math.max(yMin + 20, H - 34);
+    // Walking area: from the first spot where a whole character (head included) shows below the card, down to the bottom edge.
+    const headClear = r.bottom + 6 - H / 2, zHead = headClear > 0 ? d - f * (cy - 4.6) / headClear : -1e9;
+    const z0 = Math.min(Math.max(3.5, zHead), zAtY(H * 1.02));
+    const yMin = yAt(z0), yMax = Math.max(yMin + 16, H - (phone ? 10 : 30));
     const zAt = k => zAtY(lerp(yMin, yMin + (yMax - yMin) * .8, k)), hw = z => (W / 2) * (d - z) / f * .9, padZ = zAtY(lerp(yMin, yMax, .22));
     S.area = { key: S.lastLayout, cx, z0: zAt(0), z1: zAt(1), zAt, hw, padX: 0, padZ, padSpan: Math.min(tvW * .62, hw(padZ) * 1.25) };
   }
-  /* Phone: a smaller stage; the camera follows your own character (see frame()). */
-  function phoneLayout(W, H) {
-    S.cam.fov = 55; placeTV(26, 13, 2.6, true);
-    S.area = { key: 'phone', cx: 0, z0: 4, z1: 20, w0: 14, w1: 20, padX: 0, padZ: 10, padSpan: 22 };
-    paintScreen(S.round);
-  }
-
   function frame(now) {
     if (!S.visible) { S.loop = 0; return; }
     S.loop = requestAnimationFrame(frame);
     if (document.hidden) return;
     const dt = Math.min(.2, (now - (S.last || now)) / 1000); S.last = now; const t = now / 1000;
+    try {
     if (!layout()) return;
     for (const c of S.chars.values()) step(c, dt, t);
     S.pads.forEach(p => { if (p.right && S.revealKey) { p.top.emissiveIntensity = CALM ? .25 : .18 + Math.sin(t * 5) * .14; p.slab.position.y = lerp(p.slab.position.y, .8, dt * 4); } });
     if (S.mode === 'phone') {
       const c = S.me, tx = c ? c.x : 0, tz = c ? c.z : 10;
-      S.camT.set(lerp(S.camT.x, tx, Math.min(1, dt * 3)), 0, lerp(S.camT.z, tz, Math.min(1, dt * 3)));
-      S.cam.position.set(S.camT.x * .8, 7, S.camT.z + 10.5); S.cam.lookAt(S.camT.x * .9, 3, S.camT.z - 5);
       // phones draw at most 24 characters: you and the nearest others
       if (!S.cullT || now - S.cullT > 600) { S.cullT = now; const list = [...S.chars.values()].sort((a, b) => (b.me - a.me) || (Math.hypot(a.x - tx, a.z - tz) - Math.hypot(b.x - tx, b.z - tz))); list.forEach((c, i) => c.root.visible = i < 24); }
     }
     S.ren.render(S.scene, S.cam);
+    } catch (e) { console.error('3D world frame:', e); }
   }
   function start() { if (!S.loop && S.visible) { S.last = 0; S.loop = requestAnimationFrame(frame); } }
 
-  function show(mode, box) {
+  function show(mode, box, anchor) {
     if (!S.ok) return;
     box = mode === 'host' ? document.body : box;
+    if (S.anchor !== anchor) { S.anchor = anchor; S.lastLayout = ''; }
     if (S.mode !== mode || S.box !== box) {
       S.mode = mode; S.box = box; S.lastLayout = ''; S.padKey = ''; S.area = null; S.respawn = true; S.cv.className = 'worldcv ' + mode; box.prepend(S.cv);
-      if (S.round) paintScreen(mode === 'phone' ? S.round : null);
       for (const c of S.chars.values()) { c.mode = 'wander'; c.root.visible = true; }
     }
     S.cv.hidden = false; S.visible = true; start();

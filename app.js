@@ -986,13 +986,14 @@ function renderPlayerFinal(){
 }
 
 /* ================= 3D world (world.js + three.js, loaded the first time a round is shown) ================= */
+const BUILD='20261113b';
 const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
 const W3={state:'idle',want:null};
 function hasWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}
 function loadScript(src){return new Promise((ok,bad)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{s.remove();bad(new Error('load'));};document.head.append(s);});}
 async function loadWorld(){
   if(W3.state!=='idle')return;W3.state='loading';
-  try{if(!hasWebGL())throw new Error('webgl');if(!window.THREE)await loadScript(THREE_URL);if(!window.World)await loadScript('world.js?v=1');W3.state=window.World&&World.init()?'ready':'failed';}
+  try{if(!hasWebGL())throw new Error('webgl');if(!window.THREE)await loadScript(THREE_URL);if(!window.World)await loadScript('world.js?v='+BUILD);W3.state=window.World&&World.init()?'ready':'failed';}
   catch(e){W3.state='failed';}
   const w=W3.want;W3.want=null;if(W3.state==='ready'&&w)w();
 }
@@ -1008,13 +1009,21 @@ function worldPlayers(){return playerIds().map(id=>({id,name:playerName(id),look
 function worldHost(){
   if(innerWidth<760||innerHeight<520){worldOff();return;}
   if(W3.state!=='ready'){if(W3.state!=='failed'){W3.want=()=>{if(view==='host'&&hostSub==='hQ'&&STATE&&(STATE.phase==='question'||STATE.phase==='reveal'))worldHost();};loadWorld();}return;}
-  $('pWorld').hidden=true;document.body.classList.remove('world-phone');document.body.classList.add('world-host');World.show('host');World.sync(worldPlayers());World.round(worldRound());
+  try{$('pWorld').hidden=true;document.body.classList.remove('world-phone');document.body.classList.add('world-host');World.show('host',null,$('hTv'));World.sync(worldPlayers());World.round(worldRound());}
+  catch(e){worldBroke(e);}
 }
 function worldPlayer(){
   if(W3.state!=='ready'){if(W3.state!=='failed'){W3.want=()=>{if(view==='player'&&(playerSub==='pQ'||playerSub==='pReveal')&&STATE&&STATE.game!=='duck')worldPlayer();};loadWorld();}return;}
-  document.body.classList.remove('world-host');document.body.classList.add('world-phone');$('pWorld').hidden=false;World.show('phone',$('pWorld'));World.sync(worldPlayers());World.round(worldRound());
+  try{document.body.classList.remove('world-host');document.body.classList.add('world-phone');$('pWorld').hidden=false;if($('pCard').parentElement!==$('pWorldIn'))$('pWorldIn').prepend($('pCard'));World.show('phone',$('pWorld'),$('pCard'));World.sync(worldPlayers());World.round(worldRound());}
+  catch(e){worldBroke(e);}
 }
-function worldOff(){document.body.classList.remove('world-host','world-phone');const p=$('pWorld');if(p)p.hidden=true;if(W3.state==='ready')World.hide();}
+/* When a new version is uploaded while the game is open, offer a one-tap update so everyone runs the same code. */
+async function checkVersion(){try{const r=await fetch('version.json?x='+Date.now(),{cache:'no-store'});if(!r.ok)return;const v=await r.json();if(v&&v.build&&v.build!==BUILD)$('updateBar').hidden=false;}catch(e){}}
+setInterval(checkVersion,90000);setTimeout(checkVersion,5000);
+$('updateBtn').onclick=()=>location.reload();
+/* A problem in the 3D world must never stop the game: switch it off and keep the normal screens. */
+function worldBroke(e){try{console.error('3D world switched off:',e);}catch(x){}try{worldOff();}catch(x){}W3.state='failed';}
+function worldOff(){document.body.classList.remove('world-host','world-phone');const p=$('pWorld');if(p)p.hidden=true;const c=$('pCard');if(c&&c.parentElement!==$('pQ'))$('pQ').insertBefore(c,$('pOpts'));if(window.World)try{World.hide();}catch(e){}}
 addEventListener('resize',()=>{if(view==='host'&&hostSub==='hQ'&&STATE&&STATE.phase!=='lobby')worldHost();});
 
 /* ================= extras ================= */
