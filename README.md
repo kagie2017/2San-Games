@@ -32,11 +32,13 @@ Every game uses 2San content from [2san.com](https://2san.com): products, values
 | Memory Flash | 4 choices | Six 2San kit icons flash for 5 seconds; which was missing? |
 | Sliding Puzzle | solve on phone | Slide the tiles to spell 2SAN HOME; fastest wins |
 | Closest Number | type a number | Guess the 2San number |
-| 2San Duck Race | just watch | Every character rides a duck down the 2San river. Random winner; 1st 1000, 2nd 900, 3rd 800 … at least 100 |
+| 2San Duck Race | press Space / tap PADDLE | Every character rides a duck down the 2San river. Each press of Space (computer) or tap on PADDLE (phone) moves the duck forward; the finish line is 4.5 paddles per second of race (45 for 10s, 135 for 30s, 270 for 1 min). First over the line wins; when time runs out, more paddles places higher. 1st 1000, 2nd 900, 3rd 800 … at least 100; a duck that never moves gets 0 |
 
 Correct answers score 500 to 1000 points: the faster, the more. Closest Number scores by how near the guess is.
 
-If players tie for a podium place (top 3) at the end of any game, the host starts a duck race between them to decide the order.
+If players tie for a podium place (top 3) at the end of any game, the host starts a duck race between them to decide the order. Only the tied players paddle; everyone else watches.
+
+Paddles go to the database through `player_paddle` (at most 20 a second count, checked on the server clock, GO is 5 seconds after the race starts) and every screen reads them back with `race_board`. The host saves the final order when time is up or every duck has finished.
 
 ## 3D world
 

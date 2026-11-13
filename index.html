@@ -195,6 +195,32 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .raceorder li{display:flex;gap:10px;align-items:center;justify-content:center;background:var(--paper);border:2px solid var(--navy);border-radius:10px;padding:6px 12px;font-weight:700;animation:slideRow .4s both;animation-delay:calc(var(--i,0)*120ms)}
 .raceorder li.me{background:var(--sun)}
 .raceorder b{font-family:var(--display);font-weight:400;font-size:1.2rem}
+.raceorder small{font-weight:600;font-size:.8rem;opacity:.75}
+/* paddle race */
+.racehead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.racehead>*{min-width:0}
+.raceclock{font-size:1.6rem;white-space:nowrap}
+.racehow{margin:0;background:var(--sun);color:var(--ink);border:3px solid var(--navy);border-radius:12px;padding:8px 12px;font-weight:700;line-height:1.35;text-align:center}
+.racehow.big{font-size:clamp(1rem,1.6vw,1.3rem)}
+/* The PADDLE button stays at the bottom of the phone screen while racing; the race view leaves room for it. */
+.padwrap{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;padding:14px max(16px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,transparent,var(--sky) 38%);pointer-events:none}
+.padwrap .padbtn{pointer-events:auto}
+#pRace.padding{padding-bottom:150px}
+.padbtn{--p:0;position:relative;overflow:hidden;width:min(100%,520px);min-height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:4px solid var(--navy);border-radius:22px;background:var(--coral);color:#fff;box-shadow:0 9px 0 var(--navy);cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;font:inherit;transition:transform .06s,box-shadow .06s}
+.padbtn::before{content:"";position:absolute;inset:0;transform-origin:left;transform:scaleX(var(--p));background:rgba(255,255,255,.22);transition:transform .12s}
+.padbtn>span{position:relative}
+.padbig{font-family:var(--display);font-size:clamp(2.1rem,9vw,3rem);line-height:1;-webkit-text-stroke:2px var(--navy);paint-order:stroke fill}
+.padsub{font-weight:700;font-size:1rem}
+.padbtn.hit{animation:padHit .12s ease-out}
+@keyframes padHit{40%{transform:translateY(6px) scale(.97);box-shadow:0 3px 0 var(--navy)}}
+.padbtn:disabled{cursor:default;background:var(--sky,#5BB8F0)}
+.padbtn[data-state="wait"]{background:#8E8AA8}
+.padbtn[data-state="fin"]{background:var(--mint);color:var(--ink)}
+.padbtn[data-state="up"]{background:#8E8AA8}
+.padbtn:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
+.racecard .padbtn{min-height:96px;margin-top:10px;width:100%}
+.racecard .racehow{margin-bottom:10px;font-size:.9rem}
+.duck.kick .bird{animation:kick .25s ease-out}
+@keyframes kick{40%{transform:scaleX(-1) translateX(-6px) rotate(-8deg)}}
 /* lobby browser */
 .bcols{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:22px;align-items:start}
 @media (max-width:760px){.bcols{grid-template-columns:1fr}}
@@ -264,6 +290,9 @@ body.world-host #hDisp .egrid{grid-template-columns:repeat(auto-fill,minmax(40px
 body.world-host #hDisp .egrid.flash{grid-template-columns:repeat(6,minmax(0,1fr));width:min(100%,560px);font-size:2.4rem}
 body.world-host #hDisp .slide{width:min(100%,190px)}
 body.world-phone #pWorld .four{grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:6px}
+body.world-phone #pWorld .egrid{grid-template-columns:repeat(auto-fill,minmax(32px,1fr));gap:4px;font-size:1.25rem}
+body.world-phone #pWorld .egrid span{border-radius:7px}
+body.world-phone #pWorld .egrid.flash{grid-template-columns:repeat(6,minmax(0,1fr));width:100%;font-size:clamp(1.3rem,6vw,2rem)}
 body.world-phone #pWorld .four span{font-size:clamp(1.6rem,8vw,2.4rem);border-radius:10px}
 body.world-host .ground{display:block;height:max(24vh,140px)}
 body.world-host .qhead .qcount,body.world-host header .brand{filter:drop-shadow(0 2px 0 rgba(12,9,40,.35))}
@@ -544,8 +573,9 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
       </div>
       <!-- host duck race -->
       <div id="hRace" hidden style="display:flex;flex-direction:column;gap:18px">
-        <h2 id="hRaceTitle">Duck race</h2>
+        <div class="racehead"><h2 id="hRaceTitle">Duck race</h2><span class="qcount raceclock" id="hRaceClock"></span></div>
         <p class="hint" id="hRaceFact" hidden style="margin:-8px 0 0"></p>
+        <p class="racehow big" id="hRaceHow"></p>
         <div class="race"><div class="race-count" id="hRaceCount" aria-live="polite"></div><div class="lanes" id="hRaceLanes"></div></div>
         <div class="blk center" id="hRaceResult" hidden>
           <b class="out race-win" id="hRaceWinner"></b>
@@ -584,7 +614,8 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
       </div>
 
       <div id="pRace" hidden style="display:flex;flex-direction:column;gap:16px">
-        <span class="qcount" id="pRaceTitle"></span>
+        <div class="racehead"><span class="qcount" id="pRaceTitle"></span><span class="qcount raceclock" id="pRaceClock"></span></div>
+        <p class="racehow" id="pRaceHow"></p>
         <div class="race small"><div class="race-count" id="pRaceCount" aria-live="polite"></div><div class="lanes" id="pRaceLanes"></div></div>
         <p class="racelive" id="pRaceLive" hidden aria-live="off"></p>
         <div class="blk center" id="pRaceResult" hidden>
@@ -617,7 +648,7 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
     </div>
     <div class="actions" style="justify-content:space-between"><span class="st play">Practice round · not scored</span><span class="qcount" id="dClock"></span></div>
     <div class="card" id="dCard" style="min-height:120px;padding:16px;transform:none"><div class="cat" id="dCat"></div><div class="qtext" id="dText" style="font-size:clamp(1.2rem,4.4vw,1.9rem)"></div><div class="disp small" id="dDisp"></div><div class="hintline" id="dHint" hidden></div></div>
-    <p class="hint" id="dNote" hidden>In a real game this picture shows only on the big screen, so players have to look up.</p>
+    <p class="hint" id="dNote" hidden></p>
     <div class="opts" id="dOpts"></div>
     <div id="dTxt" class="numrow" hidden><input type="text" id="dTxtIn" maxlength="40" autocomplete="off" aria-label="Your answer" placeholder="Type your answer"><button class="btn mint" id="dTxtBtn" type="button">Check</button></div>
     <div id="dNum" class="numrow" hidden><input type="number" id="dNumIn" inputmode="decimal" aria-label="Your number" placeholder="Type a number"><button class="btn mint" id="dNumBtn" type="button">Check</button></div>
@@ -631,7 +662,9 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
 <canvas class="confetti" id="confetti" hidden></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="config.js?v=20261113d"></script>
-<script src="app.js?v=20261113d"></script>
+<!-- the PADDLE button for phones in a duck race: outside the animated screens so it can stay pinned to the bottom -->
+<div class="padwrap" id="pPadWrap" hidden><button class="padbtn" id="pPad" type="button" hidden><span class="padbig">Get ready…</span><span class="padsub"></span></button></div>
+<script src="config.js?v=20261113f"></script>
+<script src="app.js?v=20261113f"></script>
 </body>
 </html>

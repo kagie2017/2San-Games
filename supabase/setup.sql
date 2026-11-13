@@ -268,3 +268,58 @@ grant execute on function
   public.host_set_key(text,jsonb), public.host_get_key(text), public.host_answers(text),
   public.host_kick(text,uuid), public.host_transfer(text,uuid), public.host_close(text)
 to anon, authenticated;
+
+-- ---------- duck race: paddle by pressing Space or tapping ----------
+-- Paddles are kept in answers: session = the race seed, idx = -1, value = paddles so far,
+-- choice = ms after GO (server clock) when the duck reached the finish line.
+-- GO is 5 seconds after the race state was saved (started_at). At most 20 paddles a second count.
+create or replace function public._race_board(p_lobby uuid, p_seed text) returns jsonb
+language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_object_agg(a.player_id::text, jsonb_build_array(a.value::int, a.choice)), '{}'::jsonb)
+    from answers a where a.lobby_id = p_lobby and a.session = p_seed and a.idx = -1;
+$$;
+revoke execute on function public._race_board(uuid,text) from public, anon, authenticated;
+
+create or replace function public.race_board(p_token text) returns jsonb
+language plpgsql stable security definer set search_path = public as $$
+declare me players; v_seed text; v_start timestamptz;
+begin
+  me := public._me(p_token);
+  if me.id is null then return null; end if;
+  select state->'race'->>'seed', started_at into v_seed, v_start from lobbies where id = me.lobby_id;
+  if v_seed is null then return '{}'::jsonb; end if;
+  -- _el: ms after GO on the server clock, so every screen can line up its countdown.
+  return public._race_board(me.lobby_id, v_seed)
+         || jsonb_build_object('_el', round((extract(epoch from (now() - v_start)) - 5) * 1000));
+end $$;
+
+create or replace function public.player_paddle(p_token text, p_seed text, p_taps int) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare me players; st jsonb; r jsonb; v_start timestamptz; el double precision; tgt int; dur double precision; n int;
+begin
+  me := public._me(p_token);
+  if me.id is null then return null; end if;
+  select state, started_at into st, v_start from lobbies where id = me.lobby_id;
+  r := st->'race';
+  if r is null or r->>'seed' is distinct from p_seed then return null; end if;
+  el := extract(epoch from (now() - v_start)) - 5;
+  tgt := greatest(1, coalesce((r->>'target')::int, 1));
+  dur := coalesce((r->>'dur')::double precision, 10);
+  if me.role = 'player' and st->>'phase' = 'race' and coalesce((r->>'done')::boolean, false) = false
+     and (r->'ids') ? me.id::text and el > -1 and el < dur + 3 then
+    n := least(greatest(coalesce(p_taps, 0), 0), greatest(0, floor((el + 1) * 20))::int, tgt);
+    insert into answers (player_id, lobby_id, session, idx, choice, value, text, answered_at)
+    values (me.id, me.lobby_id, p_seed, -1,
+            case when n >= tgt then greatest(0, round(el * 1000))::int end, n, null, now())
+    on conflict (player_id) do update set
+      lobby_id = excluded.lobby_id,
+      value  = case when answers.session = excluded.session and answers.idx = -1
+                    then greatest(answers.value, excluded.value) else excluded.value end,
+      choice = case when answers.session = excluded.session and answers.idx = -1
+                    then coalesce(answers.choice, excluded.choice) else excluded.choice end,
+      session = excluded.session, idx = -1, text = null, answered_at = now();
+  end if;
+  return public._race_board(me.lobby_id, p_seed) || jsonb_build_object('_el', round(el * 1000));
+end $$;
+
+grant execute on function public.race_board(text), public.player_paddle(text,text,int) to anon, authenticated;

@@ -184,16 +184,16 @@ const GAMES={
  stroop:{name:'Color Clash',icon:'🎨',bg:'var(--purple)',desc:'2San brand colors. Tap the COLOR of the word, not what it says.',secs:10,count:10,gen:true,
    make:()=>{const s=shuffle(STROOP.slice()),ink=s[0],word=s[1];const opts=shuffle([ink[0],word[0],s[2][0],s[3][0]]);
      return {q:{type:'choice',text:'Tap the COLOR of the word',cat:'2San Colors',options:opts,display:{kind:'stroop',text:word[0],color:ink[1]}},key:{correct:opts.indexOf(ink[0]),answer:ink[0]}};}},
- count:{name:'Count It',icon:'👀',bg:'var(--sun)',desc:'Count the 2San kit icons on the big screen. Exact answers only.',secs:20,count:8,gen:true,
+ count:{name:'Count It',icon:'👀',bg:'var(--sun)',desc:'Count the 2San kit icons on the screen. Exact answers only.',secs:20,count:8,gen:true,
    make:()=>{const kinds=shuffle(KIT.slice()).slice(0,4),target=kinds[0],n=rnd(5,12),items=Array(n).fill(target[0]);
      while(items.length<30)items.push(kinds[rnd(1,3)][0]);
-     return {q:{type:'number',exact:true,text:`How many ${target[1]} ${target[0]} are on the big screen?`,cat:'Count It · 2San kit',display:{kind:'grid',items:shuffle(items),hostOnly:true}},key:{value:n,answer:String(n)}};}},
- memory:{name:'Memory Flash',icon:'🧠',bg:'var(--coral)',desc:'Six 2San kit icons flash on the big screen for 5 seconds. Which was missing?',secs:20,count:8,gen:true,
+     return {q:{type:'number',exact:true,text:`How many ${target[1]} ${target[0]} are on the screen?`,cat:'Count It · 2San kit',display:{kind:'grid',items:shuffle(items)}},key:{value:n,answer:String(n)}};}},
+ memory:{name:'Memory Flash',icon:'🧠',bg:'var(--coral)',desc:'Six 2San kit icons flash on the screen for 5 seconds. Which was missing?',secs:20,count:8,gen:true,
    make:()=>{const pick=shuffle(ICONS.slice()),shown=pick.slice(0,6),missing=pick[6];const opts=shuffle([missing,...shuffle(shown.slice()).slice(0,3)]);
-     return {q:{type:'choice',text:'Which one was NOT on the big screen?',cat:'Memory Flash · 2San kit',options:opts,display:{kind:'flash',items:shown,ms:5000,hostOnly:true}},key:{correct:opts.indexOf(missing),answer:missing}};}},
+     return {q:{type:'choice',text:'Which one was NOT on the screen?',cat:'Memory Flash · 2San kit',options:opts,display:{kind:'flash',items:shown,ms:5000}},key:{correct:opts.indexOf(missing),answer:missing}};}},
  slide:{name:'Sliding Puzzle',icon:'🧩',bg:'var(--blue)',desc:'Slide the tiles to spell 2SAN HOME. Same puzzle for everyone; fastest wins.',secs:90,count:3,gen:true,
    make:()=>({q:{type:'slide',text:'Slide the tiles to spell 2SAN HOME!',cat:'Sliding Puzzle',tiles:slideStart()},key:{answer:'2 S A / N H O / M E'}})},
- duck:{name:'2San Duck Race',icon:'🦆',bg:'var(--sun)',desc:'Everyone rides a duck in their 2San colors. Pure luck: any duck can win! 1st scores 1000, 2nd 900, 3rd 800 and so on.',secs:15,count:3,race:true,gen:true,
+ duck:{name:'2San Duck Race',icon:'🦆',bg:'var(--sun)',desc:'Everyone rides a duck in their 2San colors. Press SPACE or tap PADDLE as fast as you can: every press moves your duck forward. First to the finish wins! 1st scores 1000, 2nd 900, 3rd 800 and so on.',secs:15,count:3,race:true,gen:true,
    make:()=>({q:{type:'race',text:'Cheer for your duck!',cat:'2San Duck Race'},key:{answer:''}})},
  num:{name:'Closest Number',icon:'#',bg:'var(--mint)',desc:'Guess the 2San number. The closer you are, the more points.',secs:30,count:8,pool:NUM,
    make:it=>({q:{type:'number',text:it.q,cat:it.c},key:{value:it.a,answer:String(it.a),closest:true}})}
@@ -395,7 +395,7 @@ function showNoAccess(why){['loading','browser','host','player'].forEach(s=>$(s)
 /* ================= routing ================= */
 function route(){
   const v=!ME||!LOBBY?'browser':ME.role==='host'?'host':'player';
-  if(v!==view){if(v==='host')H.usedLoaded=false;if(v!=='host'&&v!=='player')worldOff();view=v;['loading','noaccess','browser','host','player'].forEach(s=>$(s).hidden=s!==v);window.scrollTo(0,0);hostQKey='';pKey='';rosterKey='';finalKey='';optsKey='';boardKey='';hostSub='';playerSub='';animIn($(v));}
+  if(v!==view){if(v==='host')H.usedLoaded=false;if(v!=='host'&&v!=='player')worldOff();if(v!=='player')padHide();view=v;['loading','noaccess','browser','host','player'].forEach(s=>$(s).hidden=s!==v);window.scrollTo(0,0);hostQKey='';pKey='';rosterKey='';finalKey='';optsKey='';boardKey='';hostSub='';playerSub='';animIn($(v));}
   const me=ME&&PLAYERS[ME.player_id];
   $('whoami').hidden=!me;if(me)$('meName').textContent=me.nick;
   $('leaveTop').hidden=v==='browser';
@@ -479,7 +479,7 @@ $('createForm').addEventListener('submit',async e=>{
 
 /* ================= GAME GUIDE + PRACTICE ROUNDS (lobby browser) ================= */
 const HOW={choice:'Tap one of the choices',text:'Type the word',number:'Type a number',slide:'Solve the puzzle on your phone'};
-function howFor(id){if(GAMES[id].race)return 'Just watch and cheer';const g=GAMES[id],s=g.make(g.pool?g.pool[0]:0).q;return s.tf?'Tap True or False':HOW[s.type];}
+function howFor(id){if(GAMES[id].race)return 'Press SPACE or tap fast';const g=GAMES[id],s=g.make(g.pool?g.pool[0]:0).q;return s.tf?'Tap True or False':HOW[s.type];}
 function buildGameCards(){
   const box=$('gameCards');if(box.firstChild)return;
   Object.entries(GAMES).forEach(([id,g])=>{
@@ -493,15 +493,15 @@ function buildGameCards(){
 /* A practice round runs only on this device: nothing is sent or scored. */
 const DM={id:null,q:null,key:null,start:0,tick:null,done:false,slide:null,opener:null};
 function openDemo(id){DM.opener=document.activeElement;DM.id=id;$('demo').hidden=false;document.body.style.overflow='hidden';newDemo();$('demoClose').focus();}
-function closeDemo(){DM.run=(DM.run||0)+1;clearInterval(DM.tick);clearTimeout(flashT);$('demo').hidden=true;document.body.style.overflow='';if(DM.opener&&DM.opener.focus)DM.opener.focus();}
+function closeDemo(){DM.run=(DM.run||0)+1;DM.paddle=null;clearInterval(DM.tick);clearTimeout(flashT);$('demo').hidden=true;document.body.style.overflow='';if(DM.opener&&DM.opener.focus)DM.opener.focus();}
 function newDemo(){
-  DM.run=(DM.run||0)+1;if(GAMES[DM.id].race)return demoRace();
+  DM.run=(DM.run||0)+1;DM.paddle=null;if(GAMES[DM.id].race)return demoRace();
   $('dCard').classList.remove('racecard');
   const g=GAMES[DM.id],pick=g.pool?g.pool[Math.floor(Math.random()*g.pool.length)]:0,{q,key}=g.make(pick);
   Object.assign(DM,{q,key,start:performance.now(),done:false});
   const ic=$('demoIcon');ic.textContent=g.icon;ic.style.background=g.bg;$('demoTitle').textContent=g.name;$('demoDesc').textContent=g.desc;
   $('dCat').textContent=q.cat;$('dText').textContent=q.text;$('dHint').textContent=q.hint||'';$('dHint').hidden=!q.hint;
-  $('dNote').hidden=!(q.display&&q.display.hostOnly);
+  $('dNote').hidden=true;
   const disp=$('dDisp');if(q.type==='slide')disp.innerHTML='';else renderDisplay(disp,q,true,DM.start);
   const opts=$('dOpts');opts.innerHTML='';opts.hidden=q.type!=='choice';opts.classList.remove('static');
   if(q.type==='choice')q.options.forEach((t,i)=>{const st=q.tf?OPT_STYLE[i===0?2:0]:OPT_STYLE[i];const b=el('button','opt');b.type='button';b.style.setProperty('--c',st.c);if(st.fg)b.style.setProperty('--fg',st.fg);
@@ -512,28 +512,44 @@ function newDemo(){
   $('dResult').hidden=true;
   clearInterval(DM.tick);const tick=()=>{const left=Math.max(0,g.secs-(performance.now()-DM.start)/1000);$('dClock').textContent=Math.ceil(left)+'s';if(left<=0){clearInterval(DM.tick);if(!DM.done)demoAnswer(null);}};tick();DM.tick=setInterval(tick,250);
 }
-/* Practice duck race: you and three 2San value ducks, only on this device. */
+/* Practice duck race: you and three 2San value ducks, only on this device. Paddle with Space or the PADDLE button. */
 function demoRace(){
-  const g=GAMES[DM.id],run=DM.run;clearInterval(DM.tick);DM.done=false;
+  const g=GAMES[DM.id],run=DM.run;clearInterval(DM.tick);DM.done=false;DM.paddle=null;
   const ic=$('demoIcon');ic.textContent=g.icon;ic.style.background=g.bg;$('demoTitle').textContent=g.name;$('demoDesc').textContent=g.desc;
   $('dCard').classList.add('racecard');
-  $('dCat').textContent='Practice race';$('dText').textContent=RACE_NAMES[rnd(0,RACE_NAMES.length-1)];$('dHint').hidden=true;$('dNote').hidden=true;
+  $('dCat').textContent='Practice race · 10 seconds';$('dText').textContent=RACE_NAMES[rnd(0,RACE_NAMES.length-1)];$('dHint').hidden=true;$('dNote').hidden=true;
   ['dOpts','dTxt','dNum','dSlideWrap','dResult'].forEach(i=>$(i).hidden=true);$('dClock').textContent='🦆';
   const nick=($('nick').value.trim()||'You').slice(0,18),riders=[['me',nick,myLook()],...DEMO_BOTS.map(b=>[b[0],b[0]+' duck',look({color:b[1],face:b[2],hair:b[3],weapon:b[4]})])];
-  const r={ids:shuffle(riders.map(x=>x[0])),order:shuffle(riders.map(x=>x[0])),place:1,seed:rid(),dur:7};
+  const dur=10,tgt=raceTarget(dur),ids=shuffle(riders.map(x=>x[0])),seed=rid();
   const race=el('div','race small'),cnt=el('div','race-count'),lanes=el('div');race.append(cnt,lanes);
-  const disp=$('dDisp');disp.innerHTML='';disp.append(race);
+  const how=el('p','racehow',RACE_HOW);
+  const btn=el('button','padbtn');btn.type='button';btn.append(el('span','padbig'),el('span','padsub'));
+  const disp=$('dDisp');disp.innerHTML='';disp.append(how,race,btn);
   animIn($('dCard'));
-  const RV=buildRiver(lanes,riders.map(x=>({id:x[0],name:x[1],...x[2],me:x[0]==='me'})),{small:true,dur:r.dur});
-  const plan=racePlan(r),t0=performance.now();let last=null;
-  (function f(){if(run!==DM.run)return;const t=(performance.now()-t0)/1000-3,c=t<0?String(Math.ceil(-t)):t<.8?'GO!':'';
+  const RV=buildRiver(lanes,ids.map(id=>{const x=riders.find(q=>q[0]===id);return {id,name:x[1],...x[2],me:id==='me'};}),{small:true,dur,follow:'me'});
+  // Bots paddle at a steady human pace with a little wobble; some days they are quick, some days slow.
+  const B={},rate={};ids.forEach(id=>{B[id]=[0,null];if(id!=='me')rate[id]=3.6+Math.random()*2.4;});
+  const shown={};ids.forEach(id=>shown[id]=0);
+  const t0=performance.now()+RACE_LEAD*1000,clock=()=>(performance.now()-t0)/1000;let lastTap=0,last=null,prev=performance.now(),ended=0,kick={},seen=false;
+  const st=()=>{const t=clock();return B.me[1]!=null?'fin':t>=dur||ended?'up':t<0?'wait':'go';};
+  DM.paddle=()=>{if(run!==DM.run||st()!=='go')return;const now=performance.now();if(now-lastTap<PAD_MIN_MS)return;lastTap=now;
+    B.me[0]=Math.min(tgt,B.me[0]+1);padPress(btn);RV.kick('me');beep(B.me[0]%2?740:880,.025);if(B.me[0]>=tgt){B.me[1]=Math.round(clock()*1000);beep(1320,.15);}};
+  wirePad(btn,()=>{if(DM.paddle)DM.paddle();});
+  (function f(){if(run!==DM.run)return;const now=performance.now(),dt=Math.min(.1,(now-prev)/1000),t=clock();prev=now;
+    const c=ended||t<-3?'':t<0?String(Math.ceil(-t)):t<.8?'GO!':'';
     if(c!==last){last=c;cnt.textContent=c;if(c)beep(c==='GO!'?990:520,.1);}
-    RV.update(calm()&&t>0?plan.end:t,plan,r);
-    if(t<plan.end)return requestAnimationFrame(f);
-    DM.done=true;const pos=r.order.indexOf('me');
-    $('dVerdict').textContent=pos===0?'Your duck won! 🎉':`Your duck finished ${ordinal(pos+1)}.`;$('dVerdict').className='dverdict '+(pos===0?'ok':'no');
-    $('dAnswer').textContent=`In a real game that is ${Math.max(100,1000-100*pos)} points.`;$('dResult').hidden=false;animIn($('dResult'));pos===0?fanfare():beep(660,.12);
-    requestAnimationFrame(()=>{try{$('demoAgain').scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(e){}});
+    if(t>=-3&&!seen){seen=true;try{btn.scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(e){}}
+    if(t>0&&!ended)for(const id in rate)if(B[id][1]==null){const v=B[id][0]+rate[id]*dt*(.6+Math.random()*.8);if(Math.floor(v)>Math.floor(B[id][0])&&(kick[id]=(kick[id]||0)+1)%3===0)RV.kick(id);B[id][0]=Math.min(tgt,v);if(B[id][0]>=tgt)B[id][1]=Math.round(t*1000);}
+    const bd={};ids.forEach(id=>bd[id]=[Math.floor(B[id][0]),B[id][1]]);
+    const order=raceOrder(ids,bd,seed),crossed={};order.forEach((id,i)=>{if(bd[id][1]!=null)crossed[id]=i;});
+    ids.forEach(id=>{const goal=bd[id][0]/tgt,a=calm()?1:1-Math.exp(-dt*(id==='me'?20:9));shown[id]+=(goal-shown[id])*a;});
+    RV.update(shown,order,crossed,!!ended);
+    paintPad(btn,{state:st(),taps:bd.me[0],tgt});$('dClock').textContent=ended?'🏁':`${Math.max(0,Math.ceil(t<0?dur:dur-t))}s`;
+    if(!ended&&(t>=dur||ids.every(id=>bd[id][1]!=null))){ended=now;DM.done=true;DM.paddle=null;const pos=order.indexOf('me'),taps=bd.me[0];
+      $('dVerdict').textContent=pos===0?`Your duck won with ${taps} paddles! 🎉`:taps===0?'Your duck did not move. Press SPACE or tap PADDLE!':`Your duck finished ${ordinal(pos+1)} with ${taps} paddles.`;$('dVerdict').className='dverdict '+(pos===0?'ok':'no');
+      $('dAnswer').textContent=taps?`In a real game that is ${Math.max(100,1000-100*pos)} points.`:'In a real game a duck that never moves scores 0 points.';$('dResult').hidden=false;animIn($('dResult'));pos===0?fanfare():beep(660,.12);
+      requestAnimationFrame(()=>{try{$('demoAgain').scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(e){}});}
+    if(!ended||now-ended<2500)requestAnimationFrame(f);
   })();
 }
 function paintDemoSlide(){
@@ -612,7 +628,7 @@ function buildGameList(){
 function setSelect(sel,v){const s=$(sel);if(![...s.options].some(o=>o.value==String(v))){const o=el('option',null,String(v));o.value=v;s.append(o);}s.value=String(v);}
 function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);$('hTimeBox').hidden=!!g.race;$('hRaceLenBox').hidden=!g.race;$('hCountLbl').textContent=g.race?'Races':'Questions';updatePoolInfo();}
 function updatePoolInfo(){const id=selGame(),g=GAMES[id];
-  if(g.race){$('poolInfo').textContent='Every race is random, so anyone can win. Points per race: 1st 1000, 2nd 900, 3rd 800, down to 100. Pick how long each race lasts.';return;}
+  if(g.race){$('poolInfo').textContent='Players press SPACE (computer) or tap PADDLE (phone) as fast as they can. First duck over the finish line wins; if time runs out, the duck furthest ahead wins. Points per race: 1st 1000, 2nd 900, 3rd 800, down to 100 (a duck that never moves gets 0). Pick how long each race lasts.';return;}
   if(!g.pool){$('poolInfo').textContent=`${g.name} makes a new round every time. No round repeats in this lobby.`;return;}
   const played=new Set((H.used[id]||[]).filter(s=>s[0]==='p')).size,left=g.pool.length-played;
   $('poolInfo').textContent=left>0?`${left} of ${g.pool.length} ${g.name} rounds not played yet in this lobby.`:`All ${g.pool.length} ${g.name} rounds have been played here. They will start over.`;}
@@ -658,12 +674,12 @@ async function goQuestion(i){
   await hostCall('host_set_key',{p_data:{deck:d,idx:i,...key,used:H.used}});
   await setState({session:d.session,phase:'question',game:d.game,idx:i,total:d.order.length,dur:d.dur,q},true);
 }
-/* One race of the 2San Duck Race game. Every player in the lobby rides; the host draws a random finishing order. */
+/* One race of the 2San Duck Race game. Every player in the lobby rides and paddles; the fastest paddler wins. */
 async function goDuck(i,base){
-  const b=base||{session:STATE.session,total:STATE.total,len:STATE.len,names:STATE.names},ids=shuffle(playerIds()),facts=RACE_FACTS();
+  const b=base||{session:STATE.session,total:STATE.total,len:STATE.len,names:STATE.names},ids=shuffle(playerIds()),facts=RACE_FACTS(),dur=b.len||30;
   if(!ids.length){status('Wait for at least one player to join.');return;}
   await setState({session:b.session,phase:'race',game:'duck',idx:i,total:b.total,len:b.len,names:b.names,
-    race:{game:true,ids,order:shuffle(ids.slice()),place:1,seed:rid(),dur:b.len||30,name:(b.names||[])[i]||RACE_NAMES[0],fact:facts[rnd(0,facts.length-1)]}},true);
+    race:{game:true,ids,place:1,seed:rid(),dur,target:raceTarget(dur),name:(b.names||[])[i]||RACE_NAMES[0],fact:facts[rnd(0,facts.length-1)]}},true);
 }
 function answeredIds(){const s=STATE;return playerIds().filter(id=>ANSWERS[id]&&ANSWERS[id].session===s.session&&ANSWERS[id].idx===s.idx);}
 function onAnswers(){
@@ -677,7 +693,6 @@ function renderDisplay(box,q,forHost,start){
   box.innerHTML='';clearTimeout(flashT);const d=q.display;
   if(q.type==='slide'&&forHost){const g=el('div','slide mini');q.tiles.forEach(t=>{const b=el('span',t?'':'blank',t?SLIDE_LABEL[t]:'');if(t){b.style.setProperty('--c',COLORS[t]);b.dataset.n=t;}g.append(b);});box.append(g);return;}
   if(!d)return;
-  if(d.hostOnly&&!forHost){box.append(el('div','lookup','👀 Look at the big screen!'));return;}
   if(d.kind==='four'){const g=el('div','four');d.items.forEach(e=>g.append(el('span',null,e)));stagger(g);box.append(g);}
   else if(d.kind==='tiles'){const g=el('div','tiles');[...d.text].forEach(ch=>g.append(el('span',ch===' '?'gap':'',ch===' '?'':ch)));stagger(g);box.append(g);}
   else if(d.kind==='big'){box.append(el('div','bigtext'+(d.emoji?' emojis':''),d.text));}
@@ -776,7 +791,7 @@ function renderHostFinal(){
   if(tie){
     $('hWinner').textContent=`It's a tie for ${ordinal(tie.place)} place!`;
     const heads=$('tieHeads');heads.innerHTML='';tie.ids.forEach(id=>{const p=PLAYERS[id]||{},c=el('div','pcard');c.append(headScene(look(p),30),el('span',null,playerName(id)));heads.append(c);});stagger(heads);
-    $('tieText').textContent=`${tie.ids.length} players have ${rows.find(r=>r.id===tie.ids[0]).score} points. A duck race decides who places higher. Every duck has the same chance.`;
+    $('tieText').textContent=`${tie.ids.length} players have ${rows.find(r=>r.id===tie.ids[0]).score} points. A duck race decides who places higher: they press SPACE or tap PADDLE as fast as they can, and the fastest paddler wins.`;
     $('raceBtn').onclick=()=>startRace(tie);
     animIn($('hWinner'));stopConfetti();
   }else{
@@ -787,42 +802,45 @@ function renderHostFinal(){
   boardRows('hFinalList',rows,{showGain:false,limit:60});
 }
 
-/* ================= DUCK RACE (tiebreaker) =================
-   The host decides the finishing order up front (random, equal chances) and stores it with a seed.
-   Every screen draws the same race from that seed and the server start time, so everyone sees the same thing. */
+/* ================= DUCK RACE: a paddle race =================
+   Every press of Space (or tap on the PADDLE button) moves your duck forward. The finish line is
+   raceTarget(dur) paddles away. GO comes RACE_LEAD seconds after the host saves the race.
+   Players send their paddle count to the server (player_paddle); every screen reads all counts back
+   (race_board), along with the server's time since GO so every countdown lines up.
+   First duck over the line wins. When time runs out, the duck with more paddles places higher.
+   The host saves the final order (race.done) and everyone shows it. */
+const RACE_LEAD=5,PADDLE_RATE=4.5,PAD_MIN_MS=50;
+const raceTarget=dur=>Math.max(10,Math.round((dur||10)*PADDLE_RATE));
+const RACE_HOW='Press SPACE (computer) or tap PADDLE (phone) as fast as you can. Every press moves your duck forward. First to the finish line wins. If time runs out, the duck furthest ahead wins.';
 async function startRace(tie){
   $('raceBtn').disabled=true;
-  const cur={...STATE};delete cur.startedAt;
-  try{await setState({...cur,phase:'race',race:{ids:shuffle(tie.ids.slice()),order:shuffle(tie.ids.slice()),place:tie.place,seed:rid(),dur:+$('tieLen').value||10}},true);}catch(e){}
+  const cur={...STATE};delete cur.startedAt;const dur=+$('tieLen').value||10;
+  try{await setState({...cur,phase:'race',race:{ids:shuffle(tie.ids.slice()),place:tie.place,seed:rid(),dur,target:raceTarget(dur)}},true);}catch(e){}
   $('raceBtn').disabled=false;
 }
-$('raceDoneBtn').onclick=async()=>{const r=STATE.race;if(!r)return;
+/* Finishing order: ducks over the line first (earliest first), then more paddles, then a fair coin from the seed. */
+function raceOrder(ids,board,seed){
+  const rn=seeded(seed||'x'),coin={};ids.forEach(id=>coin[id]=rn());const g=id=>board[id]||[0,null];
+  return ids.slice().sort((a,b)=>{const A=g(a),B=g(b),fa=A[1]!=null,fb=B[1]!=null;
+    if(fa!==fb)return fa?-1:1;if(fa&&A[1]!==B[1])return A[1]-B[1];if((A[0]||0)!==(B[0]||0))return (B[0]||0)-(A[0]||0);return coin[a]-coin[b];});
+}
+$('raceDoneBtn').onclick=async()=>{const r=STATE.race;if(!r||!r.done)return;
   if(r.game){const s=STATE;$('raceDoneBtn').disabled=true;
     try{if(!(SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx)){const scores={...((SCORES&&SCORES.session===s.session&&SCORES.scores)||{})},last={},ok={};
-        r.order.forEach((id,pos)=>{const pts=Math.max(100,1000-100*pos);last[id]=pts;ok[id]=pos<3;scores[id]=(scores[id]||0)+pts;});
+        r.order.forEach((id,pos)=>{const moved=((r.taps||{})[id]||0)>0,pts=moved?Math.max(100,1000-100*pos):0;last[id]=pts;ok[id]=moved&&pos<3;scores[id]=(scores[id]||0)+pts;});
         await setScores({session:s.session,scores,last,ok,idx:s.idx});}
       await setState({phase:s.idx+1>=s.total?'final':'board'});}catch(e){}
     $('raceDoneBtn').disabled=false;return;}const tb={...(STATE.tb||{})};r.order.forEach((id,i)=>tb[id]=i);
   $('raceDoneBtn').disabled=true;try{await setState({phase:'final',race:null,tb});}catch(e){}$('raceDoneBtn').disabled=false;};
 function seeded(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19;}
   return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return (h>>>0)/4294967296;};}
-/* Each duck: progress checkpoints that wobble (so the lead changes) and reach the line at its finishing time. */
-function racePlan(r){
-  // The winner crosses a little before the chosen length; the rest follow so the last duck finishes near it.
-  const rnd=seeded(r.seed),fin={},paths={},n=r.order.length,spread=Math.min(r.dur*.18,.55*(n-1)),gaps=r.order.slice(1).map(()=>.6+rnd()*.8),gs=gaps.reduce((a,b)=>a+b,0)||1;
-  let t=r.dur*.97-spread;r.order.forEach((id,k)=>{if(k)t+=spread*gaps[k-1]/gs;fin[id]=t;});
-  const cps=Math.round(Math.min(30,Math.max(10,r.dur/2)));
-  r.ids.forEach(id=>{const n=cps,w=[];for(let j=0;j<n;j++)w.push(.35+rnd()*1.4);const tot=w.reduce((a,b)=>a+b,0);let c=0;paths[id]=[0,...w.map(x=>(c+=x)/tot)];});
-  return {fin,paths,end:Math.max(...Object.values(fin))+.4};
-}
-function duckX(plan,id,t){const f=plan.fin[id];if(t<=0)return 0;if(t>=f)return 1;const p=plan.paths[id],u=t/f*(p.length-1),j=Math.floor(u);return p[j]+(p[j+1]-p[j])*(u-j);}
-const RACE={key:'',run:0};
-/* ---- the 2San river: one wide river, every duck in it, the camera follows the leader ---- */
+const RACE={key:'',run:0,pad:null,iv:0};
+/* ---- the 2San river: one wide river, every duck in it, the camera follows the leader (or you) ---- */
 const BANKS=['Better care, better life','Safe Sip+','Swimcount','Journey to Self-testing for All','2SAN','Excellence','Integrity','Agility','Rigor','Fearlessness','Home Water Test','UTI Test','Hydration Test','Easy Pen Test'];
 const BANK_C=['#FB7569','#0084DB','#1DD6A5','#7E43CA','#FFC83D'];
 const RIVERS=new Map();addEventListener('resize',()=>{for(const c of RIVERS.values())c.relayout();});
 function riverSize(n,small){return n<=6?(small?[44,.4]:[56,.52]):n<=16?(small?[38,.34]:[46,.42]):(small?[30,.26]:[36,.32]);}
-function buildRiver(box,riders,{small=false,board=false,dur=10}={}){
+function buildRiver(box,riders,{small=false,board=false,dur=10,place=1,follow=null}={}){
   box.innerHTML='';box.classList.add('riverbox');
   const view=el('div','rview'),world=el('div','rworld'),bank=el('div','rbank'),start=el('div','rstart'),fin=el('div','rfinish');
   fin.append(el('span','rflag','FINISH'));world.append(el('div','rwater'),bank,el('div','rshore'),start,fin);view.append(world);box.append(view);
@@ -832,61 +850,132 @@ function buildRiver(box,riders,{small=false,board=false,dur=10}={}){
   const you=el('div','ryou');you.hidden=true;view.append(you);
   riders.forEach((p,i)=>{const w=el('div','dk'+(p.me?' me':'')),tag=el('span','dtag',p.name+(p.me?' (you)':''));tag.style.setProperty('--c',p.color);
     const d=duckRider(p,s,n<=16);d.style.setProperty('--bird',bird+'px');d.style.animationDelay=(-(i*.17)%.6).toFixed(2)+'s';
-    w.append(tag,d);w.style.zIndex=10+i;world.append(w);D[p.id]={w,tag,name:p.name,y:0,fin:false};});
+    w.append(tag,d);w.style.zIndex=10+i;world.append(w);D[p.id]={w,tag,d,name:p.name,me:!!p.me,y:0,x:0,lab:'',finAt:0};});
   let G={W:600,H:300,L:1400,sx:80,fx:1480,ww:1800},last=null,lastLead=0;
   function relayout(){
     const top0=small?34:48,dh0=bird*.62+s*(100+HAIR_ROOM)+20,need=top0+4+dh0+(dh0+6)*(n-1)+18;view.style.height=n<=8&&need>(small?310:320)?need+'px':'';
     const W=view.clientWidth||600,H=view.clientHeight||300,top=top0,L=Math.max(W*(2.2+Math.min(dur,60)/25),820),sx=Math.min(110,W*.16);
     G={W,H,L,sx,fx:sx+L,ww:sx+L+W*.8};world.style.width=G.ww+'px';start.style.left=sx+'px';fin.style.left=G.fx+'px';bank.style.height=top+'px';
-    bank.innerHTML='';for(let x=sx+(small?150:220),k=0;x<G.fx-140;x+=small?250:340,k++){const sg=el('span','rsign',BANKS[k%BANKS.length]);sg.style.left=x+'px';sg.style.setProperty('--c',BANK_C[k%BANK_C.length]);bank.append(sg);}
+    bank.innerHTML='';for(let x=sx+(small?150:220),k=0;x<G.fx-140;x+=small?250:340,k++){const sg=el('span','rsign',BANKS[k%BANKS.length]);sg.style.setProperty('--c',BANK_C[k%BANK_C.length]);sg.style.left=x+'px';bank.append(sg);}
     const dh=dh0,y0=top+dh+4,y1=H-16;
     riders.forEach((p,i)=>{D[p.id].y=n===1?(y0+y1)/2:y0+(y1-y0)*(i/(n-1));});
     if(last)update(...last);
   }
-  function standings(plan,r,tt){const sc=id=>tt>=plan.fin[id]?2-r.order.indexOf(id)/n:duckX(plan,id,tt);return riders.map(p=>p.id).sort((a,b)=>sc(b)-sc(a));}
-  function update(tt,plan,r,onFin){
-    last=[tt,plan,r,onFin];let front=0;
-    for(const p of riders){const o=D[p.id],f=plan.fin[p.id],drift=tt>f?Math.min(1,(tt-f)/1.4)*G.W*.3*(1-r.order.indexOf(p.id)/n):0,x=G.sx+duckX(plan,p.id,tt)*G.L+drift;if(x>front)front=x;o.x=x;
-      o.w.style.transform=`translate3d(${x.toFixed(1)}px,${o.y.toFixed(1)}px,0)`;
-      if(tt>=plan.fin[p.id]&&!o.fin){o.fin=true;const pos=r.order.indexOf(p.id);o.tag.textContent=ordinal(r.place+pos)+' · '+o.name+(p.me?' (you)':'');o.w.classList.add('fin');if(!pos)o.w.classList.add('won');if(onFin)onFin(p.id,pos);}}
-    const cam=Math.max(0,Math.min(front-G.W*.6,G.ww-G.W));world.style.transform=`translate3d(${(-cam).toFixed(1)}px,0,0)`;
-    if(me){const sx=D[me.id].x-cam,off=sx<20?'l':sx>G.W-12?'r':'';you.hidden=!off||tt<=0;if(off){you.className='ryou '+off;you.textContent=off==='l'?'◀ You':'You ▶';you.style.top=Math.max(20,D[me.id].y-30)+'px';}}
-    if(lead&&tt>0&&performance.now()-lastLead>250){lastLead=performance.now();lead.hidden=false;lead.innerHTML='';standings(plan,r,tt).slice(0,3).forEach((id,i)=>{const li=el('li');li.append(el('b',null,ordinal(r.place+i)),document.createTextNode(D[id].name));lead.append(li);});}
+  /* prog: id -> 0..1 (1 = on the line). order: ids best first. crossed: id -> place index for ducks over the line.
+     final: true once the host saved the result, so every tag shows its place. */
+  function update(prog,order,crossed,final){
+    last=[prog,order,crossed,final];let front=0;const now=performance.now();
+    for(const p of riders){const o=D[p.id],pos=crossed[p.id];
+      if(pos!=null&&!o.finAt)o.finAt=now;
+      const drift=pos!=null?Math.min(1,(now-o.finAt)/1400)*G.W*.3*(1-pos/n):0,x=G.sx+Math.min(1,Math.max(0,prog[p.id]||0))*G.L+drift;
+      if(x>front)front=x;o.x=x;o.w.style.transform=`translate3d(${x.toFixed(1)}px,${o.y.toFixed(1)}px,0)`;
+      const k=final?order.indexOf(p.id):pos,lab=k!=null&&k>=0?ordinal(place+k)+' · '+o.name+(p.me?' (you)':''):o.name+(p.me?' (you)':'');
+      if(lab!==o.lab){o.lab=lab;o.tag.textContent=lab;o.w.classList.toggle('fin',pos!=null);o.w.classList.toggle('won',(final?order[0]===p.id:pos===0));}}
+    const f=follow&&D[follow],cam=Math.max(0,Math.min((f?f.x-G.W*.5:front-G.W*.6),G.ww-G.W));world.style.transform=`translate3d(${(-cam).toFixed(1)}px,0,0)`;
+    if(me&&!f){const sx=D[me.id].x-cam,off=sx<20?'l':sx>G.W-12?'r':'';you.hidden=!off;if(off){you.className='ryou '+off;you.textContent=off==='l'?'◀ You':'You ▶';you.style.top=Math.max(20,D[me.id].y-30)+'px';}}
+    if(lead&&order.length&&now-lastLead>250&&Object.values(prog).some(v=>v>0)){lastLead=now;lead.hidden=false;lead.innerHTML='';order.slice(0,3).forEach((id,i)=>{const li=el('li');li.append(el('b',null,ordinal(place+i)),document.createTextNode(D[id].name));lead.append(li);});}
   }
-  const ctl={relayout,update,standings};RIVERS.set(box,ctl);relayout();return ctl;
+  /* A little splash on a duck that just paddled. */
+  function kick(id){const o=D[id];if(!o||calm())return;o.d.classList.remove('kick');void o.d.offsetWidth;o.d.classList.add('kick');}
+  const ctl={relayout,update,kick};RIVERS.set(box,ctl);relayout();return ctl;
 }
+/* The big PADDLE button: label and counter. */
+function paintPad(btn,{state,taps,tgt,rank=''}){
+  btn.dataset.state=state;btn.disabled=state!=='go';
+  btn.querySelector('.padbig').textContent=state==='wait'?'Get ready…':state==='go'?'PADDLE!':state==='fin'?'Finished! 🏁':"Time's up!";
+  btn.querySelector('.padsub').textContent=state==='wait'?'Wait for GO, then tap fast!':`${taps} / ${tgt} paddles`+(rank?' · '+rank:'');
+  btn.style.setProperty('--p',Math.min(1,taps/tgt).toFixed(3));
+}
+/* Scroll so the whole river sits above the pinned PADDLE button (phones, while racing). */
+function fitRace(smooth){try{if(!RACE.pad||!RACE.pad.live||$('pPadWrap').hidden)return;const rc=$('pRaceLanes').closest('.race').getBoundingClientRect(),room=$('pPadWrap').getBoundingClientRect().top+14-8;
+  if(rc.bottom>room||rc.top<0)window.scrollTo({top:Math.max(0,scrollY+rc.top-(rc.height<room-8?Math.max(8,room-rc.height):8)),behavior:smooth&&!calm()?'smooth':'auto'});}catch(e){}}
+addEventListener('resize',()=>{if(RACE.pad&&RACE.pad.scrolled)requestAnimationFrame(()=>fitRace(false));});
+function padHide(){$('pPadWrap').hidden=true;$('pRace').classList.remove('padding');if(RACE.pad)RACE.pad.live=false;}
+function padPress(btn){if(calm())return;btn.classList.remove('hit');void btn.offsetWidth;btn.classList.add('hit');}
+/* Space anywhere on the page paddles while a race (or the practice race) is on. Space never clicks other buttons then. */
+const isSpace=e=>e.code==='Space'||e.key===' '||e.key==='Spacebar';
+function padActive(){return (DM.paddle&&!$('demo').hidden)?DM.paddle:(RACE.pad&&RACE.pad.live&&view==='player'&&playerSub==='pRace')?RACE.pad.tap:null;}
+document.addEventListener('keydown',e=>{if(!isSpace(e))return;const t=e.target;if(t&&/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))return;const f=padActive();if(!f)return;e.preventDefault();if(!e.repeat)f();},true);
+document.addEventListener('keyup',e=>{if(isSpace(e)&&padActive())e.preventDefault();},true);
+function wirePad(btn,fn){btn.addEventListener('pointerdown',e=>{if(e.button>0)return;e.preventDefault();fn();});btn.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.repeat){e.preventDefault();fn();}});btn.addEventListener('contextmenu',e=>e.preventDefault());}
+wirePad($('pPad'),()=>{if(RACE.pad&&RACE.pad.live)RACE.pad.tap();});
+
 function renderRace(isHost){
   const r=STATE.race;if(!r)return;
   if(isHost)hostShow('hRace');else playerShow('pRace');
-  const k=(isHost?'h':'p')+STATE.session+r.seed;if(RACE.key===k)return;RACE.key=k;const run=++RACE.run;stopConfetti();
-  const P_=isHost?'h':'p',me=ME&&ME.player_id,n=r.ids.length;
+  const k=(isHost?'h':'p')+STATE.session+r.seed;if(RACE.key===k)return;RACE.key=k;const run=++RACE.run;stopConfetti();clearInterval(RACE.iv);
+  const P_=isHost?'h':'p',me=ME&&ME.player_id,n=r.ids.length,tgt=r.target||raceTarget(r.dur),racing=!isHost&&r.ids.includes(me);
   $(P_+'RaceTitle').textContent=r.game?`🦆 Race ${STATE.idx+1} of ${STATE.total}: ${r.name}`:`🦆 Duck race for ${ordinal(r.place)} place`;
-  $(P_+'RaceResult').hidden=true;$(P_+'RaceCount').textContent='';
+  $(P_+'RaceResult').hidden=true;$(P_+'RaceCount').textContent='';$(P_+'RaceHow').textContent=RACE_HOW;$(P_+'RaceHow').hidden=false;
   if(isHost){$('hRaceFact').hidden=!r.fact;$('hRaceFact').textContent=r.fact?'2San fact: '+r.fact:'';$('raceDoneBtn').textContent=r.game&&STATE.idx+1<STATE.total?'Show leaderboard':'Show final results';}
   else $('pRaceWait').textContent=r.game&&STATE.idx+1<STATE.total?'Waiting for the host to show the leaderboard.':'Waiting for the host to show the final results.';
-  const live=isHost?null:$('pRaceLive');if(live){live.hidden=!r.ids.includes(me);live.textContent='';}
+  const live=isHost?null:$('pRaceLive');if(live){live.hidden=racing;live.textContent=racing?'':'You are watching this race.';}
+  const padBtn=$('pPad');if(!isHost){padBtn.hidden=!racing;$('pPadWrap').hidden=!racing;$('pRace').classList.toggle('padding',racing);}
   const riders=r.ids.map(id=>{const p=PLAYERS[id]||{};return {id,name:playerName(id),...look(p),me:id===me};});
-  const RV=buildRiver($(P_+'RaceLanes'),riders,{small:!isHost,board:isHost&&n>3,dur:r.dur});
-  const plan=racePlan(r),el0=Date.now()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<600000?el0:0);
-  let lastCount=null,done=false,lastLive=0;
+  const RV=buildRiver($(P_+'RaceLanes'),riders,{small:!isHost,board:isHost&&n>3,dur:r.dur,place:r.place,follow:racing?me:null});
+  // Clock: local time since the race was saved, corrected by the server's own "ms since GO" when it answers.
+  const el0=Date.now()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<600000?el0:0);
+  const C={corr:0,rtt:1e9};const raw=()=>(performance.now()-startLocal)/1000-RACE_LEAD,clock=()=>raw()+C.corr;
+  const B={board:{},asking:false,ask:0,finishing:false,heard:{}},shown={};r.ids.forEach(id=>shown[id]=0);
+  const take=(b,sent)=>{if(!b||run!==RACE.run)return;const rtt=performance.now()-sent;
+    if(typeof b._el==='number'&&rtt<C.rtt+150){const est=b._el/1000+rtt/2000-((performance.now()-startLocal)/1000-RACE_LEAD);if(rtt<C.rtt||Math.abs(est-C.corr)>1)C.corr=est;C.rtt=Math.min(C.rtt,rtt);}
+    const nb={};for(const id in b)if(id[0]!=='_')nb[id]=b[id];
+    for(const id in nb){const was=B.board[id];if(was&&nb[id][0]>was[0]&&id!==me)RV.kick(id);}
+    B.board=nb;};
+  const pad=racing?{seed:r.seed,taps:0,sent:0,inflight:0,lastNet:-1e9,lastTap:0,fin:false,closed:false,live:true}:null;RACE.pad=pad;
+  const send=()=>{if(!pad)return;const n0=pad.taps,t0=performance.now();pad.inflight++;pad.lastNet=t0;
+    rpc('player_paddle',{p_token:TOKEN,p_seed:r.seed,p_taps:n0}).then(b=>{if(n0>pad.sent)pad.sent=n0;take(b,t0);}).catch(()=>{}).finally(()=>{pad.inflight--;});};
+  const padState=()=>{const t=clock(),R=STATE.race||r;return pad.fin?'fin':R.done||t>=r.dur?'up':t<0?'wait':'go';};
+  if(pad){pad.tap=()=>{if(run!==RACE.run||padState()!=='go')return;const now=performance.now();if(now-pad.lastTap<PAD_MIN_MS)return;pad.lastTap=now;
+      pad.taps=Math.min(tgt,pad.taps+1);padPress(padBtn);RV.kick(me);beep(pad.taps%2?740:880,.025);
+      if(pad.taps>=tgt){pad.fin=true;send();beep(1320,.15);}paintPad(padBtn,{state:padState(),taps:pad.taps,tgt,rank:pad.rank});};
+    paintPad(padBtn,{state:padState(),taps:0,tgt});try{if(document.activeElement&&document.activeElement!==document.body)document.activeElement.blur();}catch(e){}}
+  const finalize=async()=>{B.finishing=true;let b=B.board;try{const t0=performance.now(),x=await rpc('race_board',{p_token:TOKEN});if(x){take(x,t0);b=B.board;}}catch(e){}
+    if(run!==RACE.run||!STATE||!STATE.race||STATE.race.seed!==r.seed||STATE.race.done)return;
+    const order=raceOrder(r.ids,b,r.seed),taps={},ms={};r.ids.forEach(id=>{const v=b[id]||[0,null];taps[id]=v[0]||0;if(v[1]!=null)ms[id]=v[1];});
+    try{await setState({race:{...STATE.race,done:true,order,taps,ms}});}catch(e){B.finishing=false;}};
+  // Network: send paddles about twice a second, read everyone's about every 0.4 s (host) or 1 s (phone).
+  RACE.iv=setInterval(()=>{
+    if(run!==RACE.run||!STATE||STATE.phase!=='race'||!STATE.race||STATE.race.seed!==r.seed){clearInterval(RACE.iv);if(pad)pad.live=false;return;}
+    const R=STATE.race,t=clock(),now=performance.now();if(R.done){if(pad)pad.live=false;return;}
+    if(pad){if(!pad.closed&&t>=r.dur){pad.closed=true;send();}else if(pad.taps>pad.sent&&!pad.inflight&&now-pad.lastNet>=450)send();}
+    if(!B.asking&&t<r.dur+4&&now-B.ask>=(isHost?400:1000)&&!(pad&&now-pad.lastNet<900)){B.asking=true;B.ask=now;const t0=now;
+      rpc('race_board',{p_token:TOKEN}).then(b=>take(b,t0)).catch(()=>{}).finally(()=>{B.asking=false;});}
+    if(isHost&&!B.finishing){const all=r.ids.every(id=>B.board[id]&&B.board[id][1]!=null);if(t>=r.dur+1.6||(all&&t>0))finalize();}
+  },150);
+  let lastCount=null,doneAt=0,prev=performance.now(),lastLive=0;
   (function frame(){
     if(run!==RACE.run||!STATE||STATE.phase!=='race'||!STATE.race||STATE.race.seed!==r.seed)return;
-    const t=(performance.now()-startLocal)/1000-3,tt=calm()&&t>0?plan.end:t;
-    const c=t<0?String(Math.ceil(-t)):t<.8?'GO!':'';if(c!==lastCount){lastCount=c;$(P_+'RaceCount').textContent=c;if(c)beep(c==='GO!'?990:520,.12);}
-    RV.update(tt,plan,r,(id,pos)=>{if(!pos)beep(1320,.15);});
-    if(live&&!live.hidden&&t>0&&performance.now()-lastLive>250){lastLive=performance.now();const st=RV.standings(plan,r,tt),mine=st.indexOf(me);
-      live.textContent=`You: ${ordinal(mine+1)} of ${n}`+(mine?` · Leading: ${playerName(st[0])}`:' · You are leading!');}
-    if(!done&&t>=plan.end){done=true;if(live&&!live.hidden)live.textContent=`You finished ${ordinal(r.order.indexOf(me)+1)} of ${n}`;showRaceResult(P_,r,me);}
-    if(!done)requestAnimationFrame(frame);
+    const now=performance.now(),dt=Math.min(.1,(now-prev)/1000),R=STATE.race,t=clock();prev=now;
+    const c=R.done||t<-3?'':t<0?String(Math.ceil(-t)):t<.8?'GO!':'';
+    // Phones: once the countdown starts, bring the river up so it shows above the PADDLE button.
+    if(pad&&!pad.scrolled&&t>=-3&&!R.done){pad.scrolled=true;fitRace(true);}
+    if(c!==lastCount){lastCount=c;$(P_+'RaceCount').textContent=c;if(c)beep(c==='GO!'?990:520,.12);}
+    $(P_+'RaceClock').textContent=R.done?'🏁':`⏱ ${Math.max(0,Math.ceil(t<0?r.dur:r.dur-t))}s`;
+    // Board to show: the final one once saved, else the latest from the server plus my own paddles.
+    const bd=R.done?Object.fromEntries(r.ids.map(id=>[id,[(R.taps||{})[id]||0,(R.ms||{})[id]??null]])):{...B.board};
+    if(pad&&!R.done){const v=bd[me]||[0,null];bd[me]=[Math.max(v[0],pad.taps),v[1]];}
+    const goal={},crossed={};r.ids.forEach(id=>{goal[id]=Math.min(1,((bd[id]||[0])[0]||0)/tgt);});
+    const order=R.done&&R.order?R.order:raceOrder(r.ids,bd,r.seed);
+    order.forEach((id,i)=>{if(bd[id]&&bd[id][1]!=null)crossed[id]=i;});
+    if(pad&&pad.fin&&crossed[me]==null&&!R.done)crossed[me]=Object.keys(crossed).length;
+    for(const id of r.ids){const g=goal[id],a=calm()?1:1-Math.exp(-dt*(id===me?20:7));shown[id]+=(g-shown[id])*a;if(Math.abs(g-shown[id])<.0005)shown[id]=g;}
+    RV.update(shown,order,crossed,!!R.done);
+    if(pad&&now-lastLive>120){lastLive=now;const mine=order.indexOf(me);
+      pad.rank=t>0&&!R.done?`${ordinal(r.place+mine)} of ${n}`:'';paintPad(padBtn,{state:padState(),taps:R.done?((R.taps||{})[me]||0):pad.taps,tgt,rank:pad.rank});
+      padBtn.setAttribute('aria-label',`Paddle. ${pad.taps} of ${tgt} paddles`+(t>0?`, ${ordinal(r.place+mine)} of ${n}`:''));
+      if(live&&R.done){live.hidden=false;live.textContent=`You finished ${ordinal(r.place+mine)} of ${n}`;}}
+    if(R.done&&!doneAt){doneAt=now;if(live&&!racing)live.hidden=true;if(!isHost)padHide();$(P_+'RaceHow').hidden=true;showRaceResult(P_,R,me);}
+    if(!doneAt||now-doneAt<2500)requestAnimationFrame(frame);
   })();
 }
 function showRaceResult(P_,r,me){
-  const box=$(P_+'RaceResult');box.hidden=false;animIn(box);
+  const box=$(P_+'RaceResult');box.hidden=false;animIn(box);const taps=r.taps||{};
   $(P_+'RaceWinner').textContent=`${playerName(r.order[0])}'s duck wins!`;
   const ol=$(P_+'RaceOrder'),top=P_==='h'?10:5,list=r.order.map((id,i)=>[id,i]).filter(([id,i])=>i<top||id===me);ol.innerHTML='';
-  list.forEach(([id,i])=>{const li=el('li',id===me?'me':'');li.append(el('b',null,ordinal(r.place+i)),el('span',null,' '+playerName(id)));ol.append(li);});stagger(ol);
+  list.forEach(([id,i])=>{const li=el('li',id===me?'me':'');li.append(el('b',null,ordinal(r.place+i)),el('span',null,' '+playerName(id)),el('small',null,`${taps[id]||0} paddles`));ol.append(li);});stagger(ol);
   const mine=$(P_+'RaceMine');
-  if(mine)mine.textContent=me&&r.order.includes(me)?(r.order.indexOf(me)===0?'Your duck won! 🎉':`Your duck came ${ordinal(r.order.indexOf(me)+1)}${r.game?' of '+r.order.length:''} in the race.`):'';
+  if(mine){const pos=r.order.indexOf(me),t=taps[me]||0;mine.textContent=me&&pos>=0?(pos===0?`Your duck won with ${t} paddles! 🎉`:t===0?'Your duck did not move. Press SPACE or tap PADDLE next time!':`Your duck came ${ordinal(r.place+pos)}${r.game?' of '+r.order.length:''} with ${t} paddles.`):'';}
   confetti();fanfare();
 }
 function drawPodium(id,rows){
@@ -897,7 +986,7 @@ function drawPodium(id,rows){
 $('newGameBtn').onclick=async()=>{const session=rid();try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await setState({session,phase:'lobby'},true);}catch(e){}finalKey='';rosterKey='';};
 
 /* ================= PLAYER ================= */
-function playerShow(id){if(id!=='pQ'&&id!=='pReveal'&&id!=='pWait')worldOff();['pWait','pQ','pReveal','pFinal','pRace'].forEach(s=>$(s).hidden=s!==id);if(id!==playerSub){playerSub=id;animIn($(id));if(id!=='pFinal')stopConfetti();}}
+function playerShow(id){if(id!=='pQ'&&id!=='pReveal'&&id!=='pWait')worldOff();if(id!=='pRace')padHide();['pWait','pQ','pReveal','pFinal','pRace'].forEach(s=>$(s).hidden=s!==id);if(id!==playerSub){playerSub=id;animIn($(id));if(id!=='pFinal')stopConfetti();}}
 let pKey='';
 function renderPlayer(){
   const uid=ME.player_id,me=PLAYERS[uid];if(!me)return;
@@ -919,7 +1008,7 @@ function renderPlayerQ(){
   if(pKey!==k){
     pKey=k;P.localStart=roundStart(s);animIn($('pCard'));
     $('pQNum').textContent=`Round ${s.idx+1} of ${s.total}`;$('pCat').textContent=q.cat;$('pText').textContent=q.text;
-    renderDisplay($('pDisp'),q,false);
+    renderDisplay($('pDisp'),q,false,P.localStart); // every clue shows on the phone's TV too (the memory flash hides at the same moment as on the big screen)
     $('pHint').textContent=q.hint||'';$('pHint').hidden=!q.hint;
     const box=$('pOpts');box.innerHTML='';box.hidden=q.type!=='choice';
     $('pNum').hidden=q.type!=='number';$('pNumIn').value='';
@@ -964,6 +1053,7 @@ $('pTxtBtn').onclick=()=>{const v=$('pTxtIn').value.trim().slice(0,40);if(!v){st
 $('pTxtIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('pTxtBtn').click();});
 function renderPlayerReveal(){
   const s=STATE,q=s.q||{},uid=ME.player_id;clearInterval(P.tick);playerShow('pReveal');if(s.game!=='duck')worldPlayer();else worldOff();
+  if(q.display&&q.display.kind==='flash'){const g=$('pDisp').querySelector('.egrid');if(g){clearTimeout(flashT);g.classList.remove('gone');g.querySelectorAll('span').forEach((x,i)=>x.textContent=q.display.items[i]);}} // reveal: the flashed icons come back
   const sc=SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx?SCORES:null;
   const gain=sc&&sc.last?sc.last[uid]:undefined,ok=sc&&sc.ok?sc.ok[uid]:undefined,answered=sc&&gain!==undefined;
   const k='r'+s.session+s.idx+(sc?'y':'n')+s.phase;
@@ -971,7 +1061,7 @@ function renderPlayerReveal(){
   $('pGain').textContent=answered?'+'+gain:sc?'+0':'…';
   const closestGame=q.type==='number'&&!q.exact,duck=s.game==='duck'&&s.race&&s.race.game,dpos=duck?s.race.order.indexOf(uid):-1;
   $('pAnswerLbl').textContent=duck?'Race winner':'Answer';
-  $('pVerdict').textContent=duck?(dpos<0?'You joined after this race':dpos===0?'Your duck won! 🎉':`Your duck finished ${ordinal(dpos+1)}`):!sc?'Scoring…':!answered?(q.type==='slide'?'Not solved in time':'No answer this time'):closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!':ok?'Correct!':'Not this time';
+  $('pVerdict').textContent=duck?(dpos<0?'You joined after this race':!((s.race.taps||{})[uid])?'Your duck did not move':dpos===0?'Your duck won! 🎉':`Your duck finished ${ordinal(dpos+1)}`):!sc?'Scoring…':!answered?(q.type==='slide'?'Not solved in time':'No answer this time'):closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!':ok?'Correct!':'Not this time';
   $('pAnswer').textContent=duck?`${playerName(s.race.order[0])} won ${s.race.name}`:s.answer||'';
   const rows=ranking(),r=rows.find(x=>x.id===uid),total=r?r.score:0;$('pRank').textContent=r?`${r.place} / ${rows.length}`:'–';
   const rk=s.session+':'+s.idx;
@@ -982,14 +1072,14 @@ function renderPlayerFinal(){
   const uid=ME.player_id;playerShow('pFinal');const rows=ranking(),r=rows.find(x=>x.id===uid),me=PLAYERS[uid];const k='f'+STATE.session+(r?r.score+':'+r.place:'');
   if(pKey===k+JSON.stringify(STATE.tb||{}))return;pKey=k+JSON.stringify(STATE.tb||{});clearInterval(P.tick);
   const tie=nextTie(rows),inTie=tie&&tie.ids.includes(uid);
-  $('pFinalTitle').textContent=inTie?`Tie for ${ordinal(tie.place)}! Watch the duck race.`:r&&r.place===1?'You won!':r&&r.place<=3?`Podium! You placed ${ordinal(r.place)}.`:'Thanks for playing!';
+  $('pFinalTitle').textContent=inTie?`Tie for ${ordinal(tie.place)}! Get ready to paddle: a duck race decides it.`:r&&r.place===1?'You won!':r&&r.place<=3?`Podium! You placed ${ordinal(r.place)}.`:'Thanks for playing!';
   put('pFinalChar',charScene(look(me),1.5,r&&r.place<=3));
   $('pFinalScore').textContent=r?r.score:0;$('pFinalRank').textContent=r?`${r.place} / ${rows.length}`:'–';
   boardRows('pTop',rows,{showGain:false,limit:5,highlight:uid});if(r&&r.place<=3&&!inTie){confetti();fanfare();}
 }
 
 /* ================= 3D world (world.js + three.js, loaded the first time a round is shown) ================= */
-const BUILD='20261113d';
+const BUILD='20261113f';
 const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
 const W3={state:'idle',want:null};
 function hasWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}
