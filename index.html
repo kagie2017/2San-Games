@@ -31,6 +31,9 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 .hdr-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .whoami{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;background:var(--white);border:3px solid var(--navy);border-radius:12px;padding:4px 10px 4px 4px;box-shadow:0 4px 0 var(--navy)}
 @media (max-width:520px){#musicBtn .ml{display:none}}
+/* slow devices: the same screens without the costly decorations */
+.lowfx .duck{filter:none;animation:none}.lowfx .rwater{animation:none}.lowfx .sway,.lowfx .hop{animation:none}
+.lowfx .duck .bird{filter:none}
 .whoami img{width:26px;height:26px;border-radius:7px;border:2px solid var(--navy)}
 h2{font-family:var(--display);font-weight:400;font-size:clamp(2rem,5vw,3.4rem);line-height:1.02;margin:0;text-wrap:balance;color:var(--white);-webkit-text-stroke:3px var(--navy);paint-order:stroke fill;text-shadow:0 6px 0 var(--navy)}
 h3{font-family:var(--display);font-weight:400;font-size:1.3rem;margin:0 0 10px}
@@ -666,7 +669,7 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <!-- the PADDLE button for phones in a duck race: outside the animated screens so it can stay pinned to the bottom -->
 <div class="padwrap" id="pPadWrap" hidden><button class="padbtn" id="pPad" type="button" hidden><span class="padbig">Get ready…</span><span class="padsub"></span></button></div>
-<script src="config.js?v=20261119a"></script>
-<script src="app.js?v=20261119a"></script>
+<script src="config.js?v=20261119b"></script>
+<script src="app.js?v=20261119b"></script>
 </body>
 </html>

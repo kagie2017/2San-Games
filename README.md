@@ -44,6 +44,10 @@ Paddles go to the database through `player_paddle` (at most 20 a second count, c
 
 During question rounds the big screen shows a blocky 3D world in 2San colors: the question sits on a giant TV, every player's character walks around, and at the reveal each character runs to the pad of the answer they picked (right pad lights up, right players dance). Phones show the same world in a panel above the answer buttons, following your own character. It uses three.js from jsDelivr (`world.js`); devices without WebGL, and host screens narrower than 760px, keep the normal screens.
 
+## Slow devices
+
+Tablets and budget phones are detected (4 GB of memory or less, 4 cores or less, or an Android tablet) and start the 3D world without anti-aliasing at a lower resolution. While the 3D world runs, the frame rate is checked every 2 seconds. Below about 42 frames a second the resolution steps down (1×, 0.8×, 0.65×) and fewer characters are drawn. If even the lowest step stays below about 24, the device switches to the plain screens for the rest of the visit and shows a short note. If the plain screens also run slowly, costly decorations (duck shadows, rippling water, idle bobbing) turn off. The game itself never changes.
+
 ## Music
 
 Original 8-bit background music, played live in the browser with Web Audio (no music files, nothing to license). There are four tunes: Lobby (while waiting), Questions, Duck Race, and Scores (leaderboard, final results and podium). The tune follows the game screen and fades between tracks. The big screen plays music by default. Phones start with music off so a room full of phones does not clash. The 🎵 button in the top bar turns music on or off on that device and remembers the choice. Music pauses while the tab is hidden. Sound effects play on top of the music.

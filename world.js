@@ -101,10 +101,28 @@
   /* ---------- world state ---------- */
   const S = { slot: new Map(), padNext: [], roundKey: '', ok: false, mode: null, box: null, cv: null, ren: null, scene: null, cam: null, chars: new Map(), loop: 0, last: 0, area: null, pads: [], padGroup: null, tv: null, round: null, revealKey: '', visible: false, me: null, camT: new T.Vector3(), lastLayout: '' };
 
+  /* ---------- speed: tablets and budget phones ----------
+     Weak devices start without anti-aliasing at a lower resolution. While the world runs, the frame rate is checked
+     every 2 seconds: below about 42 frames a second the resolution steps down (and fewer characters are drawn);
+     if even the lowest step stays below about 24, World.onSlow() is called and the game switches to the plain view. */
+  let PERF_OFF = false; try { PERF_OFF = localStorage.getItem('2san-perf') === 'off'; } catch (e) {}
+  const NAV = navigator, WEAK = (NAV.deviceMemory && NAV.deviceMemory <= 4) || (NAV.hardwareConcurrency && NAV.hardwareConcurrency <= 4) || (/Android/i.test(NAV.userAgent) && Math.min(screen.width, screen.height) >= 600);
+  const QPR = [null, 1, .8, .65], QCHARS = [Infinity, Infinity, 24, 16];
+  const P = { q: WEAK && !PERF_OFF ? 1 : 0, n: 0, t0: 0, low: 0, since: 0 };
+  const pixelRatio = () => Math.min(devicePixelRatio || 1, P.q ? QPR[P.q] : (S.mode === 'host' ? 1.5 : 1.25));
+  function perf(now) {
+    if (PERF_OFF) return;
+    if (!P.t0 || now - P.since < 2500) { P.t0 = now; P.n = 0; if (!P.since) P.since = now; return; } // skip the first seconds (shaders warming up)
+    P.n++; const span = now - P.t0; if (span < 2000) return;
+    const fps = P.n * 1000 / span; P.t0 = now; P.n = 0;
+    if (fps < 42 && P.q < 3) { P.q++; P.low = 0; S.lastLayout = ''; P.since = now; S.cullT = 0; }
+    else if (fps < 24 && P.q === 3) { if (++P.low >= 2 && typeof window.World.onSlow === 'function') window.World.onSlow(fps); }
+    else P.low = 0;
+  }
   function init() {
     try {
       S.cv = document.createElement('canvas'); S.cv.className = 'worldcv'; S.cv.setAttribute('aria-hidden', 'true');
-      S.ren = new T.WebGLRenderer({ canvas: S.cv, antialias: true, powerPreference: 'high-performance' });
+      S.ren = new T.WebGLRenderer({ canvas: S.cv, antialias: !WEAK, powerPreference: 'high-performance' });
     } catch (e) { return false; }
     S.ren.outputColorSpace = T.SRGBColorSpace;
     const sc = S.scene = new T.Scene(); const sky = new T.Color('#A9C8FF'); sc.background = sky; sc.fog = new T.Fog(sky, 90, 260);
@@ -319,7 +337,7 @@
     const r = { left: er.left - br.left, top: er.top - br.top, width: er.width, height: er.height }; r.bottom = r.top + r.height;
     if (!r.width || !r.height) return false;
     key += ':' + [r.left, r.top, r.width, r.height].map(Math.round).join(','); if (key === S.lastLayout) return true; S.lastLayout = key; alignLayout(W, H, r);
-    S.ren.setPixelRatio(Math.min(devicePixelRatio || 1, S.mode === 'host' ? 1.5 : 1.25)); S.ren.setSize(W, H, false);
+    S.ren.setPixelRatio(pixelRatio()); S.ren.setSize(W, H, false);
     S.cam.aspect = W / H; S.cam.updateProjectionMatrix();
     if (S.round) { S.padKey = ''; round(S.round); }
     // a new card size moves the walking area: anyone now outside it (e.g. behind the card) hops back in
@@ -354,21 +372,23 @@
   function frame(now) {
     if (!S.visible) { S.loop = 0; return; }
     S.loop = requestAnimationFrame(frame);
-    if (document.hidden) return;
+    if (document.hidden) { P.since = 0; P.t0 = 0; return; }
     const dt = Math.min(.2, (now - (S.last || now)) / 1000); S.last = now; const t = now / 1000;
     try {
     if (!layout()) return;
     for (const c of S.chars.values()) step(c, dt, t);
     S.pads.forEach(p => { if (p.right && S.revealKey) { p.top.emissiveIntensity = CALM ? .25 : .18 + Math.sin(t * 5) * .14; p.slab.position.y = lerp(p.slab.position.y, .8, dt * 4); } });
-    if (S.mode === 'phone') {
-      const c = S.me, tx = c ? c.x : 0, tz = c ? c.z : 10;
-      // phones draw at most 24 characters: you and the nearest others
-      if (!S.cullT || now - S.cullT > 600) { S.cullT = now; const list = [...S.chars.values()].sort((a, b) => (b.me - a.me) || (Math.hypot(a.x - tx, a.z - tz) - Math.hypot(b.x - tx, b.z - tz))); list.forEach((c, i) => c.root.visible = i < 24); }
+    // Phones draw at most 24 characters (you and the nearest others); slow screens draw fewer.
+    const cap = Math.min(S.mode === 'phone' ? 24 : Infinity, QCHARS[P.q]);
+    if (cap < S.chars.size && (!S.cullT || now - S.cullT > 600)) {
+      S.cullT = now; const c = S.me, tx = c ? c.x : S.area ? S.area.cx : 0, tz = c ? c.z : 10;
+      const list = [...S.chars.values()].sort((a, b) => (b.me - a.me) || (Math.hypot(a.x - tx, a.z - tz) - Math.hypot(b.x - tx, b.z - tz))); list.forEach((c, i) => c.root.visible = i < cap);
     }
     S.ren.render(S.scene, S.cam);
+    perf(now);
     } catch (e) { console.error('3D world frame:', e); }
   }
-  function start() { if (!S.loop && S.visible) { S.last = 0; S.loop = requestAnimationFrame(frame); } }
+  function start() { if (!S.loop && S.visible) { S.last = 0; P.since = 0; P.t0 = 0; S.loop = requestAnimationFrame(frame); } }
 
   function show(mode, box, anchor) {
     if (!S.ok) return;
@@ -382,5 +402,5 @@
   }
   function hide() { S.visible = false; if (S.cv) S.cv.hidden = true; if (S.loop) cancelAnimationFrame(S.loop); S.loop = 0; }
 
-  window.World = { init, show, hide, sync, round, get ok() { return S.ok; }, _S: S, cssVar };
+  window.World = { init, show, hide, sync, round, get ok() { return S.ok; }, _S: S, cssVar, perf: P, weak: WEAK, onSlow: null };
 })();

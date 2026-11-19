@@ -1080,14 +1080,16 @@ function renderPlayerFinal(){
 }
 
 /* ================= 3D world (world.js + three.js, loaded the first time a round is shown) ================= */
-const BUILD='20261119a';
+const BUILD='20261119b';
 const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
 const W3={state:'idle',want:null};
 function hasWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}
 function loadScript(src){return new Promise((ok,bad)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{s.remove();bad(new Error('load'));};document.head.append(s);});}
 async function loadWorld(){
   if(W3.state!=='idle')return;W3.state='loading';
-  try{if(!hasWebGL())throw new Error('webgl');if(!window.THREE)await loadScript(THREE_URL);if(!window.World)await loadScript('world.js?v='+BUILD);W3.state=window.World&&World.init()?'ready':'failed';}
+  let slow=false;try{slow=sessionStorage.getItem('2san-3d')==='slow';}catch(e){}
+  if(slow){W3.state='failed';W3.want=null;return;}
+  try{if(!hasWebGL())throw new Error('webgl');if(!window.THREE)await loadScript(THREE_URL);if(!window.World)await loadScript('world.js?v='+BUILD);W3.state=window.World&&World.init()?'ready':'failed';if(W3.state==='ready')World.onSlow=worldSlow;}
   catch(e){W3.state='failed';}
   const w=W3.want;W3.want=null;if(W3.state==='ready'&&w)w();
 }
@@ -1124,6 +1126,15 @@ async function checkVersion(){try{const r=await fetch('version.json?x='+Date.now
 setInterval(checkVersion,90000);setTimeout(checkVersion,5000);
 $('updateBtn').onclick=()=>location.reload();
 /* A problem in the 3D world must never stop the game: switch it off and keep the normal screens. */
+/* The 3D world could not keep up on this device even at its lowest setting: use the plain screens for the rest of this visit. */
+function worldSlow(fps){try{sessionStorage.setItem('2san-3d','slow');}catch(e){}worldBroke('slow device ('+Math.round(fps)+' fps)');lowFx();status('Switched to the simple view so the game runs smoothly on this device.');}
+/* Light effects: if the page itself runs slowly (under about 40 frames a second twice in a row), drop the costly
+   decorations (shadows on ducks, rippling water, idle bobbing). The game itself does not change. */
+function lowFx(){document.documentElement.classList.add('lowfx');}
+(()=>{let n=0,t0=0,bad=0,on=true;try{if(sessionStorage.getItem('2san-3d')==='slow')lowFx();}catch(e){}
+  const f=now=>{if(!on)return;if(document.hidden||!t0){t0=now;n=0;requestAnimationFrame(f);return;}n++;
+    if(now-t0>=3000){const fps=n*1000/(now-t0);t0=now;n=0;if(fps<40){if(++bad>=2){lowFx();on=false;return;}}else bad=0;}requestAnimationFrame(f);};
+  document.addEventListener('visibilitychange',()=>{t0=0;});requestAnimationFrame(f);})();
 function worldBroke(e){try{console.error('3D world switched off:',e);}catch(x){}try{worldOff();}catch(x){}W3.state='failed';}
 function worldOff(){document.body.classList.remove('world-host','world-phone','world-wait');const wt=$('pWaitTv');if(wt)wt.hidden=true;const p=$('pWorld');if(p)p.hidden=true;const c=$('pCard');if(c&&c.parentElement!==$('pQ'))$('pQ').insertBefore(c,$('pOpts'));if(window.World)try{World.hide();}catch(e){}}
 addEventListener('resize',()=>{if(view==='host'&&hostSub==='hQ'&&STATE&&STATE.phase!=='lobby')worldHost();});
