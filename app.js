@@ -302,9 +302,76 @@ const WHO=[
  {c:['I am a partner, not a product.','I am a project of the nonprofit GreenBlue.','My labels follow the rules in the US and Canada.','I show people how to recycle packaging.'],o:['How2Recycle','ISO 14001','No Ordinary','BSI']},
  {c:['I am in the United Kingdom.','I gave 2San its first nationwide listing.','2San started with 8 self-tests with me in February 2023.','I am one of the UK\'s largest pharmacy companies.'],o:['LloydsPharmacy','Boots','Amazon','Chemist Warehouse']}];
 /* Pixel Reveal: [name, emoji, card color]. */
-const PIXEL=[['Safe Sip+','🥤','#7E43CA'],['SwimCount','🏊','#0084DB'],['Home Water Test','🚰','#19B5C9'],['Hydration Test','💧','#1DD6A5'],['Breath Alcohol Test','🍺','#FF9A3D'],
- ['UTI Test','🚻','#FB7569'],['3 in 1 Covid & Flu Test','🤧','#5A6FD6'],['Ovulation Test','📅','#FF7AB6'],['Pregnancy Test','🤰','#FF9A3D'],['Digital Thermometer','🌡️','#FB7569'],
- ['Colorectal Health Test','🩺','#8FD14F'],['16 Panel Drug Test','🧪','#7E43CA'],['No Ordinary Gloves','🧤','#1D1D4F'],['Strep A Test','🦠','#1DD6A5'],['Stomach Ulcer Test','🫃','#5A6FD6']];
+/* Pixel Reveal: real 2San product photos (img/products/pNN.webp, numbered so the file name gives nothing away).
+   [answer shown at the reveal, other names we accept in full]. Players type the name; see nameScore(). */
+const PIXEL=[
+ ['THC Home Drug Test',['THC Drug Test','THC Test','THC Home Test','Marijuana Drug Test','Marijuana Test','Marijuana','THC Drug Cup']],
+ ['4 Panel Home Drug Test',['4 Panel Drug Test','4 Panel Test','Four Panel Drug Test','4 Panel Drug Cup']],
+ ['UTI Test',['UTI','Urinary Tract Infection Test','Urinary Tract Infection','UTI Test Strip','UTI Strip']],
+ ['Colorectal Health Test',['Colorectal Test','Colorectal Health','Colorectal']],
+ ['Safe Sip+',['Safe Sip','Safe Sip Plus','SafeSip','Safe Sip Drink Test','Drink Test Sticker','Safe Sip Sticker']],
+ ['UTI Test',['UTI','Urinary Tract Infection Test','Urinary Tract Infection','UTI Test Strip','UTI Strip']],
+ ['1 Panel Home Drug Test Cup',['Home Drug Test Cup','Drug Test Cup','1 Panel Drug Test Cup','1 Panel Drug Test','One Panel Drug Test Cup','1 Panel Home Drug Test']],
+ ['8 Panel Home Drug Test',['8 Panel Drug Test','8 Panel Test','Eight Panel Drug Test','8 Panel Drug Cup']],
+ ['COVID-19 Rapid Self-Test',['COVID-19 Self-Test','COVID-19 Rapid Test','COVID-19 Test','COVID Test','COVID Self Test','COVID Rapid Test','COVID Rapid Self Test']],
+ ['8 Panel Saliva Drug Test',['8 Panel Saliva Test','8 Panel Saliva Home Drug Test','Eight Panel Saliva Drug Test']],
+ ['Breath Alcohol Test',['Alcohol Test','Breath Test','Breathalyzer','Breath Alcohol','Alcohol Breath Test']],
+ ['10 Panel Dipcard Home Drug Test',['10 Panel Dipcard','10 Panel Dipcard Drug Test','10 Panel Dip Card','10 Panel Dipcard Test','Ten Panel Dipcard']],
+ ['Hydration Test',['Hydration','Dehydration Test']],
+ ['THC Saliva Home Drug Test',['THC Saliva Test','THC Saliva Drug Test','Saliva THC Test','THC Saliva']],
+ ['Ovulation & Pregnancy Value Pack',['Ovulation and Early Result Pregnancy Value Pack','Ovulation Pregnancy Value Pack','Ovulation & Early Result Pregnancy','Ovulation & Pregnancy Pack','Ovulation Value Pack']],
+ ['Early Result Pregnancy Test',['Early Result Pregnancy Test Strip','Early Result Pregnancy Strip','Early Result Pregnancy','Early Pregnancy Test']],
+ ['Digital Pregnancy Test',['Digital Pregnancy']],
+ ['Infrared Forehead Thermometer',['Forehead Thermometer','Infrared Thermometer','IR Thermometer','Infrared Forehead']],
+ ['Ovulation Rapid Test Strip',['Ovulation Test','Ovulation Strip','Ovulation Test Strip','Ovulation Rapid Test','Ovulation Rapid Strip']],
+ ['5 in 1 Self-Test',['5 in 1 Test','5 in 1','Five in One Test','5 in 1 Self Test','5 in 1 Covid Flu RSV Test']],
+ ['16 Panel Home Drug Test',['16 Panel Drug Test','16 Panel Test','16 Panel Drug Cup','Sixteen Panel Drug Test']],
+ ['8 Panel Saliva Drug Test',['8 Panel Saliva Test','8 Panel Saliva Home Drug Test','Eight Panel Saliva Drug Test']],
+ ['Pregnancy Value Pack',['Pregnancy Pack','Pregnancy Value']],
+ ['SwimCount',['Swim Count','SwimCount Sperm Test','SwimCount Sperm Quality Test','Sperm Quality Test','Sperm Test']],
+ ['THC Dipcard Home Drug Test',['THC Dipcard','THC Dipcard Drug Test','THC Dip Card','THC Dipcard Test']],
+ ['UTI & Vaginal pH Test',['UTI & Vaginal pH Rapid Test','UTI Vaginal pH Test','UTI & pH Test','UTI & Vaginal pH','Urinary Tract Infection & Vaginal pH Test']],
+ ['HCG Pregnancy Test',['HCG Pregnancy Rapid Test','HCG Test','HCG Pregnancy','HCG Rapid Test']],
+ ['6 Panel Dipcard Home Drug Test',['6 Panel Dipcard','6 Panel Dipcard Drug Test','6 Panel Dip Card','6 Panel Dipcard Test','Six Panel Dipcard']],
+ ['Fentanyl Home Drug Test',['Fentanyl','Fentanyl Test','Fentanyl Drug Test','Fentanyl Home Test']],
+ ['Multi-Mode Infrared Thermometer',['Multi-Mode Digital Infrared Thermometer','Multi-Mode Thermometer','Multi-Mode Digital Thermometer','Multimode Thermometer']],
+ ['COVID-19 Antigen Test Kit',['COVID-19 Antigen Test','COVID Antigen Test','COVID Antigen','SARS-CoV-2 Antigen Test','COVID-19 SARS-CoV-2 Test']],
+ ['Infrared Ear & Forehead Thermometer',['Ear & Forehead Thermometer','Ear Forehead Thermometer','Infrared Ear Thermometer','Ear Thermometer','6 in 1 Thermometer']],
+ ['Infrared Forehead Thermometer',['Forehead Thermometer','Infrared Thermometer','IR Thermometer','Infrared Forehead']],
+ ['3 in 1 COVID-19 + Flu Test',['3 in 1 COVID-19 + Flu A&B','3 in 1 Covid Flu Test','3 in 1 Covid & Flu Test','3 in 1 Test','3 in 1','3 in 1 Covid']],
+ ['Family Planning Value Pack',['Family Planning Pack','Family Planning']],
+ ['Home Water Test',['Water Test','Home Water']],
+ ['COVID-19, Flu A/B & RSV Pen Test',['COVID-19, Influenza A/B & RSV Pen Test','Covid Flu RSV Pen Test','Covid Flu & RSV Pen Test','Covid Influenza RSV Pen Test','Covid Flu RSV Test']],
+ ['Digital Thermometer',[]],
+ ['COC Home Drug Test',['COC','Cocaine','COC Drug Test','COC Test','Cocaine Drug Test','Cocaine Test','COC Drug Cup']],
+ ['UTI Test',['UTI','Urinary Tract Infection Test','Urinary Tract Infection','UTI Test Strip','UTI Strip']],
+ ['SARS-CoV-2 & Flu A+B Combo Test',['SARS-CoV-2 & Influenza A+B Antigen Combo Test','SARS-CoV-2 & Influenza Combo Test','Covid & Flu Combo Test','Covid Flu Combo Test','Antigen Combo Test','Flu Combo Test']],
+ ['Easy Pen Test',['Easy Pen','Easy Pen Covid Test','Easy Pen Test Covid-19','Easy Pen Covid-19']],
+ ['COVID-19, Flu A/B, RSV & ADV Pen Test',['COVID-19, Influenza A/B, RSV & ADV Pen Test','Covid Flu RSV ADV Pen Test','Covid Flu RSV & ADV Pen Test','Covid Flu RSV ADV Test','RSV & ADV Pen Test']]];
+const pixVerdict=f=>f>=1?'Correct!':f>=.75?'Close! Small typo: 75% of the points':f>=.5?'Almost! Part of the name: 50% of the points':'Not this time';
+const PIX_IMG=i=>'img/products/p'+String(i).padStart(2,'0')+'.webp';
+/* Typed product names: exact (or a name we accept) = 100%, a small typo = 75%, part of the name = 50%, anything else = 0.
+   Part of the name: every word typed (other than general words like "test" or "home", and at least one real word) is in
+   the name. A typo only counts if the guess is not closer to another product's name. */
+const PIX_GENERIC=new Set(['test','tests','home','drug','rapid','kit','self','selftest','strip','pack','value','panel','in','and','plus','the','a','an','of','2san','cup','for']);
+const nkey=s=>norm(String(s||'').replace(/&/g,' and ').replace(/\+/g,' plus '));
+const ntoks=s=>String(s||'').toLowerCase().replace(/&/g,' and ').replace(/\+/g,' plus ').split(/[^a-z0-9]+/).filter(Boolean);
+function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
+const typoOk=L=>L<4?0:L<8?1:Math.min(4,Math.floor(L/6));
+function nameScore(text,i){
+  const it=PIXEL[i];if(!it)return 0;const g=nkey(text);if(!g)return 0;const names=[it[0],...it[1]],mine=names.map(nkey);
+  if(mine.includes(g))return 1;
+  const best=list=>Math.min(...list.map(n=>lev(g,n)));
+  const others=PIXEL.filter(x=>x[0]!==it[0]).flatMap(x=>[x[0],...x[1]].map(nkey));
+  const want=ntoks(it[0]),pool=new Set(want);for(let k=0;k<want.length;k++){pool.add(want.slice(k,k+2).join(''));pool.add(want.slice(k,k+3).join(''));}
+  const typed=ntoks(text).filter(t=>!['the','a','an','2san'].includes(t)),core=typed.filter(t=>!PIX_GENERIC.has(t));if(!core.length)return 0;
+  if(core.every(t=>pool.has(t)))return .5; // every word is in the name, just not all of it: part of the name
+  const d0=best(mine),d1=best(others);
+  if(d0<=typoOk(Math.max(g.length,mine[mine.map(n=>lev(g,n)).indexOf(d0)].length))&&d0<d1)return .75;
+  const has=t=>pool.has(t)||(t.length>=5&&[...pool].some(p=>p.length>=5&&lev(t,p)<=1));
+  if(core.every(has))return .5; // part of the name, with a small slip in a long word
+  return 0;}
 /* Majority Wins: no right answer, the most picked wins. Four options are drawn from each list. */
 const MAJ=[
  {q:'Which 2San value means the most to you?',o:['Excellence','Integrity','Agility','Rigor','Fearlessness']},
@@ -403,8 +470,8 @@ const GAMES={
    make:it=>choiceQ('What do these emojis mean?','Emoji Riddle',it.o[0],it.o.slice(1),{display:{kind:'big',text:it.e,emoji:true}})},
  typerace:{grp:'words',name:'Type Race',icon:'⌨️',bg:'var(--blue)',desc:'A 2San line appears. Type it as fast as you can. Capitals and punctuation do not matter.',secs:30,count:8,pool:TYPE,
    make:w=>({q:{type:'text',typing:true,text:'Type this 2San line as fast as you can!',cat:'Type Race',display:{kind:'type',text:w}},key:{accept:[w],answer:w}})},
- pixel:{grp:'words',name:'Pixel Reveal',icon:'🟪',bg:'var(--coral)',desc:'A 2San product slowly comes into focus. Guess it early for more points.',secs:20,count:8,pool:PIXEL,
-   make:it=>{const r=choiceQ('Which 2San product is this?','Pixel Reveal',it[0],shuffle(PIXEL.filter(x=>x!==it)).slice(0,3).map(x=>x[0]),{display:{kind:'pixel',icon:it[1],label:it[0],color:it[2]}});r.key.pixel=true;return r;}},
+ pixel:{grp:'words',name:'Pixel Reveal',icon:'🟪',bg:'var(--coral)',desc:'A real 2San product photo slowly comes into focus. Type its name: the earlier you lock it in, the more points. Small typos and part of the name still score.',secs:25,count:8,pool:PIXEL,
+   make:it=>{const n=PIXEL.indexOf(it);return {q:{type:'text',text:'Which 2San product is this? Type its name.',cat:'Pixel Reveal',display:{kind:'pixel',img:PIX_IMG(n)}},key:{accept:[it[0],...it[1]],answer:it[0],pixel:true,pix:n}};}},
  draw:{grp:'words',name:'Draw It',icon:'✏️',bg:'var(--sun)',desc:'One player draws a 2San thing on their phone. Everyone else types their guess. Fast guessers and good drawers score.',secs:60,count:5,gen:true,make:()=>drawRound()},
  lines:{grp:'speed',name:'Two Lines!',icon:'⚡',bg:'var(--coral)',desc:'Watch the test strip. Tap the moment the second line shows. Tap too soon and you miss the round.',secs:12,count:8,gen:true,make:()=>linesRound()},
  stroop:{grp:'speed',name:'Color Clash',icon:'🎨',bg:'var(--purple)',desc:'2San brand colors. Tap the COLOR of the word, not what it says.',secs:10,count:10,gen:true,
@@ -877,6 +944,7 @@ function demoAnswer(a){
   else if(!a)msg="Time's up!";
   else if(key.majority){good=true;msg='Nice pick! In a real game you score when most players pick the same.';}
   else if(q.type==='react'){good=a.value>=REACT_MIN;msg=good?`${(a.value/1000).toFixed(3)} s reaction! The fastest player scores 1000.`:'Too soon! Wait for the second line.';}
+  else if(key.pixel&&key.pix!=null){const f=nameScore(a.text,key.pix),pts=Math.round((1000-600*Math.min(1,ms/(dur*.75)))*f);good=f>0;msg=good?`${pixVerdict(f)} Locked in at ${secs}s: that scores ${pts} points.`:'Not this time.';}
   else if(q.type==='number'&&key.closest){const err=Math.abs(a.value-key.value),pts=err===0?1000:Math.max(0,Math.round(800*(1-err/Math.max(Math.abs(key.value),1))));good=pts>=600;msg=err===0?'Exactly right!':`You were ${err} away. That would score ${pts} points.`;}
   else{good=q.type==='choice'||q.type==='spot'?a.choice===key.correct:q.type==='text'?(key.accept||[]).map(norm).includes(norm(a.text)):q.type==='order'?a.text===key.order:q.type==='number'?a.value===key.value:a.value>0;
     msg=q.type==='slide'?`Solved in ${a.value} moves and ${secs}s!`:!good?(DM.id==='last'?'Wrong! In a real game you would be out.':'Not this time.')
@@ -942,7 +1010,7 @@ function newDisplay(box,q,start,forHost=true){
   if(d.kind==='hilo'){const w=el('div','hilo'),a=el('div','hcard a'),b=el('div','hcard b');
     a.append(el('small',null,d.a[0]),el('b',null,String(d.a[1])));b.append(el('small',null,d.b),el('b','qv','?'));w.append(a,el('span','vs','VS'),b);box.append(w);return true;}
   if(d.kind==='clues'){const ol=el('ol','clues');d.clues.forEach((c,i)=>{const li=el('li',null,c);li.style.setProperty('--n',i+1);ol.append(li);later(box,i*(d.every||6000)-since(),()=>li.classList.add('on'));});box.append(ol);return true;}
-  if(d.kind==='pixel'){const w=el('div','pixwrap'),cv=document.createElement('canvas');cv.width=480;cv.height=300;cv.setAttribute('role','img');cv.setAttribute('aria-label','A blurry 2San product picture');w.append(cv);box.append(w);pixelate(box,cv,d,t0);return true;}
+  if(d.kind==='pixel'){const w=el('div','pixwrap'),cv=document.createElement('canvas');cv.width=640;cv.height=400;cv.setAttribute('role','img');cv.setAttribute('aria-label','A blurry 2San product picture');w.append(cv);box.append(w);pixelate(box,cv,d,t0);return true;}
   if(q.type==='spot'){const w=el('div','spot'+(forHost?'':' one'));(forHost?[['A',q.grid.a],['B',q.grid.b]]:[['A',q.grid.a]]).forEach(([n,g])=>{const s=el('div','sgrid');s.append(el('b','sname',n));const cells=el('div','scells');g.forEach(e=>cells.append(el('span',null,e)));s.append(cells);w.append(s);});box.append(w);return true;}
   if(q.type==='order'){if(!forHost)return true;const ol=el('div','olist');q.items.forEach((t,i)=>{const c=el('div','ocard');c.append(el('b','olet',String.fromCharCode(65+i)),el('span',null,t));ol.append(c);});stagger(ol);box.append(ol);return true;}
   if(q.type==='draw'){drawView(box,q);return true;}
@@ -961,19 +1029,23 @@ function revealDisplay(box,q,s){
     [...s.reveal.order].forEach((k,n)=>{const c=cards[+k];if(!c)return;c.querySelector('.olet').textContent=n+1;c.style.setProperty('--i',n);ol.append(c);});}}
 }
 /* Pixel Reveal: the picture is drawn in big blocks that get smaller until it is clear (at d.ms into the round). */
+const PIXIMG=new Map();
+function pixImage(url){if(!PIXIMG.has(url)){const im=new Image();im.decoding='async';PIXIMG.set(url,new Promise(ok=>{im.onload=()=>ok(im);im.onerror=()=>ok(null);}));im.src=url;}return PIXIMG.get(url);}
 function pixelate(box,cv,d,t0){
   const run=box._run,src=document.createElement('canvas'),W=cv.width,Hh=cv.height;src.width=W;src.height=Hh;const g=src.getContext('2d'),ctx=cv.getContext('2d'),tiny=document.createElement('canvas'),tg=tiny.getContext('2d');
-  g.fillStyle=d.color;g.beginPath();if(g.roundRect)g.roundRect(0,0,W,Hh,26);else g.rect(0,0,W,Hh);g.fill();
-  g.fillStyle='rgba(255,255,255,.18)';g.beginPath();g.arc(W*.78,Hh*.2,90,0,7);g.fill();g.beginPath();g.arc(W*.12,Hh*.9,70,0,7);g.fill();
-  g.textAlign='center';g.textBaseline='middle';g.font='120px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';g.fillText(d.icon,W/2,Hh*.42);
-  g.font='700 34px Lexend,"Segoe UI",sans-serif';g.fillStyle='#fff';g.strokeStyle='#1D1D4F';g.lineWidth=6;g.lineJoin='round';g.strokeText(d.label,W/2,Hh*.84);g.fillText(d.label,W/2,Hh*.84);
+  const ground=()=>{g.clearRect(0,0,W,Hh);const gr=g.createLinearGradient(0,0,0,Hh);gr.addColorStop(0,'#FFFFFF');gr.addColorStop(1,'#DCE8FF');g.fillStyle=gr;g.fillRect(0,0,W,Hh);};
+  ground();ctx.drawImage(src,0,0);
   let last=-1;
   const step=()=>{if(box._run!==run||!cv.isConnected)return;const p=box._pixDone?1:Math.min(1,(performance.now()-t0)/(d.ms||15000));
-    const blk=p>=1?1:Math.max(2,Math.round(60*Math.pow(1-p,1.7)));
+    const blk=p>=1?1:Math.max(2,Math.round(48*Math.pow(1-p,1.6)));
     if(blk!==last){last=blk;if(blk<=1){ctx.imageSmoothingEnabled=true;ctx.clearRect(0,0,W,Hh);ctx.drawImage(src,0,0);}
       else{const w=Math.max(1,Math.ceil(W/blk)),h=Math.max(1,Math.ceil(Hh/blk));tiny.width=w;tiny.height=h;tg.imageSmoothingEnabled=true;tg.drawImage(src,0,0,w,h);ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,W,Hh);ctx.drawImage(tiny,0,0,w,h,0,0,W,Hh);}}
     if(blk>1)requestAnimationFrame(step);};
-  step();
+  // the photo loads once; every screen keeps time from the round start, so all screens show the same blur level
+  pixImage(d.img).then(im=>{if(box._run!==run)return;ground();
+    if(im){const sc=Math.min(W*.92/im.width,Hh*.94/im.height),w=im.width*sc,h=im.height*sc;g.drawImage(im,(W-w)/2,(Hh-h)/2,w,h);}
+    else{g.fillStyle='#1D1D4F';g.font='700 28px Lexend,sans-serif';g.textAlign='center';g.fillText('Picture did not load',W/2,Hh/2);}
+    last=-1;step();});
 }
 
 /* ---------- Draw It: the drawing ---------- */
@@ -1249,7 +1321,7 @@ async function reveal(){
   if(key.majority){const tops=q.options.map((_,i)=>i).filter(i=>top>0&&counts[i]===top);shown.correct=tops.length?tops[0]:-1;shown.reveal={tops};
     shown.answer=top?`${tops.map(i=>q.options[i]).join(' & ')} (${top} ${top===1?'vote':'votes'})`:'Nobody voted this time';}
   if(SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx){try{await setState(shown);}catch(e){H.revealing=false;}return;} // already scored
-  const dur=s.dur*1000,scores={...((SCORES&&SCORES.session===s.session&&SCORES.scores)||{})},last={},ok={};
+  const dur=s.dur*1000,scores={...((SCORES&&SCORES.session===s.session&&SCORES.scores)||{})},last={},ok={},lvl={};
   let closest=[],right=0;
   const add=(id,pts,good)=>{last[id]=(last[id]||0)+pts;ok[id]=good;scores[id]=(scores[id]||0)+pts;};
   const msOf=a=>Math.min(dur,Math.max(0,a.ms!=null?a.ms:dur));
@@ -1270,11 +1342,13 @@ async function reveal(){
     ans.forEach(({id,a})=>{const c=counts[a.choice]||0;add(id,top?Math.round(1000*c/top):0,top>0&&c===top);});right=top;
   }else{
     const accept=(key.accept||[]).map(norm);
-    const isRight=a=>isChoice||q.type==='spot'?a.choice===key.correct:q.type==='text'||q.type==='draw'?accept.includes(norm(a.text)):q.type==='number'?a.value===key.value:q.type==='slide'?a.value>0:q.type==='order'?String(a.text||'')===key.order:false;
+    // Pixel Reveal: typed names score in full, 75% with a small typo, 50% for part of the name.
+    const pixLv=a=>{const v=nameScore(a.text,key.pix);return v;};
+    const isRight=a=>key.pixel&&key.pix!=null?pixLv(a)>0:isChoice||q.type==='spot'?a.choice===key.correct:q.type==='text'||q.type==='draw'?accept.includes(norm(a.text)):q.type==='number'?a.value===key.value:q.type==='slide'?a.value>0:q.type==='order'?String(a.text||'')===key.order:false;
     // Who Am I?: 1000 on the first clue, then 800, 600, 400. Pixel Reveal: 1000 at the start down to 400 once the picture is clear.
     const ptsFor=a=>s.game==='last'?100:key.who?[1000,800,600,400][Math.min(3,Math.floor(msOf(a)/(dur*.2)))]:key.pixel?Math.round(1000-600*Math.min(1,msOf(a)/(dur*.75))):speed(a);
     const winners=[];
-    ans.forEach(({id,a})=>{const good=isRight(a);add(id,good?ptsFor(a):0,good);if(good){right++;winners.push({id,ms:a.ms});}});
+    ans.forEach(({id,a})=>{const good=isRight(a),f=key.pixel&&key.pix!=null?pixLv(a):1;if(key.pixel&&key.pix!=null)lvl[id]=f;add(id,good?Math.round(ptsFor(a)*f):0,good);if(good){right++;winners.push({id,ms:a.ms});}});
     if(!isChoice)closest=winners.sort((x,y)=>(x.ms??1e9)-(y.ms??1e9)).slice(0,5).map((w,i)=>({id:w.id,v:((w.ms||0)/1000).toFixed(1)+'s',p:i+1}));
     // Draw It: the drawer scores up to 1000, by the share of players who guessed.
     if(q.type==='draw'&&key.drawer&&PLAYERS[key.drawer]){const n=elig.size,pts=n?Math.round(1000*right/n):0;add(key.drawer,pts,right>0);shown.drawerPts=pts;}
@@ -1285,7 +1359,7 @@ async function reveal(){
     alive.forEach(id=>{if(last[id]==null){last[id]=0;ok[id]=false;}});
     if(left.length===1&&alive.length>1){add(left[0],500,true);shown.answer+=` · ${playerName(left[0])} is the last one standing!`;}
     shown.alive=left;shown.out=out;}
-  try{await setScores({session:s.session,scores,last,ok,idx:s.idx});
+  try{await setScores(key.pixel?{session:s.session,scores,last,ok,lvl,idx:s.idx}:{session:s.session,scores,last,ok,idx:s.idx});
     await setState(isChoice&&q.type!=='draw'?{...shown,right}:{...shown,closest,right});beep(1040,.12);}
   catch(e){H.revealing=false;}
 }
@@ -1668,7 +1742,8 @@ function renderPlayerReveal(){
     :q.type==='react'?(ok?`${(mineA&&mineA.value/1000||0).toFixed(3)} s reaction!`:'Too soon!')
     :key_(q,s)==='maj'?(ok?'You picked with the crowd! 🎉':'The crowd picked something else')
     :s.game==='last'?(ok?'Still standing! 💪':'Not this time')
-    :closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!':ok?'Correct!':'Not this time';
+    :closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!'
+    :sc.lvl&&sc.lvl[uid]!=null?pixVerdict(sc.lvl[uid]):ok?'Correct!':'Not this time';
   $('pAnswer').textContent=duck?`${playerName(s.race.order[0])} won ${s.race.name}`:s.answer||'';
   const rows=ranking(),r=rows.find(x=>x.id===uid),total=r?r.score:0;$('pRank').textContent=r?`${r.place} / ${rows.length}`:'–';
   const rk=s.session+':'+s.idx;
@@ -1689,7 +1764,7 @@ function renderPlayerFinal(){
 }
 
 /* ================= 3D world (world.js + three.js, loaded the first time a round is shown) ================= */
-const BUILD='20261126a';
+const BUILD='20261126b';
 const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
 const W3={state:'idle',want:null};
 function hasWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}

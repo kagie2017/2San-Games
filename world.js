@@ -333,7 +333,9 @@
     let key = W + 'x' + H;
     // The HTML question card (host: #hTv, phone: #pCard) is the TV screen; the 3D TV is placed exactly behind it.
     const el = S.anchor; if (!el || !el.isConnected) return false;
-    const er = el.getBoundingClientRect(), br = S.box === document.body ? { left: 0, top: 0 } : S.box.getBoundingClientRect();
+    const er = el.getBoundingClientRect(), bb = S.box === document.body ? null : S.box.getBoundingClientRect();
+    // the canvas fills the box inside its border, so measure from there (not from the outer edge of the border)
+    const br = bb ? { left: bb.left + S.box.clientLeft, top: bb.top + S.box.clientTop } : { left: 0, top: 0 };
     const r = { left: er.left - br.left, top: er.top - br.top, width: er.width, height: er.height }; r.bottom = r.top + r.height;
     if (!r.width || !r.height) return false;
     key += ':' + [r.left, r.top, r.width, r.height].map(Math.round).join(','); if (key === S.lastLayout) return true; S.lastLayout = key; alignLayout(W, H, r);

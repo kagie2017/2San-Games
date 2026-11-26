@@ -36,7 +36,7 @@ Every game uses 2San content from [2san.com](https://2san.com): products, values
 | Who Am I? | 4 choices | Clues about a 2San product, value or person appear one by one; 1000 on clue 1, 800, 600, 400 after |
 | Higher or Lower | 2 choices | Two 2San numbers of the same kind: is the second higher or lower? |
 | Type Race | type the line | Type a 2San line as fast as you can (capitals and punctuation do not matter) |
-| Pixel Reveal | 4 choices | A 2San product comes into focus; earlier guesses score more (1000 down to 400) |
+| Pixel Reveal | type the name | A real 2San product photo comes into focus. Earlier = more points (1000 down to 400). Exact name 100%, small typo 75%, part of the name 50% |
 | Draw It | draw / type a word | One player draws a 2San thing on their phone (only they see the word); others type guesses. The drawer scores by how many guessed |
 | Two Lines! | tap the pad | Watch a 2San test strip; tap when the second line shows. Fastest 1000, slower less, too soon 0 |
 | Spot the Difference | tap a box | Grid A on every screen, grid B on the big screen; tap the box in B that changed |
