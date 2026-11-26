@@ -31,7 +31,35 @@ const QUIZ=[
  {c:'Sustainability',q:'How did 2San save packaging in its Covid-19 kits?',o:['The outer carton holds the test tube','The box is made of glass','The kit has no instructions','The kit ships without a box']},
  {c:'Sustainability',q:'What did 2San decide for 2026 to cut emissions?',o:['Join fewer events, so less travel','Only travel by train','Close every office','Stop all deliveries']},
  {c:'Sustainability',q:'What are "vampire" electronics?',o:['Devices drawing power on standby','Gadgets used only at night','Broken devices','Devices with red lights']},
- {c:'Sustainability',q:'Which is NOT one of 2San\'s green office habits?',o:['Free fuel for every car','Reusable cups','Hybrid work','Recycling']}
+ {c:'Sustainability',q:'Which is NOT one of 2San\'s green office habits?',o:['Free fuel for every car','Reusable cups','Hybrid work','Recycling']},
+ {c:'2San team',q:'Who is 2San\'s Founder & Global Director?',o:['Dean Hales','Dan Calder','Ralph Webb','Ryan Bowie']},
+ {c:'2San team',q:'Which job does Chelsea Tooze hold at 2San?',o:['Global Quality & Regulatory Director','Global Sales Director','Global Finance Director','In-House Legal']},
+ {c:'2San team',q:'Who is 2San\'s Chair & Non-Executive Advisor?',o:['Prof. Neil H. Ashworth','Dean Hales','Brooke Kemper','Rob Horowitz']},
+ {c:'2San team',q:'Prof. Neil Ashworth led which programme?',o:['The UK National Covid-19 Testing programme','The NHS app launch','The London Olympics','A NASA mission']},
+ {c:'2San team',q:'Who are 2San\'s two Co-Managing Directors?',o:['Dan Calder and Ralph Webb','Dean Hales and Simon Whiley','Ryan Bowie and Rob Horowitz','Ben Stevens and Brooke Kemper']},
+ {c:'2San team',q:'Who is 2San\'s Global Product Director?',o:['Ryan Bowie','Harry Edwards','Rob Horowitz','Elena Khalatian']},
+ {c:'2San team',q:'Harry Edwards is Global Supply Chain and… Director',o:['Innovations','Marketing','Finance','Legal']},
+ {c:'2San team',q:'Who is 2San\'s Global Sales Director?',o:['Brooke Kemper','Chelsea Tooze','Elena Khalatian','Ryan Bowie']},
+ {c:'Quality',q:'Which ISO certificate did 2San win in June 2023?',o:['ISO 9001','ISO 14001','ISO 27001','ISO 50001']},
+ {c:'Quality',q:'ISO 13485 is a quality standard for which industry?',o:['Medical devices','Food','Cars','Banking']},
+ {c:'Quality',q:'Which body audited 2San for ISO 9001?',o:['BSI','NASA','FIFA','UEFA']},
+ {c:'Quality',q:'What extra quality step does 2San take when products arrive?',o:['It batch-tests them','It repaints them','It sends them back','It freezes them']},
+ {c:'Products',q:'Which three drugs does Safe Sip+ look for?',o:['GHB, Ketamine and Rohypnol','Caffeine, sugar and salt','Alcohol, nicotine and THC','Aspirin, ibuprofen and paracetamol']},
+ {c:'Products',q:'About how long does a Safe Sip+ result take?',o:['3 minutes','30 seconds','1 hour','1 day']},
+ {c:'Products',q:'How many drops of drink does a Safe Sip+ test need?',o:['1','5','10','A full cup']},
+ {c:'Products',q:'About how long does SwimCount take to give a result?',o:['30 minutes','3 minutes','3 hours','3 days']},
+ {c:'Products',q:'SwimCount\'s clinically proven accuracy is…',o:['91.88%','51.5%','75%','100%']},
+ {c:'Products',q:'How many common contaminants does the Home Water Test screen for?',o:['8','2','20','100']},
+ {c:'Products',q:'Which of these does the Home Water Test check for?',o:['Lead','Gold','Sugar','Caffeine']},
+ {c:'Brands',q:'Which brand of gloves is part of the 2San family?',o:['No Ordinary','Hand Heroes','Glove Box','SafeHands']},
+ {c:'Sustainability',q:'Which recycling label project does 2San partner with?',o:['How2Recycle','Recycle Now','Green Dot','EcoLabel']},
+ {c:'Partners',q:'Which UK pharmacy gave 2San its first nationwide listing in 2023?',o:['LloydsPharmacy','Superdrug','Tesco','Asda']},
+ {c:'Partners',q:'In March 2023, 2San self-tests launched in the UK on…',o:['Amazon','eBay','Etsy','Argos']},
+ {c:'About 2San',q:'2San wants healthcare accessible "no matter who they are, no matter…"',o:['where they are','what they earn','how old they are','what they need']},
+ {c:'About 2San',q:'2San\'s innovation page says "curiosity creates…"',o:['change','problems','products','profit']},
+ {c:'About 2San',q:'2San wants to "transform, not…"',o:['disrupt','delay','destroy','duplicate']},
+ {c:'Products',q:'Which test is in the Health and Wellness range?',o:['Colorectal health test','Pregnancy test','UTI test','Drug test']},
+ {c:'About 2San',q:'In which city is 2San Pty Ltd based?',o:['Sydney','Melbourne','Perth','Brisbane']}
 ];
 const TF=[
  {c:'About 2San',q:'2San\'s mission is "Better care, better life."',a:true},
@@ -49,7 +77,25 @@ const TF=[
  {c:'Products',q:'The largest 2San home drug test is 20 panel.',a:false,why:'It is 16 panel.'},
  {c:'Products',q:'UTI stands for Urinary Tract Infection.',a:true},
  {c:'Sustainability',q:'2San looks for suppliers with ISO 14001 certification.',a:true},
- {c:'Sustainability',q:'2San supports hybrid work to reduce emissions.',a:true}
+ {c:'Sustainability',q:'2San supports hybrid work to reduce emissions.',a:true},
+ {c:'2San team',q:'Dean Hales is 2San\'s Founder & Global Director.',a:true},
+ {c:'About 2San',q:'2San has three core values.',a:false,why:'It has five.'},
+ {c:'About 2San',q:'2San is headquartered in North America.',a:true},
+ {c:'Quality',q:'2San was awarded ISO 9001 in June 2023.',a:true},
+ {c:'Quality',q:'ISO 13485 is a standard for the food industry.',a:false,why:'It is for medical devices.'},
+ {c:'Quality',q:'2San batch-tests products when it receives them.',a:true},
+ {c:'Products',q:'Safe Sip+ also detects alcohol.',a:false,why:'It checks for GHB, Ketamine and Rohypnol, not alcohol.'},
+ {c:'Products',q:'A Safe Sip+ result should not be read after 5 minutes.',a:true},
+ {c:'Products',q:'The Safe Sip+ test area has 3 test spots.',a:true},
+ {c:'Products',q:'SwimCount results take about 30 minutes.',a:true},
+ {c:'Products',q:'The Home Water Test screens for 8 common contaminants.',a:true},
+ {c:'Brands',q:'No Ordinary is a 2San brand of gloves.',a:true},
+ {c:'Sustainability',q:'2San partners with How2Recycle.',a:true},
+ {c:'Sustainability',q:'In 2026, 2San planned to attend more events.',a:false,why:'It planned fewer events, to cut travel.'},
+ {c:'About 2San',q:'2San\'s Scientific Advisory Committee was formed in 2019.',a:false,why:'It was formed in 2022.'},
+ {c:'Partners',q:'2San tests launched on Amazon UK in March 2023.',a:true},
+ {c:'About 2San',q:'2San operates in Canada and New Zealand.',a:true},
+ {c:'2San team',q:'Ryan Bowie is 2San\'s Global Finance Director.',a:false,why:'He is Global Product Director. Rob Horowitz is Global Finance Director.'}
 ];
 const NUM=[
  {c:'Products',q:'How many tests are in the Ovulation & Early Result Pregnancy Value Pack?',a:70},
@@ -67,7 +113,18 @@ const NUM=[
  {c:'About 2San',q:'How many international offices does 2San have?',a:5},
  {c:'About 2San',q:'On how many continents does 2San operate?',a:4},
  {c:'About 2San',q:'How many core values does 2San have?',a:5},
- {c:'About 2San',q:'How many product categories does 2San have?',a:4}
+ {c:'About 2San',q:'How many product categories does 2San have?',a:4},
+
+ {c:'Products',q:'How many test spots are on a Safe Sip+ sticker?',a:3},
+ {c:'Products',q:'About how many minutes does a SwimCount result take?',a:30},
+ {c:'Products',q:'How many common contaminants does the Home Water Test screen for?',a:8},
+ {c:'Quality',q:'In what year did 2San win ISO 9001?',a:2023},
+ {c:'Quality',q:'In what year did 2San announce ISO 13485?',a:2025},
+ {c:'About 2San',q:'How many free rapid antigen tests did 2San give Parramatta in 2022?',a:10000},
+ {c:'Partners',q:'How many self-tests did 2San launch with LloydsPharmacy in 2023?',a:8},
+ {c:'Partners',q:'How many self-tests launched on Amazon UK in March 2023?',a:7},
+ {c:'About 2San',q:'How many people did the 2022 IPSOS survey for 2San ask?',a:1000},
+ {c:'Sale',q:'2San Black Friday Week 2026: up to how many percent off?',a:30}
 ];
 const PICS=[
  {e:['🧪','🏠','✅','📦'],a:'SELF TEST'},{e:['🌡️','🤒','👂','🧠'],a:'THERMOMETER'},{e:['💧','🚰','🔬','❓'],a:'WATER'},
@@ -78,9 +135,13 @@ const PICS=[
  {e:['🏊','🔢','🔬','👨'],a:'SWIMCOUNT'},{e:['💧','🥤','🚰','💪'],a:'HYDRATION'},{e:['🔬','🧫','👩‍🔬','📋'],a:'SCIENCE'},
  {e:['⏱️','🔟','✅','📋'],a:'RESULTS'},{e:['🏡','💻','🏢','🔁'],a:'HYBRID'},{e:['🦁','💪','🚫','😨'],a:'FEARLESS'},
  {e:['🐆','🔄','⚡','🤸'],a:'AGILITY'},{e:['🏆','⭐','🥇','💯'],a:'EXCELLENCE'},{e:['🤝','✅','🔒','💎'],a:'INTEGRITY'}
-];
+,
+ {e:['🧤','✋','🧼','🩺'],a:'GLOVES'},{e:['🏅','📜','✅','🔍'],a:'QUALITY'},{e:['🦆','🏁','🌊','💨'],a:'DUCK RACE'},
+ {e:['🍸','⚠️','🏷️','🧊'],a:'SPIKING'},{e:['🗓️','🥚','🌸','📅'],a:'OVULATION'},{e:['🌍','🗺️','4️⃣','✈️'],a:'CONTINENTS'},
+ {e:['🏢','5️⃣','🌏','🧳'],a:'OFFICES'},{e:['♻️','🌿','📦','🏷️'],a:'PACKAGING'},{e:['🦠','🤒','🌡️','🧪'],a:'INFECTION'},
+ {e:['👪','🍼','💕','📅'],a:'FAMILY'},{e:['🦘','🏙️','🌉','⛵'],a:'SYDNEY'},{e:['🔬','🧠','📋','👩‍🔬'],a:'ADVISORY'}];
 const SCRAMBLE=['SELF TEST','SAFE SIP','HYDRATION','OVULATION','PREGNANCY','THERMOMETER','PHARMACY','INNOVATION','AGILITY','INTEGRITY',
- 'EXCELLENCE','FEARLESSNESS','RIGOR','RECYCLING','WELLNESS','INFECTION','DIAGNOSTICS','PARTNERSHIP','SWIMCOUNT','SUSTAINABILITY'];
+ 'EXCELLENCE','FEARLESSNESS','RIGOR','RECYCLING','WELLNESS','INFECTION','DIAGNOSTICS','PARTNERSHIP','SWIMCOUNT','SUSTAINABILITY','CERTIFICATION','QUALITY','GLOVES','SYDNEY','ADVISORY','CONTINENTS','PACKAGING','SCREENING','PHARMACIST','ACCESSIBLE','AFFORDABLE','CURIOSITY','MICROSCOPE','CONTAMINANTS'];
 const EMOJI=[
  {e:'🏠🧪',o:['Home test','House party','Lab work','Kitchen science']},
  {e:'🥤🛡️',o:['Safe Sip','Juice box','Water bottle','Cup holder']},
@@ -97,7 +158,15 @@ const EMOJI=[
  {e:'🔬👩‍🔬👨‍🔬📋',o:['Scientific Advisory Committee','Science fair','Lab coat sale','Chemistry class']},
  {e:'💊🏪📍',o:['Store locator','Pill box','Shopping list','Map app']},
  {e:'🛒🖤🏷️',o:['Black Friday sale','Night shopping','Dark mode','Price tag']},
- {e:'🤝🏛️',o:['Government partner','Handshake deal','Museum visit','Court case']}
+ {e:'🤝🏛️',o:['Government partner','Handshake deal','Museum visit','Court case']},
+ {e:'🧤✨',o:['No Ordinary gloves','Magic trick','Winter gloves','Clean hands']},
+ {e:'🏅9️⃣0️⃣0️⃣1️⃣',o:['ISO 9001 certificate','Gold medal','Phone number','The year 9001']},
+ {e:'🦘🏙️',o:['2San Sydney office','Zoo trip','City jump','Kangaroo crossing']},
+ {e:'🏊⏱️3️⃣0️⃣',o:['SwimCount result in 30 minutes','Swim lesson','30 laps','Pool closing time']},
+ {e:'💧8️⃣🔬',o:['Home Water Test checks 8 things','Eight glasses of water','Water science class','Rain forecast']},
+ {e:'🧠➡️🔄',o:['Curiosity creates change','Brain training','Change your mind','Think twice']},
+ {e:'💧1️⃣⏱️3️⃣',o:['Safe Sip+: 1 drop, 3 minutes','One drink, three hours','Rain at 1:30','A 3 minute shower']},
+ {e:'🦆🏁',o:['2San Duck Race','Bird watching','Finish line photo','Pond party']}
 ];
 const ODD=[
  {q:'Which is NOT a 2San core value?',o:['Simplicity','Agility','Integrity','Rigor']},
@@ -113,7 +182,15 @@ const ODD=[
  {q:'Which is NOT an Infection test?',o:['Ovulation Test','Covid-19 Test','UTI Test','Flu A/B Test']},
  {q:'Which word is NOT in the 2San mission "Better care, better life"?',o:['Cheap','Better','Care','Life']},
  {q:'Which is NOT a thermometer 2San sells?',o:['Mercury thermometer','Digital thermometer','Infrared forehead thermometer','Ear and forehead thermometer']},
- {q:'Which is NOT a 2San home drug test size?',o:['20 panel','16 panel','8 panel','4 panel']}
+ {q:'Which is NOT a 2San home drug test size?',o:['20 panel','16 panel','8 panel','4 panel']},
+ {q:'Which is NOT a 2San team member?',o:['Mark Zuckerberg','Dan Calder','Ralph Webb','Chelsea Tooze']},
+ {q:'Which does Safe Sip+ NOT detect?',o:['Alcohol','GHB','Ketamine','Rohypnol']},
+ {q:'Which ISO standard is NOT mentioned on 2san.com?',o:['ISO 22000','ISO 9001','ISO 13485','ISO 14001']},
+ {q:'Which is NOT one of 2San\'s colleague divisions?',o:['Space Travel','Quality & Regulatory','Supply Chain & Logistics','Product Innovation']},
+ {q:'Which is NOT a 2San green office habit?',o:['Leaving lights on all night','Reusable cups','Going digital','Hybrid work']},
+ {q:'Which country is NOT one where 2San operates?',o:['Mexico','United States','Australia','United Kingdom']},
+ {q:'Which is NOT in a SwimCount kit?',o:['A thermometer','A semen collection cup','A transfer syringe','Instructions']},
+ {q:'Which is NOT a Safe Sip+ colour change?',o:['Yellow','Blue-green','Blue','Red-purple']}
 ];
 const RIDDLES=[
  {q:'I stick to your cup and warn you before you sip. What am I?',o:['Safe Sip+ Drink Test Sticker','Hydration Test','Breath Alcohol Test','Home Water Test']},
@@ -129,7 +206,15 @@ const RIDDLES=[
  {q:'I am the 2San value for never cutting corners on quality checks. Who am I?',o:['Rigor','Agility','Fearlessness','Excellence']},
  {q:'I am the 2San value for doing the right thing, even when nobody is watching. Who am I?',o:['Integrity','Agility','Rigor','Fearlessness']},
  {q:'I am the 2San value for challenging the norm without fear. Who am I?',o:['Fearlessness','Excellence','Integrity','Rigor']},
- {q:'I am the city where 2San LLC has its US office. Where am I?',o:['New York','Boston','Chicago','Miami']}
+ {q:'I am the city where 2San LLC has its US office. Where am I?',o:['New York','Boston','Chicago','Miami']},
+ {q:'I founded 2San and I am a Global Director. Who am I?',o:['Dean Hales','Dan Calder','Ryan Bowie','Rob Horowitz']},
+ {q:'I lead Quality & Regulatory and helped 2San win ISO 9001. Who am I?',o:['Chelsea Tooze','Brooke Kemper','Harry Edwards','Elena Khalatian']},
+ {q:'2San earned me in June 2023 after a BSI audit. What am I?',o:['ISO 9001','ISO 13485','ISO 14001','A gold star']},
+ {q:'I have three chambers and give a result in about 30 minutes. What am I?',o:['SwimCount','Safe Sip+','Home Water Test','Breath Alcohol Test']},
+ {q:'I am the gloves brand in the 2San family. Who am I?',o:['No Ordinary','SwimCount','Safe Sip+','How2Recycle']},
+ {q:'I turn blue-green, blue or red-purple when I find something. What am I?',o:['Safe Sip+ Drink Test Sticker','A mood ring','A litmus strip','A thermometer']},
+ {q:'I look for lead, E. coli and chlorine. What am I?',o:['Home Water Test','UTI Test','Hydration Test','Safe Sip+']},
+ {q:'I was formed in 2022 to give independent scientific advice. What am I?',o:['The Scientific Advisory Committee','The Sales Action Committee','The Safety Board','The Product Panel']}
 ];
 /* Color Clash uses the 2San brand palette. */
 const STROOP=[['CORAL','#FB7569'],['BLUE','#0084DB'],['MINT','#1DD6A5'],['PURPLE','#7E43CA'],['NAVY','#1D1D4F']];
@@ -162,41 +247,192 @@ function choiceQ(text,cat,correct,others,extra){const opts=shuffle([correct,...o
 function slideStart(){const t=[1,2,3,4,5,6,7,8,0];let b=8,prev=-1;for(let i=0;i<60;i++){const r=Math.floor(b/3),c=b%3,n=[];if(r>0)n.push(b-3);if(r<2)n.push(b+3);if(c>0)n.push(b-1);if(c<2)n.push(b+1);const opts=n.filter(x=>x!==prev);const m=opts[Math.floor(Math.random()*opts.length)];t[b]=t[m];t[m]=0;prev=b;b=m;}
   return t.join('')==='123456780'?slideStart():t;}
 
+/* ---------- content for the newer games (all from 2san.com and its news pages) ---------- */
+/* Type Race: 2San lines to type. Punctuation and capitals do not matter. Each fits the 40-letter answer box. */
+const TYPE=['Better care, better life','Journey to Self-testing for All','1 test = 3 results in 10 minutes','What\'s in your water?','Curiosity creates change',
+ 'Transform, not disrupt','Test from the comfort of home','Take the next step in your health','Simple, accurate testing','Check your health on your terms',
+ 'Spot the signs early','Fast results when you need them','Available in local pharmacies','Empowering you to take control','Make good health accessible to everyone',
+ 'Excellence, Integrity, Agility','Rigor and Fearlessness','Safe Sip+ Drink Test Sticker','SwimCount sperm quality test','On time and in full',
+ 'Accessible, affordable, sustainable','People come first','When people thrive, communities thrive','Self-testing for all','Support starts with answers'];
+/* Finish the Slogan: the first option is right. */
+const SLOGAN=[
+ {t:'Better care, better ___',o:['life','world','health','future']},
+ {t:'Join us on the Journey to Self-testing for ___',o:['All','Today','Tomorrow','Fun']},
+ {t:'1 test = 3 results, all in ___',o:['10 minutes','1 minute','1 hour','1 day']},
+ {t:'What\'s in your ___?',o:['water','fridge','bag','coffee']},
+ {t:'Curiosity creates ___',o:['change','chaos','questions','products']},
+ {t:'Transform, not ___',o:['disrupt','delay','destroy','divide']},
+ {t:'Test from the comfort of ___',o:['home','the office','the car','the gym']},
+ {t:'Take the next step in your ___',o:['health','career','journey','life']},
+ {t:'Simple, accurate testing for clear next ___',o:['steps','results','days','choices']},
+ {t:'Check your health on your ___',o:['terms','phone','schedule','lunch break']},
+ {t:'Unwell and unsure why? Spot the signs early and take action ___',o:['quickly','later','together','tomorrow']},
+ {t:'Support starts with ___',o:['answers','questions','friends','tests']},
+ {t:'Because when people thrive, communities ___',o:['thrive too','grow','win','smile']},
+ {t:'Empowering you to take control of your ___',o:['health','life','future','time']},
+ {t:'2San wants to make good health accessible to ___',o:['everyone','doctors','families','athletes']},
+ {t:'2San aims to deliver on time and in ___',o:['full','style','budget','order']},
+ {t:'Accessible, affordable, sustainable and ___',o:['high-quality','high-tech','handmade','hip']},
+ {t:'Available in local pharmacies and retail ___',o:['stores','apps','markets','vans']},
+ {t:'2San was founded upon a spirit of ___',o:['entrepreneurship','adventure','tradition','competition']},
+ {t:'Delivering fast results when you ___ them',o:['need','want','order','forget']}];
+/* Higher or Lower: [label, number]. */
+const HILO=[['Tests in a Safe Sip+ pack',4],['Tests in a Breath Alcohol Test pack',3],['Tests in a Hydration Test pack',10],['Strips in the Ovulation Rapid Test pack',50],
+ ['Tests in the Ovulation & Pregnancy Value Pack',70],['Panels on 2San\'s largest drug test',16],['Minutes for 3 results from 1 test',10],['Minutes for a SwimCount result',30],
+ ['Contaminants the Home Water Test screens for',8],['2San core values',5],['Continents 2San operates on',4],['2San international offices',5],['2San product categories',4],
+ ['Self-tests launched on Amazon UK in 2023',7],['Self-tests launched with LloydsPharmacy in 2023',8],['People asked in the 2022 IPSOS survey',1000],['Free tests 2San gave Parramatta',10000],
+ ['Free Parramatta tests per business (most)',50],['Safe Sip+ test spots',3],['Chambers in a SwimCount test',3],['Top Black Friday Week discount',30,'%'],['Black Friday discount on the Breath Alcohol Test',15,'%'],
+ ['Tests in the UK Family Planning Value Pack',11],['Infections the 5 in 1 test checks',5],['Year the Scientific Advisory Committee was formed',2022,'y'],['Year 2San won ISO 9001',2023,'y'],
+ ['Year 2San announced ISO 13485',2025,'y'],['Year 2San tests launched on Amazon UK',2023,'y'],['Year 2San gave free tests to Parramatta',2022,'y'],['SwimCount accuracy',91.88,'%'],['People in the 2022 survey who were happy with self-testing',91,'%'],['People in the 2022 survey who trusted their lateral flow results',87,'%']];
+/* Who Am I?: four clues, easiest last. The first option is right. */
+const WHO=[
+ {c:['I am small enough to stick on your phone case.','I check alcoholic and non-alcoholic drinks.','I have 3 test spots and need just 1 drop.','I look for GHB, Ketamine and Rohypnol.'],o:['Safe Sip+ Drink Test Sticker','Home Water Test','Breath Alcohol Test','Hydration Test']},
+ {c:['I am in the Family Planning range.','I have three chambers inside me.','My result takes about 30 minutes.','I check sperm quality at home.'],o:['SwimCount','Ovulation Test','Early Result Pregnancy Test','UTI Test']},
+ {c:['I am a Health and Wellness test.','I screen for 8 common contaminants.','Lead, E. coli and chlorine are on my list.','I answer the question "What\'s in your water?"'],o:['Home Water Test','Hydration Test','Safe Sip+ Drink Test Sticker','UTI Test']},
+ {c:['I come in a 3 pack.','I was 15% off on Black Friday 2026.','I am in the Drugs of Abuse range.','You blow into me to check for alcohol.'],o:['Breath Alcohol Test','Safe Sip+ Drink Test Sticker','16 Panel Drug Test','Digital Thermometer']},
+ {c:['I am one of five.','I am about keeping up with the rhythm of healthcare.','I help 2San respond with certainty, knowledge and expertise.','I am the value for adapting fast.'],o:['Agility','Rigor','Integrity','Excellence']},
+ {c:['I sit on the Board of Directors & Advisors.','I was CEO of Collect+.','I led the UK National Covid-19 Testing programme.','I am 2San\'s Chair & Non-Executive Advisor.'],o:['Prof. Neil H. Ashworth','Dean Hales','Simon Whiley','Ben Stevens']},
+ {c:['I sit on the Board of Directors & Advisors.','I am a Global Director.','2San started with me.','I am 2San\'s Founder.'],o:['Dean Hales','Prof. Neil H. Ashworth','Dan Calder','Ralph Webb']},
+ {c:['I lead a global team.','I was quoted when 2San won ISO 9001.','I said ISO 13485 "ensures compliance to the highest standards".','I am Global Quality & Regulatory Director.'],o:['Chelsea Tooze','Brooke Kemper','Harry Edwards','Rob Horowitz']},
+ {c:['I am a certificate.','BSI audited 2San for me.','2San earned me in June 2023.','I am the world\'s most recognised quality management standard.'],o:['ISO 9001','ISO 13485','ISO 14001','How2Recycle']},
+ {c:['I was formed in 2022.','Valerie Palmieri is my managing member.','I give independent scientific advice.','My short name is SAC.'],o:['Scientific Advisory Committee','Board of Directors & Advisors','Quality & Regulatory team','Sales team']},
+ {c:['I am in North America.','I am home to 2San LLC.','My address is 1330 Avenue of the Americas.','I am in the Big Apple.'],o:['New York office','Sydney office','London office','Toronto office']},
+ {c:['I am in Australia.','I am home to 2San Pty Ltd.','I am on Barangaroo Avenue.','The Opera House and the Harbour Bridge are near me.'],o:['Sydney office','Melbourne office','Auckland office','New York office']},
+ {c:['I am a brand in the 2San family.','I am not a test.','You wear me on your hands.','My name says I am not ordinary.'],o:['No Ordinary gloves','SwimCount','Safe Sip+','How2Recycle']},
+ {c:['I am a partner, not a product.','I am a project of the nonprofit GreenBlue.','My labels follow the rules in the US and Canada.','I show people how to recycle packaging.'],o:['How2Recycle','ISO 14001','No Ordinary','BSI']},
+ {c:['I am in the United Kingdom.','I gave 2San its first nationwide listing.','2San started with 8 self-tests with me in February 2023.','I am one of the UK\'s largest pharmacy companies.'],o:['LloydsPharmacy','Boots','Amazon','Chemist Warehouse']}];
+/* Pixel Reveal: [name, emoji, card color]. */
+const PIXEL=[['Safe Sip+','🥤','#7E43CA'],['SwimCount','🏊','#0084DB'],['Home Water Test','🚰','#19B5C9'],['Hydration Test','💧','#1DD6A5'],['Breath Alcohol Test','🍺','#FF9A3D'],
+ ['UTI Test','🚻','#FB7569'],['3 in 1 Covid & Flu Test','🤧','#5A6FD6'],['Ovulation Test','📅','#FF7AB6'],['Pregnancy Test','🤰','#FF9A3D'],['Digital Thermometer','🌡️','#FB7569'],
+ ['Colorectal Health Test','🩺','#8FD14F'],['16 Panel Drug Test','🧪','#7E43CA'],['No Ordinary Gloves','🧤','#1D1D4F'],['Strep A Test','🦠','#1DD6A5'],['Stomach Ulcer Test','🫃','#5A6FD6']];
+/* Majority Wins: no right answer, the most picked wins. Four options are drawn from each list. */
+const MAJ=[
+ {q:'Which 2San value means the most to you?',o:['Excellence','Integrity','Agility','Rigor','Fearlessness']},
+ {q:'Which 2San office would you visit first?',o:['New York','Sydney','United Kingdom','Canada','New Zealand']},
+ {q:'Which 2San test would you gift a friend?',o:['Safe Sip+','SwimCount','Home Water Test','Hydration Test','Digital Thermometer']},
+ {q:'Your favourite 2San brand colour?',o:['Coral','Blue','Mint','Purple']},
+ {q:'Which green office habit is easiest for you?',o:['Reusable cups','Hybrid work','Recycling','Switching off vampire electronics','Going digital']},
+ {q:'Which product range should get the next new 2San test?',o:['Infection','Drugs of Abuse','Health and Wellness','Family Planning']},
+ {q:'Which 2San device makes the coolest weapon in this game?',o:['Pen Test','Alcohol Test','Water Test','Safe Sip+','Thermometer','Swimcount']},
+ {q:'Which game should we play next?',o:['2San Duck Race','2San Quiz','Draw It','Last One Standing','Two Lines!','Catch the Kit']},
+ {q:'Best way to celebrate a 2San win?',o:['Team lunch','Karaoke night','Group photo','Cake for everyone']},
+ {q:'Which 2San line is your favourite?',o:['Better care, better life','Curiosity creates change','What\'s in your water?','Journey to Self-testing for All','Transform, not disrupt']},
+ {q:'Which 2San team would you join for a day?',o:['Quality & Regulatory','Supply Chain & Logistics','Product Innovation','Marketing','Legal & Compliance','Commercial']},
+ {q:'Which face is your character making today?',o:['Smile','Shades','Sleepy','Fierce','Laugh','Love']}];
+/* Draw It: [word, other answers we accept, the 2San link shown after]. */
+const DRAW=[['DUCK',['DUCKS','RUBBER DUCK'],'The 2San Duck Race'],['THERMOMETER',['THERMO'],'2San Digital Thermometer'],['TEST TUBE',['TUBE','TESTTUBE'],'Home self-tests'],
+ ['WATER DROP',['DROP','WATER','RAINDROP','DROPLET'],'Home Water Test and Hydration Test'],['KANGAROO',['ROO'],'2San in Australia'],['STATUE OF LIBERTY',['LIBERTY','STATUE','LADY LIBERTY'],'2San LLC in New York'],
+ ['MAPLE LEAF',['LEAF','MAPLE'],'2San in Canada'],['GLOVES',['GLOVE'],'No Ordinary gloves'],['MICROSCOPE',[],'The Scientific Advisory Committee'],['CUP',['MUG','REUSABLE CUP'],'Reusable cups in 2San offices'],
+ ['STICKER',['STICKERS'],'Safe Sip+ Drink Test Sticker'],['STOPWATCH',['TIMER','CLOCK','WATCH'],'3 results in 10 minutes'],['PILL',['PILLS','TABLET','CAPSULE'],'Pharmacies sell 2San tests'],
+ ['HOUSE',['HOME'],'Test from the comfort of home'],['RECYCLING',['RECYCLE','RECYCLE SIGN'],'Recyclable packaging'],['LIGHT BULB',['BULB','LIGHTBULB','LAMP'],'Innovation, and smart lighting'],
+ ['SHOPPING CART',['CART','TROLLEY','BASKET'],'2San on Amazon'],['TROPHY',['CUP','AWARD'],'Excellence'],['GLOBE',['EARTH','WORLD','PLANET'],'Four continents'],['AIRPLANE',['PLANE','AEROPLANE','JET'],'Fewer events, less travel'],
+ ['BABY',['INFANT'],'Pregnancy tests'],['CALENDAR',[],'Ovulation tests'],['HEART',[],'Better care, better life'],['LAPTOP',['COMPUTER'],'Hybrid work'],['TOOTHBRUSH',[],'Healthy habits'],
+ ['BOTTLE',['WATER BOTTLE'],'Hydration Test'],['MAGNIFYING GLASS',['MAGNIFIER','LENS'],'Spot the signs early']];
+/* Order It sources. */
+const ORDER_FIXED=[
+ {t:'Put the Safe Sip+ steps in order',i:['Stick it on a flat surface','Pull off the clear cover','Add 1 drop of your drink','Wait about 3 minutes, then read']},
+ {t:'Put 2San\'s ISO 9001 journey in order',i:['A full-time quality team joins','BSI stage one audit','A new eQMS goes live','BSI final audit','ISO 9001 is awarded'],pick:4},
+ {t:'Order the SwimCount chambers, first to last',i:['Sample Chamber','Separation Chamber','Detection and Result Window']},
+ {t:'Order the SwimCount steps',i:['Collect','Test','Result']},
+ {t:'Order these from quickest to slowest',i:['Safe Sip+ result (about 3 min)','3 results from 1 test (10 min)','SwimCount result (about 30 min)']}];
+const ORDER_TIME=[['Scientific Advisory Committee formed',2022.6],['Free tests for Parramatta',2022.95],['Launch with LloydsPharmacy',2023.1],['Launch on Amazon UK',2023.2],
+ ['ISO 9001 awarded',2023.45],['ISO 13485 announced',2025.6],['Fewer events, to cut travel',2026.0]];
+const ORDER_PACKS=[['Breath Alcohol Test pack',3],['Safe Sip+ pack',4],['Hydration Test pack',10],['UK Family Planning Value Pack',11],['Ovulation Rapid Test Strip pack',50],['Ovulation & Pregnancy Value Pack',70]];
+/* Catch the Kit: 2San kit to catch, other things to leave alone. */
+const CATCH_GOOD=['🧪','🌡️','💧','🥤','📦','🧤','🔬','💊'],CATCH_BAD=['🍔','🎮','⚽','🍕','🎸','🧸','🍩','🎈'];
+const PUMP_NAMES=['The Hydration Rush','The Ten Test Pump','The Water Test Splash','The Fearless Fill','The Agility Pump','The Better Life Bottle','The Rigor Refill','The Excellence Pour'];
+const CATCH_NAMES=['The Kit Drop','The Pharmacy Rush','The Self-Test Shower','The Safe Sip+ Catch','The Four Continents Drop','The Store Shelf Scramble','The Delivery Day Dash','The Swimcount Splash'];
+const TEST_STRIPS=['Easy Pen Test','3 in 1 Self-Test','UTI Test','Ovulation Test','Pregnancy Test','5 in 1 Combo Test','Strep A Test'];
+/* ---------- round makers for the newer games ---------- */
+const fmtN=v=>Number(v).toLocaleString('en-US',{maximumFractionDigits:2});
+/* Two Lines!: the second line shows somewhere between 2.5 and 7.5 seconds in. */
+function linesRound(){const at=rnd(25,75)*100,name=TEST_STRIPS[rnd(0,TEST_STRIPS.length-1)];
+  return {q:{type:'react',text:'Tap the moment the second line appears!',cat:'Two Lines! · '+name,display:{kind:'strip',at,name}},key:{react:true,answer:''}};}
+/* Higher or Lower: two 2San numbers of a similar size where possible. */
+/* Numbers are only compared with the same kind: counts with counts, years with years, percentages with percentages. */
+const hiloFmt=(v,u)=>u==='y'?String(v):u==='%'?fmtN(v)+'%':fmtN(v);
+function hiloRound(){const a=HILO[rnd(0,HILO.length-1)],same=b=>b!==a&&(b[2]||'')===(a[2]||'')&&b[1]!==a[1];let pool=HILO.filter(b=>same(b)&&b[1]/a[1]<=8&&a[1]/b[1]<=8);if(!pool.length)pool=HILO.filter(same);
+  const b=pool[rnd(0,pool.length-1)],hi=b[1]>a[1];
+  return {q:{type:'choice',hilo:true,text:'Is the second number higher or lower?',cat:'Higher or Lower',options:['Higher','Lower'],display:{kind:'hilo',a:[a[0],hiloFmt(a[1],a[2])],b:b[0]}},
+    key:{correct:hi?0:1,answer:`${b[0]}: ${hiloFmt(b[1],b[2])}`,reveal:{v:hiloFmt(b[1],b[2])}}};}
+/* Spot the Difference: two 4x4 grids of 2San kit, one box changed. */
+function spotRound(){const a=Array.from({length:16},()=>ICONS[rnd(0,ICONS.length-1)]),i=rnd(0,15);let c;do{c=ICONS[rnd(0,ICONS.length-1)];}while(c===a[i]);const b=a.slice();b[i]=c;
+  return {q:{type:'spot',text:'Find the one box that changed from A to B!',cat:'Spot the Difference · 2San kit',grid:{a,b}},key:{correct:i,answer:`Row ${Math.floor(i/4)+1}, box ${i%4+1}: ${a[i]} became ${c}`}};}
+/* Order It: a fixed 2San sequence, 2San moments by date, or packs by size. */
+function orderRound(){
+  const r=Math.random();let title,items;
+  if(r<.4){const f=ORDER_FIXED[rnd(0,ORDER_FIXED.length-1)];items=f.i.slice();if(f.pick&&items.length>f.pick){const keep=shuffle(items.map((_,i)=>i)).slice(0,f.pick).sort((x,y)=>x-y);items=keep.map(i=>items[i]);}title=f.t;}
+  else if(r<.7){title='Order these 2San moments, oldest first';items=shuffle(ORDER_TIME.slice()).slice(0,4).sort((x,y)=>x[1]-y[1]).map(x=>x[0]);}
+  else{title='Order these packs, fewest tests first';items=shuffle(ORDER_PACKS.slice()).slice(0,4).sort((x,y)=>x[1]-y[1]).map(x=>x[0]);}
+  let idx;do{idx=shuffle(items.map((_,i)=>i));}while(idx.every((v,i)=>v===i));
+  const shown=idx.map(i=>items[i]),order=items.map((_,i)=>idx.indexOf(i)).join('');
+  return {q:{type:'order',text:title,cat:'Order It',items:shown},key:{order,answer:items.join(' → ')}};}
+/* Draw It: a word only the drawer sees. */
+function drawRound(){const w=DRAW[rnd(0,DRAW.length-1)];
+  return {q:{type:'draw',text:'Guess what is being drawn!',cat:'Draw It',hint:pattern(w[0])},key:{accept:[w[0],...w[1]],answer:`${w[0]} · ${w[2]}`,word:w[0]}};}
+/* Last One Standing: questions from the quiz, true or false, riddles and odd one out. */
+const LAST=[...QUIZ.map(x=>['quiz',x]),...TF.map(x=>['tf',x]),...RIDDLES.map(x=>['riddle',x]),...ODD.map(x=>['odd',x])];
+/* Timed clues follow the round length: Pixel Reveal is clear at 75% of the time, Who Am I? shows a clue every 20%. */
+function fitTiming(q,secs){const d=q.display;if(!d)return q;if(d.kind==='pixel')d.ms=Math.round(secs*750);if(d.kind==='clues')d.every=Math.round(secs*200);return q;}
+const HOW_PLAY={react:'Tap when the 2nd line shows',spot:'Tap the different box',order:'Tap them in order',draw:'Draw it, or type a guess'};
+const REACT_MIN=100; // faster than 0.1 s is a guess, not a reaction
 /* Each game: how it looks in the picker, its defaults, and how it makes one round.
-   q is what everyone sees; key stays with the host until the reveal. */
+   q is what everyone sees; key stays with the host until the reveal. grp sorts the game list. */
+const GROUPS=[['trivia','Quiz & trivia'],['words','Words & pictures'],['speed','Speed & reflexes'],['puzzle','Puzzles & memory'],['party','Party']];
 const GAMES={
- quiz:{name:'2San Quiz',icon:'?',bg:'var(--coral)',desc:'Four choices about 2San. Faster correct answers score more.',secs:20,count:10,pool:QUIZ,
+ quiz:{grp:'trivia',name:'2San Quiz',icon:'?',bg:'var(--coral)',desc:'Four choices about 2San. Faster correct answers score more.',secs:20,count:10,pool:QUIZ,
    make:it=>choiceQ(it.q,it.c,it.o[0],it.o.slice(1))},
- tf:{name:'True or False',icon:'T/F',bg:'var(--blue)',desc:'Quick 2San facts. Pick one of two.',secs:15,count:10,pool:TF,
+ tf:{grp:'trivia',name:'True or False',icon:'T/F',bg:'var(--blue)',desc:'Quick 2San facts. Pick one of two.',secs:15,count:10,pool:TF,
    make:it=>({q:{type:'choice',tf:true,text:it.q,cat:it.c,options:['True','False']},key:{correct:it.a?0:1,answer:(it.a?'True':'False')+(it.why?'. '+it.why:'')}})},
- pics:{name:'4 Pics 1 Word',icon:'🖼️',bg:'var(--sun)',desc:'Four emoji pictures, one 2San word. Type it in.',secs:30,count:10,pool:PICS,
-   make:it=>({q:{type:'text',text:'What one word links all four pictures?',cat:'4 Pics 1 Word',hint:pattern(it.a),display:{kind:'four',items:it.e}},key:{accept:[it.a],answer:it.a}})},
- scramble:{name:'Word Scramble',icon:'🔤',bg:'var(--mint)',desc:'Unscramble the letters to find a 2San word.',secs:30,count:10,pool:SCRAMBLE,
-   make:w=>({q:{type:'text',text:'Unscramble the 2San word',cat:'Word Scramble',hint:pattern(w),display:{kind:'tiles',text:w.split(' ').map(scrambleWord).join(' ')}},key:{accept:[w],answer:w}})},
- emoji:{name:'Emoji Riddle',icon:'😎',bg:'var(--purple)',desc:'Read the emojis and pick the 2San phrase they spell.',secs:20,count:10,pool:EMOJI,
-   make:it=>choiceQ('What do these emojis mean?','Emoji Riddle',it.o[0],it.o.slice(1),{display:{kind:'big',text:it.e,emoji:true}})},
- odd:{name:'Odd One Out',icon:'🙃',bg:'var(--coral)',desc:'Three are true to 2San. Spot the one that is not.',secs:15,count:10,pool:ODD,
+ slogan:{grp:'trivia',name:'Finish the Slogan',icon:'💬',bg:'var(--sun)',desc:'Fill in the missing word of a 2San line.',secs:15,count:10,pool:SLOGAN,
+   make:it=>choiceQ('Finish the 2San line','Finish the Slogan',it.o[0],it.o.slice(1),{display:{kind:'blank',text:it.t}})},
+ whoami:{grp:'trivia',name:'Who Am I?',icon:'🕵️',bg:'var(--purple)',desc:'Clues about a 2San product, value or person appear one by one. Answer after fewer clues for more points.',secs:30,count:8,pool:WHO,
+   make:it=>{const r=choiceQ('Who or what am I?','Who Am I?',it.o[0],it.o.slice(1),{display:{kind:'clues',clues:it.c}});r.key.who=true;return r;}},
+ hilo:{grp:'trivia',name:'Higher or Lower',icon:'↕️',bg:'var(--mint)',desc:'Two 2San numbers. Is the second one higher or lower?',secs:12,count:10,gen:true,make:()=>hiloRound()},
+ odd:{grp:'trivia',name:'Odd One Out',icon:'🙃',bg:'var(--coral)',desc:'Three are true to 2San. Spot the one that is not.',secs:15,count:10,pool:ODD,
    make:it=>choiceQ(it.q,'Odd One Out',it.o[0],it.o.slice(1))},
- riddle:{name:'2San Riddles',icon:'🤔',bg:'var(--blue)',desc:'Guess the 2San product or value from the clue.',secs:25,count:10,pool:RIDDLES,
+ riddle:{grp:'trivia',name:'2San Riddles',icon:'🤔',bg:'var(--blue)',desc:'Guess the 2San product or value from the clue.',secs:25,count:10,pool:RIDDLES,
    make:it=>choiceQ(it.q,'2San Riddle',it.o[0],it.o.slice(1))},
- math:{name:'Quick Math',icon:'➗',bg:'var(--mint)',desc:'Fast 2San word problems. Type the exact answer.',secs:20,count:10,gen:true,
-   make:()=>{const [text,v]=MATH[rnd(0,MATH.length-1)]();return {q:{type:'number',exact:true,text,cat:'Quick Math'},key:{value:v,answer:String(v)}};}},
- stroop:{name:'Color Clash',icon:'🎨',bg:'var(--purple)',desc:'2San brand colors. Tap the COLOR of the word, not what it says.',secs:10,count:10,gen:true,
+ num:{grp:'trivia',name:'Closest Number',icon:'#',bg:'var(--mint)',desc:'Guess the 2San number. The closer you are, the more points.',secs:30,count:8,pool:NUM,
+   make:it=>({q:{type:'number',text:it.q,cat:it.c},key:{value:it.a,answer:String(it.a),closest:true}})},
+ pics:{grp:'words',name:'4 Pics 1 Word',icon:'🖼️',bg:'var(--sun)',desc:'Four emoji pictures, one 2San word. Type it in.',secs:30,count:10,pool:PICS,
+   make:it=>({q:{type:'text',text:'What one word links all four pictures?',cat:'4 Pics 1 Word',hint:pattern(it.a),display:{kind:'four',items:it.e}},key:{accept:[it.a],answer:it.a}})},
+ scramble:{grp:'words',name:'Word Scramble',icon:'🔤',bg:'var(--mint)',desc:'Unscramble the letters to find a 2San word.',secs:30,count:10,pool:SCRAMBLE,
+   make:w=>({q:{type:'text',text:'Unscramble the 2San word',cat:'Word Scramble',hint:pattern(w),display:{kind:'tiles',text:w.split(' ').map(scrambleWord).join(' ')}},key:{accept:[w],answer:w}})},
+ emoji:{grp:'words',name:'Emoji Riddle',icon:'😎',bg:'var(--purple)',desc:'Read the emojis and pick the 2San phrase they spell.',secs:20,count:10,pool:EMOJI,
+   make:it=>choiceQ('What do these emojis mean?','Emoji Riddle',it.o[0],it.o.slice(1),{display:{kind:'big',text:it.e,emoji:true}})},
+ typerace:{grp:'words',name:'Type Race',icon:'⌨️',bg:'var(--blue)',desc:'A 2San line appears. Type it as fast as you can. Capitals and punctuation do not matter.',secs:30,count:8,pool:TYPE,
+   make:w=>({q:{type:'text',typing:true,text:'Type this 2San line as fast as you can!',cat:'Type Race',display:{kind:'type',text:w}},key:{accept:[w],answer:w}})},
+ pixel:{grp:'words',name:'Pixel Reveal',icon:'🟪',bg:'var(--coral)',desc:'A 2San product slowly comes into focus. Guess it early for more points.',secs:20,count:8,pool:PIXEL,
+   make:it=>{const r=choiceQ('Which 2San product is this?','Pixel Reveal',it[0],shuffle(PIXEL.filter(x=>x!==it)).slice(0,3).map(x=>x[0]),{display:{kind:'pixel',icon:it[1],label:it[0],color:it[2]}});r.key.pixel=true;return r;}},
+ draw:{grp:'words',name:'Draw It',icon:'✏️',bg:'var(--sun)',desc:'One player draws a 2San thing on their phone. Everyone else types their guess. Fast guessers and good drawers score.',secs:60,count:5,gen:true,make:()=>drawRound()},
+ lines:{grp:'speed',name:'Two Lines!',icon:'⚡',bg:'var(--coral)',desc:'Watch the test strip. Tap the moment the second line shows. Tap too soon and you miss the round.',secs:12,count:8,gen:true,make:()=>linesRound()},
+ stroop:{grp:'speed',name:'Color Clash',icon:'🎨',bg:'var(--purple)',desc:'2San brand colors. Tap the COLOR of the word, not what it says.',secs:10,count:10,gen:true,
    make:()=>{const s=shuffle(STROOP.slice()),ink=s[0],word=s[1];const opts=shuffle([ink[0],word[0],s[2][0],s[3][0]]);
      return {q:{type:'choice',text:'Tap the COLOR of the word',cat:'2San Colors',options:opts,display:{kind:'stroop',text:word[0],color:ink[1]}},key:{correct:opts.indexOf(ink[0]),answer:ink[0]}};}},
- count:{name:'Count It',icon:'👀',bg:'var(--sun)',desc:'Count the 2San kit icons on the screen. Exact answers only.',secs:20,count:8,gen:true,
+ duck:{grp:'speed',name:'2San Duck Race',icon:'🦆',bg:'var(--sun)',desc:'Everyone rides a duck in their 2San colors. Press SPACE or tap PADDLE as fast as you can: every press moves your duck forward. First to the finish wins! 1st scores 1000, 2nd 900, 3rd 800 and so on.',secs:15,count:3,race:true,kind:'duck',gen:true,
+   make:()=>({q:{type:'race',text:'Cheer for your duck!',cat:'2San Duck Race'},key:{answer:''}})},
+ pump:{grp:'speed',name:'Hydration Pump',icon:'💧',bg:'var(--blue)',desc:'Press SPACE or tap PUMP as fast as you can to fill your Hydration Test bottle. The fullest bottle wins! 1st scores 1000, 2nd 900 and so on.',secs:15,count:3,race:true,kind:'pump',gen:true,
+   make:()=>({q:{type:'race',text:'Pump!',cat:'Hydration Pump'},key:{answer:''}})},
+ catch:{grp:'speed',name:'Catch the Kit',icon:'🧺',bg:'var(--mint)',desc:'2San kit falls from the sky. Tap it to catch it! Tapping anything that is not 2San freezes you for a second. Most catches wins.',secs:15,count:3,race:true,kind:'catch',gen:true,
+   make:()=>({q:{type:'race',text:'Catch!',cat:'Catch the Kit'},key:{answer:''}})},
+ math:{grp:'puzzle',name:'Quick Math',icon:'➗',bg:'var(--mint)',desc:'Fast 2San word problems. Type the exact answer.',secs:20,count:10,gen:true,
+   make:()=>{const [text,v]=MATH[rnd(0,MATH.length-1)]();return {q:{type:'number',exact:true,text,cat:'Quick Math'},key:{value:v,answer:String(v)}};}},
+ count:{grp:'puzzle',name:'Count It',icon:'👀',bg:'var(--sun)',desc:'Count the 2San kit icons on the screen. Exact answers only.',secs:20,count:8,gen:true,
    make:()=>{const kinds=shuffle(KIT.slice()).slice(0,4),target=kinds[0],n=rnd(5,12),items=Array(n).fill(target[0]);
      while(items.length<30)items.push(kinds[rnd(1,3)][0]);
      return {q:{type:'number',exact:true,text:`How many ${target[1]} ${target[0]} are on the screen?`,cat:'Count It · 2San kit',display:{kind:'grid',items:shuffle(items)}},key:{value:n,answer:String(n)}};}},
- memory:{name:'Memory Flash',icon:'🧠',bg:'var(--coral)',desc:'Six 2San kit icons flash on the screen for 5 seconds. Which was missing?',secs:20,count:8,gen:true,
+ memory:{grp:'puzzle',name:'Memory Flash',icon:'🧠',bg:'var(--coral)',desc:'Six 2San kit icons flash on the screen for 5 seconds. Which was missing?',secs:20,count:8,gen:true,
    make:()=>{const pick=shuffle(ICONS.slice()),shown=pick.slice(0,6),missing=pick[6];const opts=shuffle([missing,...shuffle(shown.slice()).slice(0,3)]);
      return {q:{type:'choice',text:'Which one was NOT on the screen?',cat:'Memory Flash · 2San kit',options:opts,display:{kind:'flash',items:shown,ms:5000}},key:{correct:opts.indexOf(missing),answer:missing}};}},
- slide:{name:'Sliding Puzzle',icon:'🧩',bg:'var(--blue)',desc:'Slide the tiles to spell 2SAN HOME. Same puzzle for everyone; fastest wins.',secs:90,count:3,gen:true,
+ spot:{grp:'puzzle',name:'Spot the Difference',icon:'🔎',bg:'var(--purple)',desc:'Two grids of 2San kit. One box changed. Tap it on your phone first!',secs:25,count:8,gen:true,make:()=>spotRound()},
+ order:{grp:'puzzle',name:'Order It',icon:'🔢',bg:'var(--blue)',desc:'Put 2San steps, dates or packs in the right order. Tap them one by one, then lock it in.',secs:30,count:8,gen:true,make:()=>orderRound()},
+ slide:{grp:'puzzle',name:'Sliding Puzzle',icon:'🧩',bg:'var(--mint)',desc:'Slide the tiles to spell 2SAN HOME. Same puzzle for everyone; fastest wins.',secs:90,count:3,gen:true,
    make:()=>({q:{type:'slide',text:'Slide the tiles to spell 2SAN HOME!',cat:'Sliding Puzzle',tiles:slideStart()},key:{answer:'2 S A / N H O / M E'}})},
- duck:{name:'2San Duck Race',icon:'🦆',bg:'var(--sun)',desc:'Everyone rides a duck in their 2San colors. Press SPACE or tap PADDLE as fast as you can: every press moves your duck forward. First to the finish wins! 1st scores 1000, 2nd 900, 3rd 800 and so on.',secs:15,count:3,race:true,gen:true,
-   make:()=>({q:{type:'race',text:'Cheer for your duck!',cat:'2San Duck Race'},key:{answer:''}})},
- num:{name:'Closest Number',icon:'#',bg:'var(--mint)',desc:'Guess the 2San number. The closer you are, the more points.',secs:30,count:8,pool:NUM,
-   make:it=>({q:{type:'number',text:it.q,cat:it.c},key:{value:it.a,answer:String(it.a),closest:true}})}
+ last:{grp:'party',name:'Last One Standing',icon:'🏆',bg:'var(--coral)',desc:'2San trivia where a wrong or missing answer knocks you out. Survive each round for 100 points; the last one standing gets 500 more.',secs:15,count:15,pool:LAST,
+   make:([g,x])=>{const r=GAMES[g].make(x);r.q.cat='Last One Standing · '+(r.q.cat||GAMES[g].name);return r;}},
+ majority:{grp:'party',name:'Majority Wins',icon:'🗳️',bg:'var(--mint)',desc:'No wrong answers! Pick what you think most people will pick. The most popular answer scores.',secs:15,count:8,pool:MAJ,
+   make:it=>({q:{type:'choice',maj:true,text:it.q,cat:'Majority Wins · no wrong answers',options:shuffle(it.o.slice()).slice(0,4)},key:{majority:true,answer:''}})}
 };
 /* Duck race names and fun facts, all from 2san.com. */
 const RACE_NAMES=['The Agility Sprint','The Fearlessness Dash','The Integrity Cup','The Rigor Regatta','The Excellence Classic','The Swimcount Swim',
@@ -246,10 +482,14 @@ const local={get(k){try{return JSON.parse(localStorage.getItem('2san-live-'+k))}
 
 /* ================= 3D blocks ================= */
 function faceHTML(f){return `<span class="face ${f||'smile'}"><span class="eye l"></span><span class="eye r"></span>${f==='cool'?'<span class="bridge"></span>':''}<span class="mouth"></span></span>`;}
+/* A box side a little darker or lighter, worked out once (a CSS filter on every side made big races slow on tablets). */
+const SHADES=new Map();
+function shade(hex,k){const key=hex+k;if(SHADES.has(key))return SHADES.get(key);const m=/^#([0-9a-f]{6})$/i.exec(hex);let out='';
+  if(m){const n=parseInt(m[1],16);out='#'+[16,8,0].map(b=>Math.min(255,Math.round(((n>>b)&255)*k)).toString(16).padStart(2,'0')).join('');}SHADES.set(key,out);return out;}
 function box(w,h,d,color,x,y,front,z=0,lite=false){
   const b=el('div','bx');b.style.width=w+'px';b.style.height=h+'px';b.style.transform=`translate3d(${x}px,${y}px,${z}px)`;
   const F=[['ft',w,h,0,0,`translateZ(${d/2}px)`,1],['bk',w,h,0,0,`rotateY(180deg) translateZ(${d/2}px)`,.72],['rt',d,h,(w-d)/2,0,`rotateY(90deg) translateZ(${w/2}px)`,.8],['lt',d,h,(w-d)/2,0,`rotateY(-90deg) translateZ(${w/2}px)`,.88],['tp',w,d,0,(h-d)/2,`rotateX(90deg) translateZ(${h/2}px)`,1.16],['bt',w,d,0,(h-d)/2,`rotateX(-90deg) translateZ(${h/2}px)`,.6]];
-  for(const[n,fw,fh,l,t,tr,sh] of F){if(lite&&(n==='bk'||n==='bt'))continue;const f=el('i','fc');f.style.cssText=`width:${fw}px;height:${fh}px;left:${l}px;top:${t}px;transform:${tr};background:${color};filter:brightness(${sh})`;if(n==='ft'&&front){f.innerHTML=front;f.style.filter='none';}b.append(f);}
+  for(const[n,fw,fh,l,t,tr,sh] of F){if(lite&&(n==='bk'||n==='bt'))continue;const f=el('i','fc'),plain=n==='ft'&&front,c=plain?color:shade(color,sh);f.style.cssText=`width:${fw}px;height:${fh}px;left:${l}px;top:${t}px;transform:${tr};background:${c}`+(c?'':`;background:${color};filter:brightness(${sh})`);if(plain)f.innerHTML=front;b.append(f);}
   return b;
 }
 /* White 2San logo for the shirt front, taken from the page header logo. */
@@ -276,12 +516,54 @@ function riderScene(L,s,armed=true){
     ...hairBoxes(L,s,k(18),0),...(armed?weaponBoxes(L.weapon,s,k(-5),true):[]));
   w.append(p);sc.style.width=k(72)+'px';sc.style.height=k(100+up)+'px';sc.append(w);return sc;
 }
-function duckRider(L,s,armed=true){const d=el('div','duck');d.setAttribute('aria-hidden','true');d.append(riderScene(L,s,armed),el('span','bird','🦆'));return d;}
+function duckRider(L,s,armed=true){const d=el('div','duck');d.setAttribute('aria-hidden','true');d.append(bakeScene(riderScene(L,s,armed),'r'+s+armed+L.color+L.face+L.hair+L.weapon),el('span','bird','🦆'));return d;}
+/* Baked characters: a character made of CSS boxes turned into one still picture (an SVG image of the same boxes).
+   A race with many riders, or a long list of heads, then moves one picture each instead of dozens of 3D sides,
+   which made tablets lag. The picture hides the far sides itself and draws near boxes last, so it looks the same.
+   Only in Chrome-based browsers (Android, desktop Chrome and Edge); others keep the live boxes. */
+/* Tablets and budget phones (same test as the 3D world uses). */
+const WEAK_DEVICE=(navigator.deviceMemory&&navigator.deviceMemory<=4)||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4)||(/Android/i.test(navigator.userAgent)&&Math.min(screen.width,screen.height)>=600);
+const CAN_BAKE=/Chrome\//.test(navigator.userAgent)&&!/CriOS|EdgiOS|FxiOS|OPiOS/.test(navigator.userAgent);
+let BAKE_CSS=null;const BAKED=new Map();
+function bakeCss(){if(BAKE_CSS!==null)return BAKE_CSS;let css='';
+  // Taken from the page's own style text (not cssText, which drops shorthands such as "border:solid var(--ink)").
+  const src=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n').replace(/\/\*[\s\S]*?\*\//g,'');
+  for(const m of src.matchAll(/([^{}]+)\{([^{}]*)\}/g)){const sel=m[1].trim();if(sel&&!sel.startsWith('@')&&sel.split(',').every(p=>/^\.(scene|world|bx|fc|tee|wd|face|stepnum)\b/.test(p.trim())&&!/sway|hop|baked/.test(p)))css+=sel+'{'+m[2]+'}\n';}
+  const cs=getComputedStyle(document.documentElement);
+  return BAKE_CSS={css,vars:['--ink','--navy','--white','--sun','--coral','--mint','--sky','--paper'].map(v=>v+':'+cs.getPropertyValue(v).trim()).join(';')};}
+function bakeScene(sc,key){
+  if(!CAN_BAKE)return sc;
+  try{
+    const w=parseFloat(sc.style.width),h=parseFloat(sc.style.height);if(!(w>0&&h>0))return sc;
+    let hit=BAKED.get(key);
+    if(!hit){
+      // Measure how far the 3D sides reach outside the scene box, so the picture is exactly as big as the drawing.
+      const tmp=el('div');tmp.style.cssText='position:fixed;left:-4000px;top:0;visibility:hidden;pointer-events:none';tmp.append(sc);document.body.append(tmp);
+      const sr=sc.getBoundingClientRect();let x0=0,y0=0,x1=w,y1=h;
+      for(const f of sc.querySelectorAll('.fc')){const r=f.getBoundingClientRect();if(!r.width&&!r.height)continue;x0=Math.min(x0,r.left-sr.left);y0=Math.min(y0,r.top-sr.top);x1=Math.max(x1,r.right-sr.left);y1=Math.max(y1,r.bottom-sr.top);}
+      tmp.remove();
+      const pad={l:Math.ceil(-x0)+2,t:Math.ceil(-y0)+2,r:Math.ceil(x1-w)+2,b:Math.ceil(y1-h)+2};
+      const c=sc.cloneNode(true),world=c.querySelector('.world'),wt=new DOMMatrix(world.style.transform||'none');
+      // every box with sides, wherever it sits, moves straight under the world with its full offset (groups only shift, never turn)
+      const leaves=[],walk=(node,m)=>{for(const k of [...node.children]){if(!k.classList.contains('bx'))continue;const km=m.multiply(new DOMMatrix(k.style.transform||'none'));
+        if(k.querySelector(':scope > .fc'))leaves.push([k,km]);else walk(k,km);}};walk(world,new DOMMatrix());
+      world.replaceChildren();const grp=world,gt=wt;
+      const boxes=leaves.map(([b,m])=>{b.style.transform=m.toString();const bw=parseFloat(b.style.width)||0,bh=parseFloat(b.style.height)||0;
+        return [gt.transformPoint(new DOMPoint(m.m41+bw/2,m.m42+bh/2,m.m43)).z,b,gt.multiply(m)];});
+      boxes.sort((a,b)=>a[0]-b[0]).forEach(([,b,bm])=>{grp.append(b);for(const f of [...b.children]){if(!f.classList.contains('fc'))continue;const m=bm.multiply(new DOMMatrix(f.style.transform||'none')),a=m.transformPoint(new DOMPoint(0,0,0)),z=m.transformPoint(new DOMPoint(0,0,1));if(z.z-a.z<=1e-4)f.remove();}});
+      c.style.border='';c.style.borderRadius='';c.style.margin='0';
+      const W2=w+pad.l+pad.r,H2=h+pad.t+pad.b,{css,vars}=bakeCss(),svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W2}" height="${H2}"><foreignObject x="0" y="0" width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml" style="${vars};padding:${pad.t}px ${pad.r}px ${pad.b}px ${pad.l}px"><style>${css}</style>${new XMLSerializer().serializeToString(c)}</div></foreignObject></svg>`;
+      hit={url:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg),pad,W2,H2};BAKED.set(key,hit);}
+    const {url,pad,W2,H2}=hit,out=el('div',sc.className+' baked');out.style.cssText=sc.style.cssText;
+    const img=new Image(W2,H2);img.alt='';img.decoding='async';img.draggable=false;img.src=url;img.style.cssText=`position:absolute;left:${-pad.l}px;top:${-pad.t}px;width:${W2}px;height:${H2}px;max-width:none;pointer-events:none`;
+    out.append(img);return out;
+  }catch(e){return sc;}
+}
 /* Just the head (with hair), for lists. Heads with tall hair are drawn a little smaller so they stay inside the same box. */
 function headScene(L,size,bar=true){
   const up=HAIR_UP[L.hair],f=36/(36+up*.9),hs=size*f,u=hs/36,sc=el('div','scene'),w=el('div','world');w.style.width=hs+'px';w.style.height=hs+'px';
   w.style.transform=`translateY(${(up*u*.5).toFixed(1)}px) rotateX(-18deg) rotateY(-30deg)`;
-  w.append(box(hs,hs,hs,SKIN,0,0,faceHTML(L.face)),...hairBoxes(L,u,0,0));sc.style.width=size*1.5+'px';sc.style.height=size*1.5+'px';if(bar){sc.style.borderBottom=`6px solid ${L.color}`;sc.style.borderRadius='4px';}sc.append(w);return sc;
+  w.append(box(hs,hs,hs,SKIN,0,0,faceHTML(L.face)),...hairBoxes(L,u,0,0));sc.style.width=size*1.5+'px';sc.style.height=size*1.5+'px';if(bar){sc.style.borderBottom=`6px solid ${L.color}`;sc.style.borderRadius='4px';}sc.append(w);return bakeScene(sc,'h'+size+bar+L.color+L.face+L.hair);
 }
 /* A weapon on its own, for the picker. */
 function weaponScene(weapon,size){
@@ -290,12 +572,19 @@ function weaponScene(weapon,size){
   const x0=Math.min(...parts.map(p=>p[4])),x1=Math.max(...parts.map(p=>p[4]+p[0])),y0=Math.min(...parts.map(p=>p[5])),y1=Math.max(...parts.map(p=>p[5]+p[1]));
   const s=Math.min(size*.86/(y1-y0),size*.6/(x1-x0),1.3),w=el('div','world'),g=el('div','bx');
   w.style.width=(x1-x0)*s+'px';w.style.height=(y1-y0)*s+'px';w.style.transform='rotateX(-14deg) rotateY(-32deg)';
-  g.style.transform=`translate3d(${-x0*s}px,${-y0*s}px,${-13*s}px)`;g.append(...weaponBoxes(weapon,s));w.append(g);sc.append(w);return sc;
+  g.style.transform=`translate3d(${-x0*s}px,${-y0*s}px,${-13*s}px)`;g.append(...weaponBoxes(weapon,s));w.append(g);sc.append(w);return bakeScene(sc,'w'+size+weapon);
 }
 function podiumScene(L,rank,stepH,s){
   const W=120*s,D=80*s,cH=(124+HAIR_ROOM)*s,sc=el('div','scene'),w=el('div','world sway');w.style.width=W+'px';w.style.height=(cH+stepH)+'px';
   const ch=el('div','bx'+(rank===1?' hop':''));ch.style.width=W+'px';ch.style.height=cH+'px';const c=character(L,s);c.style.transform=`translate3d(${(W-72*s)/2}px,${HAIR_ROOM*s}px,0)`;ch.append(c);
-  w.append(ch,box(W,stepH,D,L.color,0,cH,`<span class="stepnum">${rank}</span>`));sc.append(w);return sc;
+  // Tablets and budget phones: a still picture (the rank number laid on top, in the game font) instead of three turning 3D characters.
+  const still=WEAK_DEVICE&&CAN_BAKE;
+  w.append(ch,box(W,stepH,D,L.color,0,cH,still?null:`<span class="stepnum">${rank}</span>`));sc.append(w);
+  if(still){const tr='rotateX(-12deg) rotateY(-23deg)';sc.style.width=W+'px';sc.style.height=(cH+stepH)+'px';w.classList.remove('sway');w.style.transform=tr;
+    const b=bakeScene(sc,'p'+rank+stepH+s+L.color+L.face+L.hair+L.weapon);if(!b.classList.contains('baked'))return sc;if(rank===1)b.classList.add('hop');
+    const c=new DOMMatrix(tr).transformPoint(new DOMPoint(0,cH/2,D/2)),n=el('div','stepon');n.style.cssText=`left:${W/2+c.x-W*.4}px;top:${(cH+stepH)/2+c.y-stepH/2}px;width:${W*.8}px;height:${stepH}px`;
+    n.append(el('span','stepnum',String(rank)));b.append(n);return b;}
+  return sc;
 }
 function put(id,node){const e=$(id);e.innerHTML='';e.append(node);}
 /* ---- animation helpers (CSS does the motion; reduced-motion users get none) ---- */
@@ -317,12 +606,14 @@ const H={timer:null,poll:null,revealing:false,deck:null,key:null,localStart:0,us
 /* A short fingerprint of a round, so the same round is never served twice in one lobby. */
 function sigOf(g,item,q,key){if(GAMES[g].pool)return 'p'+item;
   if(g==='math')return q.text;if(g==='stroop')return q.display.text+'|'+q.display.color;if(g==='count')return q.text+'|'+key.value;
-  if(g==='memory')return [...q.display.items].sort().join('')+'|'+key.answer;if(g==='slide')return q.tiles.join('');return JSON.stringify(q);}
+  if(g==='memory')return [...q.display.items].sort().join('')+'|'+key.answer;if(g==='slide')return q.tiles.join('');
+  if(g==='hilo')return q.display.a[0]+'|'+q.display.b;if(g==='spot')return q.grid.b.join('')+'|'+key.correct;if(g==='order')return q.text+'|'+[...q.items].sort().join('|');
+  if(g==='lines')return q.display.name+'|'+q.display.at;if(g==='draw')return 'd'+key.word;return JSON.stringify(q);}
 /* Load what this lobby has already played (kept with the host key, so it survives reloads and host changes). */
 async function loadUsed(){if(H.usedLoaded)return;try{const k=await hostCall('host_get_key',{});H.used=(k&&k.used)||{};H.usedLoaded=true;}catch(e){}}
 let P={tick:null,localStart:0,answered:local.get('answered')||{}};
 /* How far into the round we are, from the server's start time. Clamped so a wrong device clock cannot break the timer. */
-function roundStart(s){const t=Date.parse(s.startedAt||'');if(!isFinite(t))return performance.now();const el=Date.now()-t;return el>=0&&el<=s.dur*1000?performance.now()-el:performance.now();}
+function roundStart(s){const t=Date.parse(s.startedAt||'');if(!isFinite(t))return performance.now();const el=serverNow()-t;return el>=0&&el<=s.dur*1000?performance.now()-el:performance.now();}
 const anyOf=(list,skip=1)=>list[skip+Math.floor(Math.random()*(list.length-skip))][0];
 let myColor=local.get('color')||COLORS[Math.floor(Math.random()*COLORS.length)],myFace=pickId(FACES,local.get('face'));
 // First visit with the new character maker: start with a random hairstyle and weapon so everyone looks different.
@@ -374,6 +665,7 @@ let refreshT;function soon(){clearTimeout(refreshT);refreshT=setTimeout(refresh,
 async function boot(){
   if(!window.supabase||!CFG.supabaseUrl||!CFG.supabaseAnonKey||CFG.supabaseUrl.includes('YOUR-'))return showNoAccess('This game is not connected to its database yet. Add the Supabase URL and anon key in config.js.');
   sb=window.supabase.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey,{auth:{persistSession:false}});
+  syncClock();setInterval(syncClock,120000);
   if(location.hash.includes('host='))history.replaceState(null,'',location.pathname+location.search); // old facilitator links
   TOKEN=local.get('token');if(!TOKEN||TOKEN.length<20){TOKEN=newToken();local.set('token',TOKEN);}
   const t=setTimeout(()=>$('loadingNote').textContent='Still connecting. Check your internet connection.',10000);
@@ -479,33 +771,44 @@ $('createForm').addEventListener('submit',async e=>{
 });
 
 /* ================= GAME GUIDE + PRACTICE ROUNDS (lobby browser) ================= */
-const HOW={choice:'Tap one of the choices',text:'Type the word',number:'Type a number',slide:'Solve the puzzle on your phone'};
-function howFor(id){if(GAMES[id].race)return 'Press SPACE or tap fast';const g=GAMES[id],s=g.make(g.pool?g.pool[0]:0).q;return s.tf?'Tap True or False':HOW[s.type];}
+const HOW={choice:'Tap one of the choices',text:'Type the word',number:'Type a number',slide:'Solve the puzzle on your phone',...HOW_PLAY};
+function howFor(id){const g=GAMES[id];if(g.race)return g.kind==='catch'?'Tap the falling 2San kit':'Press SPACE or tap fast';if(id==='typerace')return 'Type the line fast';if(id==='majority')return 'Pick what most will pick';if(id==='last')return 'Wrong answer = out';
+  const s=g.make(g.pool?g.pool[0]:0).q;return s.tf?'Tap True or False':s.hilo?'Tap Higher or Lower':HOW[s.type];}
 function buildGameCards(){
   const box=$('gameCards');if(box.firstChild)return;
-  Object.entries(GAMES).forEach(([id,g])=>{
+  GROUPS.forEach(([gid,gname])=>{box.append(el('h3','ghead',gname));
+  Object.entries(GAMES).filter(([,g])=>g.grp===gid).forEach(([id,g])=>{
     const c=el('div','gcard');const ic=el('i',null,g.icon);ic.style.background=g.bg;
     const t=el('div');t.style.minWidth='0';t.append(el('b',null,g.name),el('p',null,g.desc));
-    const meta=el('div','gmeta');meta.append(el('span','st wait',howFor(id)),el('span',null,g.race?'10s, 30s or 1 min races':`${g.secs}s per round`));
+    const meta=el('div','gmeta');meta.append(el('span','st wait',howFor(id)),el('span',null,g.race?'10s, 30s or 1 min rounds':`${g.secs}s per round`));
     const b=el('button','btn sm blue','Try a sample');b.type='button';b.onclick=()=>openDemo(id);
     const top=el('div','gtop');top.append(ic,t);c.append(top,meta,b);box.append(c);
+  });
+  if(gid==='party'){const c=el('div','gcard team');const ic=el('i',null,'🤝');ic.style.background='var(--sun)';const t=el('div');t.style.minWidth='0';
+    t.append(el('b',null,'Team Battle'),el('p',null,'Not a game but a mode for any game: the host splits everyone into 2 or 4 teams (Coral, Blue, Mint, Purple). The team with the best average score wins.'));
+    const top=el('div','gtop');top.append(ic,t);const meta=el('div','gmeta');meta.append(el('span','st wait','Host turns it on'),el('span',null,'Works with every game'));c.append(top,meta);box.append(c);}
   });stagger(box);
 }
 /* A practice round runs only on this device: nothing is sent or scored. */
 const DM={id:null,q:null,key:null,start:0,tick:null,done:false,slide:null,opener:null};
 function openDemo(id){DM.opener=document.activeElement;DM.id=id;$('demo').hidden=false;document.body.style.overflow='hidden';newDemo();$('demoClose').focus();}
-function closeDemo(){DM.run=(DM.run||0)+1;DM.paddle=null;clearInterval(DM.tick);clearTimeout(flashT);$('demo').hidden=true;document.body.style.overflow='';if(DM.opener&&DM.opener.focus)DM.opener.focus();}
+function closeDemo(){DM.run=(DM.run||0)+1;DM.paddle=null;DM.noKey=false;clearInterval(DM.tick);clearTimeout(flashT);$('demo').hidden=true;document.body.style.overflow='';if(DM.opener&&DM.opener.focus)DM.opener.focus();}
 function newDemo(){
-  DM.run=(DM.run||0)+1;DM.paddle=null;if(GAMES[DM.id].race)return demoRace();
+  DM.run=(DM.run||0)+1;DM.paddle=null;DM.noKey=false;boxTimers($('dDisp'));boxTimers($('dPlay'));if(GAMES[DM.id].race)return demoRace();
   $('dCard').classList.remove('racecard');
-  const g=GAMES[DM.id],pick=g.pool?g.pool[Math.floor(Math.random()*g.pool.length)]:0,{q,key}=g.make(pick);
+  const g=GAMES[DM.id],pick=g.pool?g.pool[Math.floor(Math.random()*g.pool.length)]:0,{q,key}=g.make(pick);fitTiming(q,g.secs);
+  if(q.type==='draw'){q.text='Practice: draw it before time runs out';q.hint='';}
   Object.assign(DM,{q,key,start:performance.now(),done:false});
   const ic=$('demoIcon');ic.textContent=g.icon;ic.style.background=g.bg;$('demoTitle').textContent=g.name;$('demoDesc').textContent=g.desc;
   $('dCat').textContent=q.cat;$('dText').textContent=q.text;$('dHint').textContent=q.hint||'';$('dHint').hidden=!q.hint;
-  $('dNote').hidden=true;
-  const disp=$('dDisp');if(q.type==='slide')disp.innerHTML='';else renderDisplay(disp,q,true,DM.start);
+  const note=DM.id==='majority'?'In a real game the most picked answer scores. Here any pick is fine.':DM.id==='last'?'In a real game a wrong answer knocks you out.':DM.id==='draw'?'In a real game only you see the word, and everyone else types a guess.':DM.id==='whoami'?'A new clue appears every few seconds. Answer early for more points.':'';
+  $('dNote').textContent=note;$('dNote').hidden=!note;
+  const disp=$('dDisp');if(q.type==='slide'||q.type==='draw'){disp.innerHTML='';boxTimers(disp);}else renderDisplay(disp,q,!(q.type==='order'||q.type==='spot'),DM.start);
+  const dp=$('dPlay');dp.hidden=!(q.type==='react'||q.type==='spot'||q.type==='order'||q.type==='draw');dp.innerHTML='';
+  if(!dp.hidden){DM.pad=buildPlay(dp,q,{start:DM.start,locked:null,demo:true,word:key.word,onAnswer:a=>demoAnswer(a)});
+    if(q.type==='draw'){const b=el('button','btn mint','Done drawing');b.type='button';b.onclick=()=>demoAnswer({drawn:true});const row=el('div','actions');row.append(b);dp.append(row);}}
   const opts=$('dOpts');opts.innerHTML='';opts.hidden=q.type!=='choice';opts.classList.remove('static');
-  if(q.type==='choice')q.options.forEach((t,i)=>{const st=q.tf?OPT_STYLE[i===0?2:0]:OPT_STYLE[i];const b=el('button','opt');b.type='button';b.style.setProperty('--c',st.c);if(st.fg)b.style.setProperty('--fg',st.fg);
+  if(q.type==='choice')q.options.forEach((t,i)=>{const st=optStyle(q,i);const b=el('button','opt');b.type='button';b.style.setProperty('--c',st.c);if(st.fg)b.style.setProperty('--fg',st.fg);
     b.append(el('span','sh',q.tf?(i===0?'✓':'✗'):st.s),optLabel(t));b.onclick=()=>demoAnswer({choice:i});opts.append(b);});stagger(opts);animIn($('dCard'));
   $('dTxt').hidden=q.type!=='text';$('dTxtIn').value='';
   $('dNum').hidden=q.type!=='number';$('dNumIn').value='';
@@ -518,37 +821,41 @@ function demoRace(){
   const g=GAMES[DM.id],run=DM.run;clearInterval(DM.tick);DM.done=false;DM.paddle=null;
   const ic=$('demoIcon');ic.textContent=g.icon;ic.style.background=g.bg;$('demoTitle').textContent=g.name;$('demoDesc').textContent=g.desc;
   $('dCard').classList.add('racecard');
-  $('dCat').textContent='Practice race · 10 seconds';$('dText').textContent=RACE_NAMES[rnd(0,RACE_NAMES.length-1)];$('dHint').hidden=true;$('dNote').hidden=true;
-  ['dOpts','dTxt','dNum','dSlideWrap','dResult'].forEach(i=>$(i).hidden=true);$('dClock').textContent='🦆';
+  const K=KINDS[g.kind||'duck'],kind=g.kind||'duck',names=K.names();
+  $('dCat').textContent=`Practice ${kind==='duck'?'race':'round'} · 10 seconds`;$('dText').textContent=names[rnd(0,names.length-1)];$('dHint').hidden=true;$('dNote').hidden=true;
+  ['dOpts','dTxt','dNum','dSlideWrap','dResult','dPlay'].forEach(i=>$(i).hidden=true);$('dClock').textContent=K.icon;
   const nick=($('nick').value.trim()||'You').slice(0,18),riders=[['me',nick,myLook()],...DEMO_BOTS.map(b=>[b[0],b[0]+' duck',look({color:b[1],face:b[2],hair:b[3],weapon:b[4]})])];
-  const dur=10,tgt=raceTarget(dur),ids=shuffle(riders.map(x=>x[0])),seed=rid();
-  const race=el('div','race small'),cnt=el('div','race-count'),lanes=el('div');race.append(cnt,lanes);
-  const how=el('p','racehow',RACE_HOW);
-  const btn=el('button','padbtn');btn.type='button';btn.append(el('span','padbig'),el('span','padsub'));
+  const dur=10,ids=shuffle(riders.map(x=>x[0])),seed=rid(),tgt=K.target(dur,seed);
+  const race=el('div','race small'),cnt=el('div','race-count'),lanes=el('div','lanes');race.append(cnt,lanes);race.dataset.kind=kind;
+  const how=el('p','racehow',K.how());
+  const btn=el('button','padbtn');btn.type='button';btn.append(el('span','padbig'),el('span','padsub'));btn.hidden=kind==='catch';
   const disp=$('dDisp');disp.innerHTML='';disp.append(how,race,btn);
   animIn($('dCard'));
-  const RV=buildRiver(lanes,ids.map(id=>{const x=riders.find(q=>q[0]===id);return {id,name:x[1],...x[2],me:id==='me'};}),{small:true,dur,follow:'me'});
-  // Bots paddle at a steady human pace with a little wobble; some days they are quick, some days slow.
-  const B={},rate={};ids.forEach(id=>{B[id]=[0,null];if(id!=='me')rate[id]=3.6+Math.random()*2.4;});
+  const list=ids.map(id=>{const x=riders.find(q=>q[0]===id);return {id,name:x[1],...x[2],me:id==='me'};});
+  const t0=performance.now()+RACE_LEAD*1000,clock=()=>(performance.now()-t0)/1000;
+  const RV=kind==='pump'?buildBottles(lanes,list,{small:true}):kind==='catch'?buildCatch(lanes,list,{small:true,seed,dur,clock,me:'me',canPlay:()=>st()==='go',onGood:()=>DM.paddle&&DM.paddle(),onBad:()=>beep(160,.25)}):buildRiver(lanes,list,{small:true,dur,follow:'me'});
+  // Bots play at a steady human pace with a little wobble; some days they are quick, some days slow.
+  const B={},rate={};ids.forEach(id=>{B[id]=[0,null];if(id!=='me')rate[id]=kind==='catch'?(tgt/dur)*(.45+Math.random()*.4):kind==='pump'?4+Math.random()*3:3.6+Math.random()*2.4;});
   const shown={};ids.forEach(id=>shown[id]=0);
-  const t0=performance.now()+RACE_LEAD*1000,clock=()=>(performance.now()-t0)/1000;let lastTap=0,last=null,prev=performance.now(),ended=0,kick={},seen=false;
+  let lastTap=0,last=null,prev=performance.now(),ended=0,kick={},seen=false;
   const st=()=>{const t=clock();return B.me[1]!=null?'fin':t>=dur||ended?'up':t<0?'wait':'go';};
-  DM.paddle=()=>{if(run!==DM.run||st()!=='go')return;const now=performance.now();if(now-lastTap<PAD_MIN_MS)return;lastTap=now;
-    B.me[0]=Math.min(tgt,B.me[0]+1);padPress(btn);RV.kick('me');beep(B.me[0]%2?740:880,.025);if(B.me[0]>=tgt){B.me[1]=Math.round(clock()*1000);beep(1320,.15);}};
+  DM.paddle=()=>{if(run!==DM.run||st()!=='go')return;const now=performance.now();if(kind!=='catch'&&now-lastTap<PAD_MIN_MS)return;lastTap=now;
+    B.me[0]=Math.min(tgt,B.me[0]+1);if(kind!=='catch')padPress(btn);RV.kick('me');beep(kind==='catch'?990:B.me[0]%2?740:880,kind==='catch'?.05:.025);if(B.me[0]>=tgt){B.me[1]=Math.round(clock()*1000);beep(1320,.15);}};
+  DM.noKey=kind==='catch';
   wirePad(btn,()=>{if(DM.paddle)DM.paddle();});
   (function f(){if(run!==DM.run)return;const now=performance.now(),dt=Math.min(.1,(now-prev)/1000),t=clock();prev=now;
     const c=ended||t<-3?'':t<0?String(Math.ceil(-t)):t<.8?'GO!':'';
-    if(c!==last){last=c;cnt.textContent=c;if(c)beep(c==='GO!'?990:520,.1);}
+    if(c!==last){last=c;cnt.textContent=c;if(c)beep(c==='GO!'?990:520,.1);if(kind!=='duck')race.classList.toggle('counting',t<0);}
     if(t>=-3&&!seen){seen=true;try{btn.scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(e){}}
     if(t>0&&!ended)for(const id in rate)if(B[id][1]==null){const v=B[id][0]+rate[id]*dt*(.6+Math.random()*.8);if(Math.floor(v)>Math.floor(B[id][0])&&(kick[id]=(kick[id]||0)+1)%3===0)RV.kick(id);B[id][0]=Math.min(tgt,v);if(B[id][0]>=tgt)B[id][1]=Math.round(t*1000);}
     const bd={};ids.forEach(id=>bd[id]=[Math.floor(B[id][0]),B[id][1]]);
     const order=raceOrder(ids,bd,seed),crossed={};order.forEach((id,i)=>{if(bd[id][1]!=null)crossed[id]=i;});
     ids.forEach(id=>{const goal=bd[id][0]/tgt,a=calm()?1:1-Math.exp(-dt*(id==='me'?20:9));shown[id]+=(goal-shown[id])*a;});
-    RV.update(shown,order,crossed,!!ended);
-    paintPad(btn,{state:st(),taps:bd.me[0],tgt});$('dClock').textContent=ended?'🏁':`${Math.max(0,Math.ceil(t<0?dur:dur-t))}s`;
+    const cn={};ids.forEach(id=>cn[id]=bd[id][0]);RV.update(shown,order,crossed,!!ended,cn);
+    if(kind!=='catch')paintPad(btn,{state:st(),taps:bd.me[0],tgt,K});$('dClock').textContent=ended?'🏁':`${Math.max(0,Math.ceil(t<0?dur:dur-t))}s`;
     if(!ended&&(t>=dur||ids.every(id=>bd[id][1]!=null))){ended=now;DM.done=true;DM.paddle=null;const pos=order.indexOf('me'),taps=bd.me[0];
-      $('dVerdict').textContent=pos===0?`Your duck won with ${taps} paddles! 🎉`:taps===0?'Your duck did not move. Press SPACE or tap PADDLE!':`Your duck finished ${ordinal(pos+1)} with ${taps} paddles.`;$('dVerdict').className='dverdict '+(pos===0?'ok':'no');
-      $('dAnswer').textContent=taps?`In a real game that is ${Math.max(100,1000-100*pos)} points.`:'In a real game a duck that never moves scores 0 points.';$('dResult').hidden=false;animIn($('dResult'));pos===0?fanfare():beep(660,.12);
+      $('dVerdict').textContent=K.mine(pos,taps,1,'');$('dVerdict').className='dverdict '+(pos===0?'ok':'no');
+      $('dAnswer').textContent=taps?`In a real game that is ${Math.max(100,1000-100*pos)} points.`:'In a real game that scores 0 points.';$('dResult').hidden=false;animIn($('dResult'));pos===0?fanfare():beep(660,.12);
       requestAnimationFrame(()=>{try{$('demoAgain').scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(e){}});}
     if(!ended||now-ended<2500)requestAnimationFrame(f);
   })();
@@ -565,16 +872,23 @@ function paintDemoSlide(){
 function demoAnswer(a){
   if(DM.done)return;DM.done=true;clearInterval(DM.tick);ensureAudio();
   const q=DM.q,key=DM.key,secs=((performance.now()-DM.start)/1000).toFixed(1);let good=false,msg;
-  if(!a)msg="Time's up!";
+  const ms=performance.now()-DM.start,dur=GAMES[DM.id].secs*1000;
+  if(q.type==='draw'){good=true;msg=a?'Nice drawing!':"Time's up! Nice drawing.";if(DM.pad&&DM.pad.stop)DM.pad.stop();}
+  else if(!a)msg="Time's up!";
+  else if(key.majority){good=true;msg='Nice pick! In a real game you score when most players pick the same.';}
+  else if(q.type==='react'){good=a.value>=REACT_MIN;msg=good?`${(a.value/1000).toFixed(3)} s reaction! The fastest player scores 1000.`:'Too soon! Wait for the second line.';}
   else if(q.type==='number'&&key.closest){const err=Math.abs(a.value-key.value),pts=err===0?1000:Math.max(0,Math.round(800*(1-err/Math.max(Math.abs(key.value),1))));good=pts>=600;msg=err===0?'Exactly right!':`You were ${err} away. That would score ${pts} points.`;}
-  else{good=q.type==='choice'?a.choice===key.correct:q.type==='text'?(key.accept||[]).map(norm).includes(norm(a.text)):q.type==='number'?a.value===key.value:a.value>0;
-    msg=q.type==='slide'?`Solved in ${a.value} moves and ${secs}s!`:good?`Correct in ${secs}s!`:'Not this time.';}
+  else{good=q.type==='choice'||q.type==='spot'?a.choice===key.correct:q.type==='text'?(key.accept||[]).map(norm).includes(norm(a.text)):q.type==='order'?a.text===key.order:q.type==='number'?a.value===key.value:a.value>0;
+    msg=q.type==='slide'?`Solved in ${a.value} moves and ${secs}s!`:!good?(DM.id==='last'?'Wrong! In a real game you would be out.':'Not this time.')
+      :key.who?`Correct after ${Math.min(4,Math.floor(ms/(dur*.2))+1)} of 4 clues! That scores ${[1000,800,600,400][Math.min(3,Math.floor(ms/(dur*.2)))]} points.`
+      :key.pixel?`Correct in ${secs}s! That scores ${Math.round(1000-600*Math.min(1,ms/(dur*.75)))} points.`:DM.id==='last'?`Correct! You survive this round.`:`Correct in ${secs}s!`;}
   $('dOpts').classList.add('static');
   if(q.type==='choice')document.querySelectorAll('#dOpts .opt').forEach((b,i)=>{b.disabled=true;b.classList.add(i===key.correct?'right':'dim');if(a&&a.choice===i)b.classList.add('mine');});
-  $('dTxt').hidden=true;$('dNum').hidden=true;
+  $('dTxt').hidden=true;$('dNum').hidden=true;$('dPlay').querySelectorAll('button').forEach(b=>b.disabled=true);
+  revealDisplay($('dDisp'),q,{correct:key.correct,reveal:key.reveal||(q.type==='order'?{order:key.order}:null)});
   if(q.display&&q.display.kind==='flash'){clearTimeout(flashT);const gr=$('dDisp').querySelector('.egrid');if(gr)gr.querySelectorAll('span').forEach((s,i)=>{s.textContent=q.display.items[i];});gr&&gr.classList.remove('gone');}
   $('dVerdict').textContent=msg;$('dVerdict').className='dverdict '+(good?'ok':'no');
-  $('dAnswer').textContent=q.type==='slide'?'':'Answer: '+key.answer;
+  $('dAnswer').textContent=q.type==='slide'||key.majority||q.type==='react'?'':q.type==='draw'?'You drew: '+key.word:'Answer: '+key.answer;
   $('dResult').hidden=false;animIn($('dResult'));requestAnimationFrame(()=>{try{$('demoAgain').scrollIntoView({block:'nearest',behavior:calm()?'auto':'smooth'});}catch(e){}});good?beep(1040,.12):beep(240,.18);
 }
 $('demoClose').onclick=closeDemo;$('demoDone').onclick=closeDemo;$('demoAgain').onclick=newDemo;
@@ -607,6 +921,145 @@ function boardRows(container,rows,{showGain=true,limit=10,highlight=null}={}){
   stagger(c);if(!rows.length)c.append(el('p','hint','No players yet.'));
 }
 
+/* ================= newer games: pictures on the screen, play areas on the phone ================= */
+/* Server clock: timed clues (Two Lines!, Pixel Reveal, Who Am I?) show at the same moment on every screen,
+   even when a phone's own clock is a few seconds off. */
+const CLOCK={off:0,rtt:1e9};
+async function syncClock(){let best=1e9,off=CLOCK.off;for(let i=0;i<3;i++){try{const t0=Date.now(),s=await rpc('server_clock',{}),t1=Date.now();if(typeof s==='number'&&isFinite(s)&&t1-t0<best){best=t1-t0;off=s-(t0+t1)/2;}}catch(e){}}if(best<1e9){CLOCK.off=off;CLOCK.rtt=best;}}
+const serverNow=()=>Date.now()+CLOCK.off;
+/* Timers that belong to one picture; cleared whenever the picture is drawn again. */
+function boxTimers(box){(box._t||[]).forEach(clearTimeout);box._t=[];box._run=(box._run||0)+1;return box._run;}
+function later(box,ms,fn){const t=setTimeout(fn,Math.max(0,ms));(box._t||(box._t=[])).push(t);}
+/* The newer pictures. start = performance.now() when the round opened on this screen. Returns true when it drew something. */
+function newDisplay(box,q,start,forHost=true){
+  const d=q.display||{},t0=start??H.localStart,since=()=>performance.now()-t0;
+  if(d.kind==='strip'){
+    const w=el('div','strip'),cas=el('div','cass'),win=el('div','win'),c=el('span','ln c'),t=el('span','ln t');
+    win.append(el('i','lbl c','C'),c,el('i','lbl t','T'),t);cas.append(el('b','sname',d.name),win,el('span','well'));w.append(cas);box.append(w);
+    later(box,d.at-since(),()=>{t.classList.add('on');w.classList.add('pos');});return true;}
+  if(d.kind==='type'){const t=el('div','typeline',d.text);t.addEventListener('copy',e=>e.preventDefault());t.addEventListener('contextmenu',e=>e.preventDefault());box.append(t);return true;}
+  if(d.kind==='blank'){const t=el('div','blankline');const parts=d.text.split('___');t.append(document.createTextNode(parts[0]),el('span','blank','?'),document.createTextNode(parts[1]||''));box.append(t);return true;}
+  if(d.kind==='hilo'){const w=el('div','hilo'),a=el('div','hcard a'),b=el('div','hcard b');
+    a.append(el('small',null,d.a[0]),el('b',null,String(d.a[1])));b.append(el('small',null,d.b),el('b','qv','?'));w.append(a,el('span','vs','VS'),b);box.append(w);return true;}
+  if(d.kind==='clues'){const ol=el('ol','clues');d.clues.forEach((c,i)=>{const li=el('li',null,c);li.style.setProperty('--n',i+1);ol.append(li);later(box,i*(d.every||6000)-since(),()=>li.classList.add('on'));});box.append(ol);return true;}
+  if(d.kind==='pixel'){const w=el('div','pixwrap'),cv=document.createElement('canvas');cv.width=480;cv.height=300;cv.setAttribute('role','img');cv.setAttribute('aria-label','A blurry 2San product picture');w.append(cv);box.append(w);pixelate(box,cv,d,t0);return true;}
+  if(q.type==='spot'){const w=el('div','spot'+(forHost?'':' one'));(forHost?[['A',q.grid.a],['B',q.grid.b]]:[['A',q.grid.a]]).forEach(([n,g])=>{const s=el('div','sgrid');s.append(el('b','sname',n));const cells=el('div','scells');g.forEach(e=>cells.append(el('span',null,e)));s.append(cells);w.append(s);});box.append(w);return true;}
+  if(q.type==='order'){if(!forHost)return true;const ol=el('div','olist');q.items.forEach((t,i)=>{const c=el('div','ocard');c.append(el('b','olet',String.fromCharCode(65+i)),el('span',null,t));ol.append(c);});stagger(ol);box.append(ol);return true;}
+  if(q.type==='draw'){drawView(box,q);return true;}
+  return false;
+}
+/* What the picture shows once the answer is out: the second line, the hidden number, all clues, the changed box, the right order. */
+function revealDisplay(box,q,s){
+  if(!box||!q)return;const d=q.display||{};
+  if(d.kind==='strip'){boxTimers(box);const t=box.querySelector('.ln.t');if(t)t.classList.add('on');const w=box.querySelector('.strip');if(w)w.classList.add('pos');}
+  if(d.kind==='hilo'){const b=box.querySelector('.hcard.b .qv');if(b&&s.reveal&&b.textContent==='?'){b.textContent=String(s.reveal.v);b.classList.add('shown');box.querySelector('.hcard.b').classList.add(s.correct===0?'up':'down');}}
+  if(d.kind==='clues'){boxTimers(box);box.querySelectorAll('.clues li').forEach(li=>li.classList.add('on'));}
+  if(d.kind==='pixel'){box._pixDone=true;}
+  if(d.kind==='blank'){const b=box.querySelector('.blank');if(b&&s.correct!=null&&q.options){b.textContent=q.options[s.correct];b.classList.add('shown');}}
+  if(q.type==='spot'&&s.correct!=null)box.querySelectorAll('.scells').forEach(c=>{const x=c.children[s.correct];if(x)x.classList.add('hit');});
+  if(q.type==='order'&&s.reveal&&s.reveal.order){const ol=box.querySelector('.olist');if(ol&&!ol.classList.contains('done')){ol.classList.add('done');const cards=[...ol.children];ol.innerHTML='';
+    [...s.reveal.order].forEach((k,n)=>{const c=cards[+k];if(!c)return;c.querySelector('.olet').textContent=n+1;c.style.setProperty('--i',n);ol.append(c);});}}
+}
+/* Pixel Reveal: the picture is drawn in big blocks that get smaller until it is clear (at d.ms into the round). */
+function pixelate(box,cv,d,t0){
+  const run=box._run,src=document.createElement('canvas'),W=cv.width,Hh=cv.height;src.width=W;src.height=Hh;const g=src.getContext('2d'),ctx=cv.getContext('2d'),tiny=document.createElement('canvas'),tg=tiny.getContext('2d');
+  g.fillStyle=d.color;g.beginPath();if(g.roundRect)g.roundRect(0,0,W,Hh,26);else g.rect(0,0,W,Hh);g.fill();
+  g.fillStyle='rgba(255,255,255,.18)';g.beginPath();g.arc(W*.78,Hh*.2,90,0,7);g.fill();g.beginPath();g.arc(W*.12,Hh*.9,70,0,7);g.fill();
+  g.textAlign='center';g.textBaseline='middle';g.font='120px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';g.fillText(d.icon,W/2,Hh*.42);
+  g.font='700 34px Lexend,"Segoe UI",sans-serif';g.fillStyle='#fff';g.strokeStyle='#1D1D4F';g.lineWidth=6;g.lineJoin='round';g.strokeText(d.label,W/2,Hh*.84);g.fillText(d.label,W/2,Hh*.84);
+  let last=-1;
+  const step=()=>{if(box._run!==run||!cv.isConnected)return;const p=box._pixDone?1:Math.min(1,(performance.now()-t0)/(d.ms||15000));
+    const blk=p>=1?1:Math.max(2,Math.round(60*Math.pow(1-p,1.7)));
+    if(blk!==last){last=blk;if(blk<=1){ctx.imageSmoothingEnabled=true;ctx.clearRect(0,0,W,Hh);ctx.drawImage(src,0,0);}
+      else{const w=Math.max(1,Math.ceil(W/blk)),h=Math.max(1,Math.ceil(Hh/blk));tiny.width=w;tiny.height=h;tg.imageSmoothingEnabled=true;tg.drawImage(src,0,0,w,h);ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,W,Hh);ctx.drawImage(tiny,0,0,w,h,0,0,W,Hh);}}
+    if(blk>1)requestAnimationFrame(step);};
+  step();
+}
+
+/* ---------- Draw It: the drawing ---------- */
+const DRAW_COLORS=['#1D1D4F','#FB7569','#0084DB','#1DD6A5','#7E43CA','#FFC83D','#FFFFFF'];
+const drawRound_=s=>s.session+':'+s.idx;
+function strokeOn(ctx,s,W,Hh){if(!Array.isArray(s)||s.length<4)return;const col=DRAW_COLORS[s[0]]||DRAW_COLORS[0],wd=Math.max(1,Math.min(40,+s[1]||4))*W/800;
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=wd;ctx.lineCap='round';ctx.lineJoin='round';
+  if(s.length<6){ctx.beginPath();ctx.arc(s[2]*W/1000,s[3]*Hh/1000,wd/2,0,7);ctx.fill();return;}
+  ctx.beginPath();ctx.moveTo(s[2]*W/1000,s[3]*Hh/1000);for(let i=4;i+1<s.length;i+=2)ctx.lineTo(s[i]*W/1000,s[i+1]*Hh/1000);ctx.stroke();}
+function blankCanvas(cv){const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height);return c;}
+/* Everyone but the drawer: read the drawing from the server about twice a second. */
+function drawView(box,q){
+  const s=STATE,round=s?drawRound_(s):'',run=box._run,w=el('div','drawview'),cv=document.createElement('canvas');cv.width=800;cv.height=600;cv.setAttribute('role','img');cv.setAttribute('aria-label','The drawing so far');
+  const me=ME&&q.drawer===ME.player_id,who=el('span','who',me?'You are drawing! Your canvas is below.':`✏️ ${q.drawerName||'Someone'} is drawing…`);
+  w.append(cv,who);box.append(w);const ctx=blankCanvas(cv);let n=0,busy=false;
+  if(me){w.classList.add('mine');return;}
+  const pull=async()=>{if(box._run!==run||!cv.isConnected||!STATE||drawRound_(STATE)!==round)return;
+    if(!busy){busy=true;try{const r=await rpc('draw_get',{p_token:TOKEN,p_round:round,p_from:n});if(r&&box._run===run){if(r.from===0&&n>0){blankCanvas(cv);n=0;}(r.s||[]).forEach(x=>strokeOn(ctx,x,800,600));n=r.n||0;}}catch(e){}busy=false;}
+    if(STATE&&STATE.phase==='question')later(box,isHost()?400:600,pull);else if(STATE&&STATE.phase==='reveal'&&!box._last){box._last=true;later(box,300,pull);}};
+  pull();
+}
+/* The drawer's canvas: lines are drawn here at once and sent in short pieces about 8 times a second. */
+function drawPad(box,{round,live=true,word=''}){
+  const run=box._run,wrap=el('div','drawpad'),cv=document.createElement('canvas');cv.width=800;cv.height=600;cv.setAttribute('aria-label','Draw here');
+  const banner=el('div','drawword');banner.append(el('small',null,'Draw this (no letters!)'),el('b',null,word||'Loading…'));
+  const tools=el('div','drawtools'),pal=el('div','pal');let col=0,wd=6;
+  DRAW_COLORS.forEach((c,i)=>{const b=el('button',i===0?'on':'');b.type='button';b.style.background=c;b.setAttribute('aria-label',i===6?'Eraser':'Color '+(i+1));if(i===6)b.textContent='⌫';b.onclick=()=>{col=i;wd=i===6?22:6;pal.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));};pal.append(b);});
+  const clear=el('button','btn sm','Clear');clear.type='button';tools.append(pal,clear);wrap.append(banner,cv,tools);box.append(wrap);
+  const ctx=blankCanvas(cv);const mine=[];let sent=0,busy=false,cur=null,clearing=false,stopped=false;
+  const pt=e=>{const r=cv.getBoundingClientRect();return [Math.round(Math.max(0,Math.min(1000,(e.clientX-r.left)/r.width*1000))),Math.round(Math.max(0,Math.min(1000,(e.clientY-r.top)/r.height*1000)))];};
+  const flushCur=()=>{if(cur&&cur.length>=4){mine.push(cur);const tail=cur.slice(-2);cur=cur.length>=6?[col,wd,...tail]:null;}};
+  cv.addEventListener('pointerdown',e=>{if(stopped)return;e.preventDefault();try{cv.setPointerCapture(e.pointerId);}catch(x){}const [x,y]=pt(e);cur=[col,wd,x,y];strokeOn(ctx,cur,800,600);});
+  cv.addEventListener('pointermove',e=>{if(!cur||stopped)return;e.preventDefault();const [x,y]=pt(e),lx=cur[cur.length-2],ly=cur[cur.length-1];if(Math.abs(x-lx)+Math.abs(y-ly)<4)return;
+    ctx.strokeStyle=DRAW_COLORS[col];ctx.lineWidth=wd*800/800;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(lx*.8,ly*.6);ctx.lineTo(x*.8,y*.6);ctx.stroke();cur.push(x,y);if(cur.length>=80)flushCur();});
+  const up=()=>{if(!cur)return;if(cur.length>=4)mine.push(cur);cur=null;};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.addEventListener('pointerleave',e=>{if(e.buttons===0)up();});
+  cv.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+  clear.onclick=()=>{blankCanvas(cv);mine.length=0;cur=null;sent=0;clearing=true;};
+  const push=async()=>{if(box._run!==run||!cv.isConnected||stopped)return;
+    if(!busy&&live){if(cur&&cur.length>=8)flushCur();const batch=mine.slice(sent,sent+25);
+      if(batch.length||clearing){busy=true;const cl=clearing,from=cl?0:sent;clearing=false;
+        try{const n=await rpc('draw_push',{p_token:TOKEN,p_round:round,p_from:from,p_strokes:batch,p_clear:cl});if(n<0){stopped=true;}else if(n===from+batch.length)sent=n;else if(n<=mine.length)sent=n;}catch(e){if(cl)clearing=true;}busy=false;}}
+    later(box,130,push);};
+  // After a reload the drawing so far comes back from the server, so new lines carry on from it.
+  if(live)(async()=>{try{const r=await rpc('draw_get',{p_token:TOKEN,p_round:round,p_from:0});if(r&&box._run===run&&r.n>0){(r.s||[]).forEach(x=>{mine.push(x);strokeOn(ctx,x,800,600);});sent=r.n;}}catch(e){}later(box,130,push);})();
+  return {setWord:w=>{banner.querySelector('b').textContent=w;},stop:()=>{stopped=true;up();}};
+}
+
+/* ---------- play areas on the phone (and in practice rounds) ---------- */
+/* opts: onAnswer(a), start (performance.now() when the round opened), locked (my answer or null), demo. */
+function buildPlay(box,q,o){
+  box.innerHTML='';boxTimers(box);
+  if(q.type==='react'){const at=q.display.at,appear=()=>o.start+at,pad=el('button','reactpad');pad.type='button';const big=el('b'),sub=el('span');pad.append(big,sub);box.append(pad);
+    const paint=()=>{const mine=o.locked;let st;if(mine){st=mine.value<REACT_MIN?'soon':'done';big.textContent=st==='soon'?'Too soon!':(mine.value/1000).toFixed(3)+' s';sub.textContent=st==='soon'?'You tapped before the second line.':'Nice reflexes! Wait for the others.';}
+      else if(performance.now()<appear()){st='wait';big.textContent='Wait for it…';sub.textContent='Tap when the second line (T) shows.';}else{st='go';big.textContent='TAP!';sub.textContent='Now! Now! Now!';}
+      pad.dataset.state=st;pad.disabled=!!mine;};
+    paint();later(box,appear()-performance.now(),paint);
+    pad.addEventListener('pointerdown',e=>{e.preventDefault();if(o.locked)return;const now=performance.now(),v=now<appear()?-1:Math.round(now-appear());o.locked={value:v};paint();if(v<0)beep(200,.2);o.onAnswer({value:v});});
+    pad.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!e.repeat){e.preventDefault();pad.dispatchEvent(new PointerEvent('pointerdown'));}});
+    return;}
+  if(q.type==='spot'){const g=el('div','spotpad');q.grid.b.forEach((e,i)=>{const b=el('button',null,e);b.type='button';b.setAttribute('aria-label',`Row ${Math.floor(i/4)+1}, box ${i%4+1}: ${e}`);b.disabled=!!o.locked;if(o.locked&&o.locked.choice===i)b.classList.add('mine');
+      b.onclick=()=>{if(o.locked)return;o.locked={choice:i};b.classList.add('mine');g.querySelectorAll('button').forEach(x=>x.disabled=true);o.onAnswer({choice:i});};g.append(b);});
+    box.append(el('p','playhint','Tap the box in grid B that is different from A.'),g);return;}
+  if(q.type==='order'){const seq=o.locked&&o.locked.text?[...o.locked.text].map(Number):[],list=el('div','orderpad'),undo=el('button','btn sm','Undo'),lock=el('button','btn mint','Lock it in');undo.type=lock.type='button';
+    const paint=()=>{list.querySelectorAll('button').forEach((b,i)=>{const n=seq.indexOf(i);b.querySelector('.onum').textContent=n<0?String.fromCharCode(65+i):n+1;b.classList.toggle('picked',n>=0);b.disabled=!!o.locked||n>=0;});
+      undo.disabled=!!o.locked||!seq.length;lock.disabled=!!o.locked||seq.length<q.items.length;lock.hidden=undo.hidden=!!o.locked;};
+    q.items.forEach((t,i)=>{const b=el('button');b.type='button';b.append(el('b','onum',String.fromCharCode(65+i)),el('span',null,t));b.onclick=()=>{if(o.locked||seq.includes(i))return;seq.push(i);beep(500+seq.length*90,.04);paint();};list.append(b);});
+    undo.onclick=()=>{seq.pop();paint();};lock.onclick=()=>{if(seq.length<q.items.length||o.locked)return;o.locked={text:seq.join('')};paint();o.onAnswer({text:seq.join('')});};
+    const row=el('div','actions');row.append(undo,lock);box.append(el('p','playhint','Tap them in the right order: first, second, third…'),list,row);paint();return;}
+  if(q.type==='draw'){return drawPad(box,{round:o.round,live:!o.demo,word:o.word||''});}
+}
+
+/* ---------- Team Battle ---------- */
+const TEAMS=[['Coral','#FB7569'],['Blue','#0084DB'],['Mint','#1DD6A5'],['Purple','#7E43CA']];
+/* Keep everyone's team; new players join the smallest team. */
+function assignTeams(prev,ids,n){const t={};ids.forEach(id=>{const k=prev&&prev[id];if(k!=null&&k<n)t[id]=k;});const cnt=Array(n).fill(0);Object.values(t).forEach(k=>cnt[k]++);
+  shuffle(ids.filter(id=>t[id]==null)).forEach(id=>{const k=cnt.indexOf(Math.min(...cnt));t[id]=k;cnt[k]++;});return t;}
+const teamOn=()=>!!(STATE&&STATE.nteams&&STATE.teams);
+/* Team standings: the average score of each team's players, so small teams are not punished. */
+function teamRows(rows){if(!teamOn())return null;const per=TEAMS.slice(0,STATE.nteams).map(([name,c],k)=>({k,name,c,ids:[],total:0}));
+  (rows||ranking()).forEach(r=>{const k=STATE.teams[r.id];if(k!=null&&per[k]){per[k].ids.push(r.id);per[k].total+=r.score;}});
+  per.forEach(p=>p.avg=p.ids.length?Math.round(p.total/p.ids.length):0);return per.filter(p=>p.ids.length).sort((a,b)=>b.avg-a.avg||a.k-b.k);}
+function teamBars(box,rows){const t=teamRows(rows);box.hidden=!t;if(!t)return;box.innerHTML='';const max=Math.max(1,...t.map(p=>p.avg));
+  t.forEach((p,i)=>{const r=el('div','tbar');r.style.setProperty('--c',p.c);r.style.setProperty('--w',(p.avg/max*100).toFixed(1)+'%');
+    r.append(el('b','tname',(i===0&&p.avg>0?'👑 ':'')+'Team '+p.name),el('span','tfill'),el('span','tpts',`${p.avg} avg · ${p.ids.length} ${p.ids.length===1?'player':'players'}`));box.append(r);});stagger(box);}
+function teamChip(chip,id){const k=teamOn()?STATE.teams[id]:null;chip.hidden=k==null;if(k==null)return;chip.textContent='Team '+TEAMS[k][0];chip.style.setProperty('--c',TEAMS[k][1]);}
+
 /* ================= HOST ================= */
 async function hostCall(fn,args){try{return await rpc(fn,{p_token:TOKEN,...args});}catch(e){status(errCode(e).includes('not_host')?'You are no longer the host of this lobby.':'Could not save. Check your connection and try again.');throw e;}}
 async function setState(data,restart=false){const cur={...STATE};delete cur.startedAt;const next={...(restart?{}:cur),...data};const started=await hostCall('host_set_state',{p_data:next,p_restart_clock:restart});STATE={...next,startedAt:started};route();}
@@ -618,18 +1071,21 @@ function renderHost(){
 }
 function selGame(){const r=document.querySelector('input[name=game]:checked');return r?r.value:'quiz';}
 function buildGameList(){
-  const box=$('gameList');if(box.firstChild)return;
-  Object.entries(GAMES).forEach(([id,g],i)=>{const l=el('label','game');
+  const box=$('gameList');if(box.firstChild)return;let i=0;
+  GROUPS.forEach(([gid,gname])=>{box.append(el('h4','ghead',gname));
+  Object.entries(GAMES).filter(([,g])=>g.grp===gid).forEach(([id,g])=>{const l=el('label','game');
     l.innerHTML=`<input type="radio" name="game" id="g-${id}" value="${id}" ${i===0?'checked':''}><span><i></i><span><b></b><small></small></span></span>`;
     const ic=l.querySelector('i');ic.textContent=g.icon;ic.style.background=g.bg;
     l.querySelector('b').textContent=g.name;l.querySelector('small').textContent=g.desc;
-    l.querySelector('input').addEventListener('change',applyGameDefaults);box.append(l);});
+    l.querySelector('input').addEventListener('change',applyGameDefaults);box.append(l);i++;});});
   applyGameDefaults();
 }
 function setSelect(sel,v){const s=$(sel);if(![...s.options].some(o=>o.value==String(v))){const o=el('option',null,String(v));o.value=v;s.append(o);}s.value=String(v);}
-function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);$('hTimeBox').hidden=!!g.race;$('hRaceLenBox').hidden=!g.race;$('hCountLbl').textContent=g.race?'Races':'Questions';updatePoolInfo();}
+function applyGameDefaults(){const g=GAMES[selGame()];setSelect('hTime',g.secs);setSelect('hCount',g.count);$('hTimeBox').hidden=!!g.race;$('hRaceLenBox').hidden=!g.race;$('hCountLbl').textContent=g.race?(g.kind==='duck'?'Races':'Rounds'):'Questions';$('hRaceLenLbl').textContent=g.kind==='duck'?'Race length':'Round length';updatePoolInfo();}
 function updatePoolInfo(){const id=selGame(),g=GAMES[id];
-  if(g.race){$('poolInfo').textContent='Players press SPACE (computer) or tap PADDLE (phone) as fast as they can. First duck over the finish line wins; if time runs out, the duck furthest ahead wins. Points per race: 1st 1000, 2nd 900, 3rd 800, down to 100 (a duck that never moves gets 0). Pick how long each race lasts.';return;}
+  if(g.race){$('poolInfo').textContent=KINDS[g.kind].how()+' Points per round: 1st 1000, 2nd 900, 3rd 800, down to 100 (0 for anyone who does nothing). Pick how long each round lasts.';return;}
+  if(id==='last'){$('poolInfo').textContent='Everyone starts in. A wrong or missing answer knocks you out (if everyone misses, nobody is out). Each round survived scores 100; the last one standing gets 500 more. The game ends when one player is left or the questions run out.';return;}
+  if(id==='draw'){$('poolInfo').textContent='Each round a different player draws on their phone; only they see the word. The others type guesses. Fast guessers score 500 to 1000; the drawer scores up to 1000 when everyone guesses it.';return;}
   if(!g.pool){$('poolInfo').textContent=`${g.name} makes a new round every time. No round repeats in this lobby.`;return;}
   const played=new Set((H.used[id]||[]).filter(s=>s[0]==='p')).size,left=g.pool.length-played;
   $('poolInfo').textContent=left>0?`${left} of ${g.pool.length} ${g.name} rounds not played yet in this lobby.`:`All ${g.pool.length} ${g.name} rounds have been played here. They will start over.`;}
@@ -660,39 +1116,54 @@ $('startBtn').onclick=async()=>{
   if(G.pool){const used=new Set(H.used[g]||[]),all=G.pool.map((_,i)=>i);order=shuffle(all.filter(i=>!used.has('p'+i))).slice(0,n);
     if(order.length<n){order=order.concat(shuffle(all.filter(i=>!order.includes(i))).slice(0,n-order.length));H.used[g]=[];
       status(`Every ${G.name} round has been played in this lobby, so some start over.`,5000);}}
-  if(G.race){const session=rid(),names=shuffle(RACE_NAMES.slice());try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await goDuck(0,{session,total:n,len:+$('hRaceLen').value||30,names:Array.from({length:n},(_,i)=>names[i%names.length])});}catch(e){}$('startBtn').disabled=false;return;}
-  H.deck={session:rid(),game:g,order,dur:+$('hTime').value};
+  const nt=+$('hTeams').value||0,teams=nt?assignTeams({},playerIds(),nt):null;
+  if(G.race){const session=rid(),names=shuffle(KINDS[G.kind].names().slice());try{await setScores({session,scores:{},last:{},ok:{},idx:-1});await goRace(0,{session,game:g,total:n,len:+$('hRaceLen').value||30,names:Array.from({length:n},(_,i)=>names[i%names.length]),teams,nteams:nt||0});}catch(e){}$('startBtn').disabled=false;return;}
+  H.deck={session:rid(),game:g,order,dur:+$('hTime').value,nteams:nt||0,drawers:g==='draw'?shuffle(playerIds()):null};H.startTeams=teams;H.startAlive=g==='last'?playerIds():null;
   try{await setScores({session:H.deck.session,scores:{},last:{},ok:{},idx:-1});await goQuestion(0);}catch(e){}
   $('startBtn').disabled=false;
 };
 async function goQuestion(i){
   const d=H.deck,g=d.game,G=GAMES[g],item=G.pool?d.order[i]:i;let made,sig,list=H.used[g]||(H.used[g]=[]);
-  for(let t=0;t<80;t++){made=G.make(G.pool?G.pool[item]:item);sig=sigOf(g,item,made.q,made.key);if(!list.includes(sig))break;}
+  for(let t=0;t<400;t++){made=G.make(G.pool?G.pool[item]:item);sig=sigOf(g,item,made.q,made.key);if(!list.includes(sig))break;}
   if(list.includes(sig)&&!G.pool){list=H.used[g]=[];} // every possible round used: start over
   list.push(sig);if(list.length>400)list.splice(0,list.length-400);
-  const {q,key}=made;
+  const {q,key}=made;fitTiming(q,d.dur);
+  const extra={};
+  // Team Battle: keep teams, put new players in the smallest team.
+  if(d.nteams){extra.nteams=d.nteams;extra.teams=assignTeams(i===0&&H.startTeams?H.startTeams:(STATE&&STATE.teams)||{},playerIds(),d.nteams);}
+  // Last One Standing: who is still in.
+  if(g==='last')extra.alive=(i===0&&H.startAlive?H.startAlive:(STATE&&STATE.alive)||playerIds()).filter(id=>PLAYERS[id]);
+  // Draw It: the next drawer still in the lobby; only they can read the word.
+  let secret={};
+  if(g==='draw'){const ids=playerIds(),list=(d.drawers||[]).filter(id=>ids.includes(id)).concat(ids.filter(id=>!(d.drawers||[]).includes(id)));
+    const who=list.length?list[i%list.length]:null;q.drawer=who;q.drawerName=who?playerName(who):'';key.drawer=who;secret={secret_for:who,secret:key.word,secret_round:d.session+':'+i};}
   key.idx=i;H.key=key;H.revealing=false;H.localStart=performance.now();H.startFor=d.session+':'+i;ANSWERS={};
-  await hostCall('host_set_key',{p_data:{deck:d,idx:i,...key,used:H.used}});
-  await setState({session:d.session,phase:'question',game:d.game,idx:i,total:d.order.length,dur:d.dur,q},true);
+  await hostCall('host_set_key',{p_data:{deck:d,idx:i,...key,used:H.used,...secret}});
+  await setState({session:d.session,phase:'question',game:d.game,idx:i,total:d.order.length,dur:d.dur,q,...extra},true);
 }
-/* One race of the 2San Duck Race game. Every player in the lobby rides and paddles; the fastest paddler wins. */
-async function goDuck(i,base){
-  const b=base||{session:STATE.session,total:STATE.total,len:STATE.len,names:STATE.names},ids=shuffle(playerIds()),facts=RACE_FACTS(),dur=b.len||30;
+/* One round of a tap game (Duck Race, Hydration Pump, Catch the Kit). Every player in the lobby plays; the fastest wins. */
+async function goRace(i,base){
+  const b=base||{session:STATE.session,game:STATE.game,total:STATE.total,len:STATE.len,names:STATE.names,teams:STATE.teams,nteams:STATE.nteams},ids=shuffle(playerIds()),facts=RACE_FACTS(),dur=b.len||30,G=GAMES[b.game]||GAMES.duck,kind=G.kind||'duck',seed=rid();
   if(!ids.length){status('Wait for at least one player to join.');return;}
-  await setState({session:b.session,phase:'race',game:'duck',idx:i,total:b.total,len:b.len,names:b.names,
-    race:{game:true,ids,place:1,seed:rid(),dur,target:raceTarget(dur),name:(b.names||[])[i]||RACE_NAMES[0],fact:facts[rnd(0,facts.length-1)]}},true);
+  const extra=b.nteams?{nteams:b.nteams,teams:assignTeams(b.teams||{},playerIds(),b.nteams)}:{};
+  await setState({session:b.session,phase:'race',game:b.game,idx:i,total:b.total,len:b.len,names:b.names,...extra,
+    race:{game:true,kind,ids,place:1,seed,dur,target:KINDS[kind].target(dur,seed),name:(b.names||[])[i]||KINDS[kind].names()[0],fact:facts[rnd(0,facts.length-1)]}},true);
 }
 function answeredIds(){const s=STATE;return playerIds().filter(id=>ANSWERS[id]&&ANSWERS[id].session===s.session&&ANSWERS[id].idx===s.idx);}
+/* Who plays this round: everyone, except players already out (Last One Standing) and the drawer (Draw It). */
+function eligibleIds(){const s=STATE;let ids=playerIds();if(!s)return ids;if(s.game==='last'&&Array.isArray(s.alive))ids=ids.filter(id=>s.alive.includes(id));if(s.q&&s.q.type==='draw'&&s.q.drawer)ids=ids.filter(id=>id!==s.q.drawer);return ids;}
 function onAnswers(){
   if(!STATE||STATE.phase!=='question'||view!=='host')return;
-  const done=answeredIds(),n=playerIds().length;$('hAnswered').textContent=`${done.length}/${n}`;
+  const el_=new Set(eligibleIds()),done=answeredIds().filter(id=>el_.has(id)),n=el_.size;$('hAnswered').textContent=`${done.length}/${n}`;
   if(n&&done.length>=n)reveal();
 }
 /* The picture part of a round: emoji tiles, letter tiles, a big word, an icon grid, or a flash grid. */
 let flashT;
 function renderDisplay(box,q,forHost,start){
   box.innerHTML='';clearTimeout(flashT);const d=q.display;
+  boxTimers(box);box._pixDone=false;box._last=false;
   if(q.type==='slide'&&forHost){const g=el('div','slide mini');q.tiles.forEach(t=>{const b=el('span',t?'':'blank',t?SLIDE_LABEL[t]:'');if(t){b.style.setProperty('--c',COLORS[t]);b.dataset.n=t;}g.append(b);});box.append(g);return;}
+  if(newDisplay(box,q,start,forHost))return;
   if(!d)return;
   if(d.kind==='four'){const g=el('div','four');d.items.forEach(e=>g.append(el('span',null,e)));stagger(g);box.append(g);}
   else if(d.kind==='tiles'){const g=el('div','tiles');[...d.text].forEach(ch=>g.append(el('span',ch===' '?'gap':'',ch===' '?'':ch)));stagger(g);box.append(g);}
@@ -707,19 +1178,22 @@ let hostQKey='';
 function renderHostQ(){
   hostShow('hQ');worldHost();const s=STATE,q=s.q||{};const k=s.session+':'+s.idx+':'+s.phase;
   $('hAnswered').textContent=`${answeredIds().length}/${playerIds().length}`;
-  $('hAnsweredLbl').textContent=q.type==='slide'?'Solved':'Answered';
+  $('hAnsweredLbl').textContent=q.type==='slide'?'Solved':q.type==='react'?'Tapped':'Answered';
+  $('hAnswered').textContent=`${answeredIds().filter(id=>eligibleIds().includes(id)).length}/${eligibleIds().length}`;
   if(k===hostQKey){if(s.phase==='reveal')paintHostOpts();return;}
   hostQKey=k;if(s.phase==='question')animIn($('hCard'));else animIn($('hAnswer'));
-  $('hQNum').textContent=`${LOBBY.name} · ${GAMES[s.game].name} · Round ${s.idx+1} of ${s.total}`;
+  $('hQNum').textContent=`${LOBBY.name} · ${GAMES[s.game].name} · Round ${s.idx+1} of ${s.total}`+(s.game==='last'&&s.alive?` · 👥 ${s.alive.filter(id=>PLAYERS[id]).length} still in`:'')+(q.type==='draw'&&q.drawerName?` · ✏️ ${q.drawerName} draws`:'');
   $('hCat').textContent=q.cat;$('hText').textContent=q.text;
   $('hHint').textContent=q.hint||'';$('hHint').hidden=!q.hint||s.phase==='reveal';
   if(H.startFor!==s.session+':'+s.idx){H.startFor=s.session+':'+s.idx;H.localStart=roundStart(s);}
-  if(s.phase==='question')renderDisplay($('hDisp'),q,true);
-  else if(q.display&&q.display.kind==='flash'){const g=el('div','egrid flash');q.display.items.forEach(e=>g.append(el('span',null,e)));$('hDisp').innerHTML='';$('hDisp').append(g);}
-  else renderDisplay($('hDisp'),q,true);
+  // The picture is drawn once per round; the reveal only changes it (no restart of its animations).
+  const hd=$('hDisp'),dk=s.session+':'+s.idx;
+  if(s.phase==='question'){renderDisplay(hd,q,true);hd._key=dk;}
+  else if(q.display&&q.display.kind==='flash'){const g=el('div','egrid flash');q.display.items.forEach(e=>g.append(el('span',null,e)));hd.innerHTML='';hd.append(g);hd._key=dk;}
+  else{if(hd._key!==dk){renderDisplay(hd,q,true);hd._key=dk;}revealDisplay(hd,q,s);}
   $('hAnswer').hidden=s.phase!=='reveal';$('hAnswer').textContent=s.phase==='reveal'?'Answer: '+(s.answer||''):'';
   $('revealBtn').hidden=s.phase!=='question';$('toBoardBtn').hidden=s.phase!=='reveal';
-  $('toBoardBtn').textContent=s.idx+1>=s.total?'Show final results':'Show leaderboard';
+  $('toBoardBtn').textContent=lastRound()?'Show final results':'Show leaderboard';
   paintHostOpts();clearInterval(H.timer);
   if(s.phase==='question'){
     const tick=()=>{const left=Math.max(0,s.dur-(performance.now()-H.localStart)/1000),sec=Math.ceil(left);
@@ -730,24 +1204,30 @@ function renderHostQ(){
 }
 /* An option that is just an emoji gets a bigger label. */
 function optLabel(t){const e=el('span',null,t);if(/^\p{Extended_Pictographic}/u.test(t)&&[...t].length<=3)e.className='emo';return e;}
-function optStyle(s,i){return s.q&&s.q.tf?OPT_STYLE[i===0?2:0]:OPT_STYLE[i];}
+function optStyle(s,i){const q=s.q||s;return q.tf?OPT_STYLE[i===0?2:0]:q.hilo?(i===0?{c:'var(--mint)',s:'⬆',fg:'var(--ink)'}:{c:'var(--coral)',s:'⬇'}):OPT_STYLE[i];}
+const optSym=(q,i,st)=>q.tf?(i===0?'✓':'✗'):st.s;
 let optsKey='';
 function paintHostOpts(){
   const s=STATE,q=s.q||{},box=$('hOpts');
-  const ok=JSON.stringify([s.session,s.idx,s.phase,s.closest||null,s.right||0,q.type==='choice'&&s.phase==='reveal'?answeredIds().map(id=>ANSWERS[id].choice):0]);
+  const ok=JSON.stringify([s.session,s.idx,s.phase,s.closest||null,s.right||0,s.out||0,q.type==='choice'&&s.phase==='reveal'?answeredIds().map(id=>ANSWERS[id].choice):0]);
   if(ok===optsKey)return;optsKey=ok;box.innerHTML='';$('hNumResult').hidden=true;box.classList.toggle('static',s.phase==='reveal');
   if(q.type==='choice'){
-    const counts=q.options.map(()=>0);answeredIds().forEach(id=>{const c=ANSWERS[id].choice;if(c>=0&&c<counts.length)counts[c]++;});
+    const counts=q.options.map(()=>0),elig=new Set(eligibleIds());answeredIds().filter(id=>elig.has(id)).forEach(id=>{const c=ANSWERS[id].choice;if(c>=0&&c<counts.length)counts[c]++;});
     q.options.forEach((t,i)=>{const st=optStyle(s,i);const b=el('div','opt');b.style.setProperty('--c',st.c);if(st.fg)b.style.setProperty('--fg',st.fg);
       b.append(el('span','sh',q.tf?(i===0?'✓':'✗'):st.s),optLabel(t));
-      if(s.phase==='reveal'){b.append(el('span','cnt',counts[i]));b.classList.add(i===s.correct?'right':'dim');}box.append(b);});stagger(box);
+      if(s.phase==='reveal'){b.append(el('span','cnt',counts[i]));const tops=s.reveal&&s.reveal.tops;b.classList.add((tops?tops.includes(i):i===s.correct)?'right':'dim');}box.append(b);});stagger(box);
+    // Last One Standing: who went out this round, and how many are left.
+    if(s.game==='last'&&s.phase==='reveal'&&Array.isArray(s.out)){const nr=$('hNumResult');nr.hidden=false;nr.innerHTML='';const left=(s.alive||[]).filter(id=>PLAYERS[id]);
+      nr.append(el('h3',null,`👥 ${left.length} still standing`+(s.out.length?` · ${s.out.length} out this round`:'')));
+      const wrap=el('div','outlist');(s.out.length?s.out:[]).forEach(id=>{const p=PLAYERS[id];if(!p)return;const c=el('div','pcard out');c.append(headScene(look(p),24),el('span',null,playerName(id)));wrap.append(c);});
+      if(!s.out.length)wrap.append(el('p','hint',left.length<=1?'':'Nobody is out this round.'));nr.append(wrap);stagger(wrap);}
   }else if(s.phase==='reveal'){
     const nr=$('hNumResult');nr.hidden=false;nr.innerHTML='';
     const closest=q.type==='number'&&!q.exact;
-    nr.append(el('h3',null,closest?'Closest guesses':q.type==='slide'?`Fastest solvers · ${s.right||0} solved`:`Fastest correct · ${s.right||0} got it`));
+    nr.append(el('h3',null,closest?'Closest guesses':q.type==='slide'?`Fastest solvers · ${s.right||0} solved`:q.type==='react'?`Fastest reactions · ${s.right||0} tapped in time`:q.type==='draw'?`Fastest guessers · ${s.right||0} got it`+(s.drawerPts!=null?` · ${q.drawerName||'Drawer'} +${s.drawerPts}`:''):`Fastest correct · ${s.right||0} got it`));
     const wrap=el('div','board');nr.append(wrap);
     (s.closest||[]).forEach(c=>{const p=PLAYERS[c.id]||{};const row=el('div','rrow');row.append(el('span','rk',c.p),headScene(look(p),22),el('span','nm',playerName(c.id)),el('span','gn',''),el('span','sc',c.v));wrap.append(row);});stagger(wrap);
-    if(!(s.closest||[]).length)wrap.append(el('p','hint',q.type==='slide'?'Nobody solved this one.':'Nobody got this one.'));
+    if(!(s.closest||[]).length)wrap.append(el('p','hint',q.type==='slide'?'Nobody solved this one.':q.type==='react'?'Nobody tapped in time.':'Nobody got this one.'));
   }
 }
 async function restoreHost(){try{const k=await hostCall('host_get_key',{});if(k&&k.used){H.used=k.used;H.usedLoaded=true;}if(k&&k.deck){H.deck=k.deck;if(STATE&&k.idx===STATE.idx)H.key=k;}}catch(e){}}
@@ -756,38 +1236,70 @@ async function reveal(){
   if(H.revealing||!STATE||STATE.phase!=='question'||!isHost())return;H.revealing=true;clearInterval(H.timer);
   if(!H.key||!H.deck||H.deck.session!==STATE.session||H.key.idx!==STATE.idx)await restoreHost();
   await loadAnswers();
-  const s=STATE,q=s.q||{},key=H.key||{};
-  const shown=q.type==='choice'?{phase:'reveal',answer:key.answer||'',correct:key.correct,picks:Object.fromEntries(answeredIds().map(id=>[id,ANSWERS[id].choice]))}:{phase:'reveal',answer:key.answer||''};
+  const s=STATE,q=s.q||{},key=H.key||{},isChoice=q.type==='choice',elig=new Set(eligibleIds());
+  const ans=answeredIds().filter(id=>elig.has(id)).map(id=>({id,a:ANSWERS[id]}));
+  const counts=isChoice?q.options.map(()=>0):[];if(isChoice)ans.forEach(({a})=>{if(a.choice>=0&&a.choice<counts.length)counts[a.choice]++;});
+  const top=counts.length?Math.max(0,...counts):0;
+  const shown={phase:'reveal',answer:key.answer||''};
+  if(isChoice){shown.correct=key.correct;shown.picks=Object.fromEntries(ans.map(x=>[x.id,x.a.choice]));}
+  if(q.type==='spot')shown.correct=key.correct;
+  if(key.reveal)shown.reveal=key.reveal;
+  if(q.type==='order')shown.reveal={order:key.order};
+  // Majority Wins: the most picked option (or options) is the answer.
+  if(key.majority){const tops=q.options.map((_,i)=>i).filter(i=>top>0&&counts[i]===top);shown.correct=tops.length?tops[0]:-1;shown.reveal={tops};
+    shown.answer=top?`${tops.map(i=>q.options[i]).join(' & ')} (${top} ${top===1?'vote':'votes'})`:'Nobody voted this time';}
   if(SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx){try{await setState(shown);}catch(e){H.revealing=false;}return;} // already scored
   const dur=s.dur*1000,scores={...((SCORES&&SCORES.session===s.session&&SCORES.scores)||{})},last={},ok={};
-  const ans=answeredIds().map(id=>({id,a:ANSWERS[id]}));let closest=[],right=0;
-  const add=(id,pts,good)=>{last[id]=pts;ok[id]=good;scores[id]=(scores[id]||0)+pts;};
-  const speed=a=>Math.round(500+500*(1-Math.min(dur,Math.max(0,a.ms!=null?a.ms:dur))/dur));
+  let closest=[],right=0;
+  const add=(id,pts,good)=>{last[id]=(last[id]||0)+pts;ok[id]=good;scores[id]=(scores[id]||0)+pts;};
+  const msOf=a=>Math.min(dur,Math.max(0,a.ms!=null?a.ms:dur));
+  const speed=a=>Math.round(500+500*(1-msOf(a)/dur));
   if(q.type==='number'&&key.closest){
     const v=key.value;
     const g=ans.filter(x=>typeof x.a.value==='number'&&isFinite(x.a.value)).map(x=>({id:x.id,v:x.a.value,err:Math.abs(x.a.value-v)})).sort((a,b)=>a.err-b.err);
     g.forEach(x=>{const pts=x.err===0?1000:Math.max(0,Math.round(800*(1-x.err/Math.max(Math.abs(v),1))));add(x.id,pts,x.err===0||pts>=600);});
     let place=0,pe=null;closest=g.slice(0,5).map((x,i)=>{if(x.err!==pe){place=i+1;pe=x.err;}return {id:x.id,v:x.v,p:place};});
+  }else if(q.type==='react'){
+    // Two Lines!: the fastest valid tap scores 1000; slower taps score in proportion. Too soon = 0.
+    const okv=v=>typeof v==='number'&&v>=REACT_MIN&&v<dur,valid=ans.filter(x=>okv(x.a.value)).sort((x,y)=>x.a.value-y.a.value),best=valid.length?valid[0].a.value:1;
+    ans.forEach(({id,a})=>{if(okv(a.value)){add(id,Math.max(100,Math.round(1000*best/a.value)),true);right++;}else add(id,0,false);});
+    closest=valid.slice(0,5).map((x,i)=>({id:x.id,v:(x.a.value/1000).toFixed(3)+'s',p:i+1}));
+    shown.answer=valid.length?`Fastest: ${playerName(valid[0].id)} in ${(best/1000).toFixed(3)} seconds`:'Nobody caught the second line';
+  }else if(key.majority){
+    // Majority Wins: the most picked answer scores 1000; others score in proportion to how popular they were.
+    ans.forEach(({id,a})=>{const c=counts[a.choice]||0;add(id,top?Math.round(1000*c/top):0,top>0&&c===top);});right=top;
   }else{
     const accept=(key.accept||[]).map(norm);
-    const isRight=a=>q.type==='choice'?a.choice===key.correct:q.type==='text'?accept.includes(norm(a.text)):q.type==='number'?a.value===key.value:q.type==='slide'?a.value>0:false;
+    const isRight=a=>isChoice||q.type==='spot'?a.choice===key.correct:q.type==='text'||q.type==='draw'?accept.includes(norm(a.text)):q.type==='number'?a.value===key.value:q.type==='slide'?a.value>0:q.type==='order'?String(a.text||'')===key.order:false;
+    // Who Am I?: 1000 on the first clue, then 800, 600, 400. Pixel Reveal: 1000 at the start down to 400 once the picture is clear.
+    const ptsFor=a=>s.game==='last'?100:key.who?[1000,800,600,400][Math.min(3,Math.floor(msOf(a)/(dur*.2)))]:key.pixel?Math.round(1000-600*Math.min(1,msOf(a)/(dur*.75))):speed(a);
     const winners=[];
-    ans.forEach(({id,a})=>{const good=isRight(a);add(id,good?speed(a):0,good);if(good){right++;winners.push({id,ms:a.ms});}});
-    if(q.type!=='choice')closest=winners.sort((x,y)=>(x.ms??1e9)-(y.ms??1e9)).slice(0,5).map((w,i)=>({id:w.id,v:((w.ms||0)/1000).toFixed(1)+'s',p:i+1}));
+    ans.forEach(({id,a})=>{const good=isRight(a);add(id,good?ptsFor(a):0,good);if(good){right++;winners.push({id,ms:a.ms});}});
+    if(!isChoice)closest=winners.sort((x,y)=>(x.ms??1e9)-(y.ms??1e9)).slice(0,5).map((w,i)=>({id:w.id,v:((w.ms||0)/1000).toFixed(1)+'s',p:i+1}));
+    // Draw It: the drawer scores up to 1000, by the share of players who guessed.
+    if(q.type==='draw'&&key.drawer&&PLAYERS[key.drawer]){const n=elig.size,pts=n?Math.round(1000*right/n):0;add(key.drawer,pts,right>0);shown.drawerPts=pts;}
   }
+  // Last One Standing: wrong or no answer = out, unless everyone missed. The last one standing gets 500 more.
+  if(s.game==='last'){const alive=(s.alive||[]).filter(id=>PLAYERS[id]),stay=alive.filter(id=>ok[id]);let out=alive.filter(id=>!ok[id]),left=stay;
+    if(!stay.length){out=[];left=alive;shown.answer+=' · Everyone missed, so nobody is out!';}
+    alive.forEach(id=>{if(last[id]==null){last[id]=0;ok[id]=false;}});
+    if(left.length===1&&alive.length>1){add(left[0],500,true);shown.answer+=` · ${playerName(left[0])} is the last one standing!`;}
+    shown.alive=left;shown.out=out;}
   try{await setScores({session:s.session,scores,last,ok,idx:s.idx});
-    await setState(q.type==='choice'?shown:{...shown,closest,right});beep(1040,.12);}
+    await setState(isChoice&&q.type!=='draw'?{...shown,right}:{...shown,closest,right});beep(1040,.12);}
   catch(e){H.revealing=false;}
 }
-$('toBoardBtn').onclick=async()=>{try{await setState({phase:STATE.idx+1>=STATE.total?'final':'board'});}catch(e){}};
+const lastRound=()=>STATE.idx+1>=STATE.total||(STATE.game==='last'&&Array.isArray(STATE.alive)&&STATE.alive.filter(id=>PLAYERS[id]).length<=1);
+$('toBoardBtn').onclick=async()=>{try{await setState({phase:lastRound()?'final':'board'});}catch(e){}};
 let boardKey='';
-function renderHostBoard(){hostShow('hBoard');const duck=STATE.game==='duck';$('hBoardNum').textContent=`After ${duck?'race':'round'} ${STATE.idx+1} of ${STATE.total}`;$('nextBtn').textContent=duck?'Next race':'Next question';const rows=ranking(),k=STATE.session+STATE.idx+JSON.stringify(rows.slice(0,10).map(r=>[r.id,r.score,playerName(r.id)]));if(k===boardKey)return;boardKey=k;boardRows('hBoardList',rows,{limit:10});}
-$('nextBtn').onclick=async()=>{if(STATE.game==='duck'){$('nextBtn').disabled=true;try{await goDuck(STATE.idx+1);}catch(e){}$('nextBtn').disabled=false;return;}if(!H.deck||H.deck.session!==STATE.session)await restoreHost();if(!H.deck){status('Could not load the question list. Start a new game.');return;}$('nextBtn').disabled=true;try{await goQuestion(STATE.idx+1);}catch(e){}$('nextBtn').disabled=false;};
+function renderHostBoard(){hostShow('hBoard');const G=GAMES[STATE.game]||{},race=!!G.race;$('hBoardNum').textContent=`After ${G.kind==='duck'?'race':'round'} ${STATE.idx+1} of ${STATE.total}`+(STATE.game==='last'&&STATE.alive?` · 👥 ${STATE.alive.filter(id=>PLAYERS[id]).length} still standing`:'');
+  $('nextBtn').textContent=race?(G.kind==='duck'?'Next race':'Next round'):'Next question';const rows=ranking(),k=STATE.session+STATE.idx+JSON.stringify(rows.slice(0,10).map(r=>[r.id,r.score,playerName(r.id)]))+JSON.stringify(STATE.teams||0);if(k===boardKey)return;boardKey=k;boardRows('hBoardList',rows,{limit:10});teamBars($('hTeamBars'),rows);}
+$('nextBtn').onclick=async()=>{if((GAMES[STATE.game]||{}).race){$('nextBtn').disabled=true;try{await goRace(STATE.idx+1);}catch(e){}$('nextBtn').disabled=false;return;}if(!H.deck||H.deck.session!==STATE.session)await restoreHost();if(!H.deck){status('Could not load the question list. Start a new game.');return;}$('nextBtn').disabled=true;try{await goQuestion(STATE.idx+1);}catch(e){}$('nextBtn').disabled=false;};
 async function endGame(){try{await setState({phase:'final'});}catch(e){}}
 $('hEndBtn').onclick=endGame;$('hEndBtn2').onclick=endGame;
 let finalKey='';
 function renderHostFinal(){
-  hostShow('hFinal');const rows=ranking(),tie=nextTie(rows);const k=STATE.session+JSON.stringify(rows.map(r=>[r.id,r.score,r.place,playerName(r.id)]))+JSON.stringify(tie);if(k===finalKey)return;finalKey=k;
+  hostShow('hFinal');const rows=ranking(),tie=nextTie(rows);const k=STATE.session+JSON.stringify(rows.map(r=>[r.id,r.score,r.place,playerName(r.id)]))+JSON.stringify(tie)+JSON.stringify(STATE.teams||0);if(k===finalKey)return;finalKey=k;
   $('hTie').hidden=!tie;$('hPodium').hidden=!!tie;
   if(tie){
     $('hWinner').textContent=`It's a tie for ${ordinal(tie.place)} place!`;
@@ -801,6 +1313,8 @@ function renderHostFinal(){
     animIn($('hWinner'));drawPodium('hPodium',rows);confetti();fanfare();
   }
   boardRows('hFinalList',rows,{showGain:false,limit:60});
+  teamBars($('hFinalTeams'),rows);const t=teamRows(rows);$('hTeamWin').hidden=!t||!t.length;
+  if(t&&t.length){const best=t.filter(p=>p.avg===t[0].avg);$('hTeamWin').textContent=best.length>1?`🤝 Teams ${best.map(p=>p.name).join(' & ')} tie with ${t[0].avg} points on average!`:`🏆 Team ${t[0].name} wins with ${t[0].avg} points on average!`;$('hTeamWin').style.setProperty('--c',t[0].c);}
 }
 
 /* ================= DUCK RACE: a paddle race =================
@@ -877,14 +1391,14 @@ function buildRiver(box,riders,{small=false,board=false,dur=10,place=1,follow=nu
     if(lead&&order.length&&now-lastLead>250&&Object.values(prog).some(v=>v>0)){lastLead=now;lead.hidden=false;lead.innerHTML='';order.slice(0,3).forEach((id,i)=>{const li=el('li');li.append(el('b',null,ordinal(place+i)),document.createTextNode(D[id].name));lead.append(li);});}
   }
   /* A little splash on a duck that just paddled. */
-  function kick(id){const o=D[id];if(!o||calm())return;o.d.classList.remove('kick');void o.d.offsetWidth;o.d.classList.add('kick');}
+  function kick(id){const o=D[id];if(!o||calm())return;try{(o.bird||(o.bird=o.d.querySelector('.bird'))).animate([{transform:'scaleX(-1)'},{transform:'scaleX(-1) translateX(-6px) rotate(-8deg)',offset:.4},{transform:'scaleX(-1)'}],{duration:250,easing:'ease-out'});}catch(e){}}
   const ctl={relayout,update,kick};RIVERS.set(box,ctl);relayout();return ctl;
 }
 /* The big PADDLE button: label and counter. */
-function paintPad(btn,{state,taps,tgt,rank=''}){
+function paintPad(btn,{state,taps,tgt,rank='',K=KINDS.duck}){
   btn.dataset.state=state;btn.disabled=state!=='go';
-  btn.querySelector('.padbig').textContent=state==='wait'?'Get ready…':state==='go'?'PADDLE!':state==='fin'?'Finished! 🏁':"Time's up!";
-  btn.querySelector('.padsub').textContent=state==='wait'?'Wait for GO, then tap fast!':`${taps} / ${tgt} paddles`+(rank?' · '+rank:'');
+  btn.querySelector('.padbig').textContent=state==='wait'?'Get ready…':state==='go'?K.btn:state==='fin'?(K===KINDS.pump?'Full! 💧':'Finished! 🏁'):"Time's up!";
+  btn.querySelector('.padsub').textContent=state==='wait'?'Wait for GO, then tap fast!':`${taps} / ${tgt} ${K.unit}`+(rank?' · '+rank:'');
   btn.style.setProperty('--p',Math.min(1,taps/tgt).toFixed(3));
 }
 /* Scroll so the whole river sits above the pinned PADDLE button (phones, while racing). */
@@ -892,30 +1406,97 @@ function fitRace(smooth){try{if(!RACE.pad||!RACE.pad.live||$('pPadWrap').hidden)
   if(rc.bottom>room||rc.top<0)window.scrollTo({top:Math.max(0,scrollY+rc.top-(rc.height<room-8?Math.max(8,room-rc.height):8)),behavior:smooth&&!calm()?'smooth':'auto'});}catch(e){}}
 addEventListener('resize',()=>{if(RACE.pad&&RACE.pad.scrolled)requestAnimationFrame(()=>fitRace(false));});
 function padHide(){$('pPadWrap').hidden=true;$('pRace').classList.remove('padding');if(RACE.pad)RACE.pad.live=false;}
-function padPress(btn){if(calm())return;btn.classList.remove('hit');void btn.offsetWidth;btn.classList.add('hit');}
+function padPress(btn){if(calm())return;try{btn.animate([{transform:'none'},{transform:'translateY(6px) scale(.97)',boxShadow:'0 3px 0 var(--navy)',offset:.4},{transform:'none'}],{duration:120,easing:'ease-out'});}catch(e){}}
 /* Space anywhere on the page paddles while a race (or the practice race) is on. Space never clicks other buttons then. */
 const isSpace=e=>e.code==='Space'||e.key===' '||e.key==='Spacebar';
-function padActive(){return (DM.paddle&&!$('demo').hidden)?DM.paddle:(RACE.pad&&RACE.pad.live&&view==='player'&&playerSub==='pRace')?RACE.pad.tap:null;}
+function padActive(){return (DM.paddle&&!DM.noKey&&!$('demo').hidden)?DM.paddle:(RACE.pad&&RACE.pad.live&&!RACE.pad.noKey&&view==='player'&&playerSub==='pRace')?RACE.pad.tap:null;}
 document.addEventListener('keydown',e=>{if(!isSpace(e))return;const t=e.target;if(t&&/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))return;const f=padActive();if(!f)return;e.preventDefault();if(!e.repeat)f();},true);
 document.addEventListener('keyup',e=>{if(isSpace(e)&&padActive())e.preventDefault();},true);
 function wirePad(btn,fn){btn.addEventListener('pointerdown',e=>{if(e.button>0)return;e.preventDefault();fn();});btn.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.repeat){e.preventDefault();fn();}});btn.addEventListener('contextmenu',e=>e.preventDefault());}
-wirePad($('pPad'),()=>{if(RACE.pad&&RACE.pad.live)RACE.pad.tap();});
+wirePad($('pPad'),()=>{if(RACE.pad&&RACE.pad.live&&!RACE.pad.noKey)RACE.pad.tap();});
+
+/* ---------- tap games that run on the race engine: Duck Race, Hydration Pump, Catch the Kit ---------- */
+const KINDS={
+ duck:{icon:'🦆',noun:'Race',unit:'paddles',btn:'PADDLE!',names:()=>RACE_NAMES,how:()=>RACE_HOW,target:dur=>raceTarget(dur),
+   win:n=>`${n}'s duck wins!`,mine:(pos,t,place,of)=>pos===0?`Your duck won with ${t} paddles! 🎉`:t===0?'Your duck did not move. Press SPACE or tap PADDLE next time!':`Your duck came ${ordinal(place+pos)}${of} with ${t} paddles.`,
+   verdict:(pos,t)=>!t?'Your duck did not move':pos===0?'Your duck won! 🎉':`Your duck finished ${ordinal(pos+1)}`},
+ pump:{icon:'💧',noun:'Round',unit:'pumps',btn:'PUMP!',names:()=>PUMP_NAMES,how:()=>'Press SPACE (computer) or tap PUMP (phone) as fast as you can. Every pump fills your Hydration Test bottle. A full bottle finishes first; otherwise the fullest bottle when time runs out wins.',
+   target:dur=>Math.round(dur*8),win:n=>`${n} pumped the most!`,
+   mine:(pos,t,place,of)=>pos===0?`You pumped the most: ${t} pumps! 🎉`:t===0?'Your bottle stayed empty. Press SPACE or tap PUMP next time!':`You came ${ordinal(place+pos)}${of} with ${t} pumps.`,
+   verdict:(pos,t)=>!t?'Your bottle stayed empty':pos===0?'You pumped the most! 🎉':`You finished ${ordinal(pos+1)}`},
+ catch:{icon:'🧺',noun:'Round',unit:'catches',btn:null,names:()=>CATCH_NAMES,how:()=>`2San kit falls from the sky: tap it to catch it! Do not tap things that are not 2San (${CATCH_BAD.slice(0,4).join(' ')}): that freezes you for 1 second. Most catches wins.`,
+   target:(dur,seed)=>catchPlan(seed,dur).good,win:n=>`${n} caught the most!`,
+   mine:(pos,t,place,of)=>pos===0?`You caught the most: ${t}! 🎉`:t===0?'You did not catch anything. Tap the falling 2San kit next time!':`You came ${ordinal(place+pos)}${of} with ${t} catches.`,
+   verdict:(pos,t)=>!t?'Nothing caught this time':pos===0?'You caught the most! 🎉':`You finished ${ordinal(pos+1)}`}};
+const kindOf=r=>KINDS[(r&&r.kind)||'duck']||KINDS.duck;
+
+/* Hydration Pump: one bottle per player. The big screen shows them all; a phone shows its own bottle big, plus the top 3. */
+function buildBottles(box,riders,{small=false,place=1,follow=null}={}){
+  box.innerHTML='';box.classList.remove('riverbox');const n=riders.length,D={},me=riders.find(p=>p.me);
+  const wrap=el('div','pumpwrap'+(small?' small':'')),grid=el('div','bottles'+(n>16?' crowd':n>8?' mid':' few'));
+  const mkBottle=(p,big)=>{const c=el('div','bcard'+(p.me?' me':'')+(big?' big':''));const btl=el('div','btl'),water=el('i','water'),cap=el('span','bcap');btl.append(water,el('span','blabel','2San'),cap);
+    const head=n<=24||big?headScene(p,big?30:20):null,nm=el('b','bname',p.name+(p.me?' (you)':'')),cnt=el('span','bcnt','0');
+    if(head)c.append(head);c.append(btl,nm,cnt);return {c,water,cnt,nm,last:-1,lab:''};};
+  if(small&&me){const top=el('ol','plead');const mine=mkBottle(me,true);D[me.id]=mine;wrap.append(mine.c,top);D._top=top;}
+  else{riders.forEach(p=>{const b=mkBottle(p,false);D[p.id]=b;grid.append(b.c);});wrap.append(grid);if(n>3){const top=el('ol','plead side');D._top=top;wrap.append(top);}}
+  box.append(wrap);let lastTop=0;
+  function update(prog,order,crossed,final,counts){
+    for(const p of riders){const o=D[p.id];if(!o)continue;const v=Math.min(1,Math.max(0,prog[p.id]||0));if(Math.abs(v-o.last)>.002){o.last=v;o.water.style.transform=`scaleY(${v.toFixed(3)})`;}
+      const c=String((counts&&counts[p.id])||0);if(o.cnt.textContent!==c)o.cnt.textContent=c;
+      const k=final?order.indexOf(p.id):crossed[p.id],lab=k!=null&&k>=0&&k<3&&(final||crossed[p.id]!=null)?['🥇','🥈','🥉'][k]:'';
+      if(lab!==o.lab){o.lab=lab;o.c.dataset.medal=lab;o.c.classList.toggle('won',lab==='🥇');}}
+    const now=performance.now();if(D._top&&now-lastTop>250&&Object.values(prog).some(v=>v>0)){lastTop=now;D._top.innerHTML='';
+      order.slice(0,small?3:5).forEach((id,i)=>{const li=el('li',id===(me&&me.id)?'me':'');li.append(el('b',null,ordinal(place+i)),el('span',null,(riders.find(r=>r.id===id)||{}).name||''),el('small',null,String((counts&&counts[id])||0)));D._top.append(li);});}
+  }
+  function kick(id){const o=D[id];if(!o||calm())return;try{o.water.parentElement.animate([{transform:'scale(1)'},{transform:'scale(1.06,0.96)',offset:.4},{transform:'scale(1)'}],{duration:180,easing:'ease-out'});}catch(e){}}
+  return {relayout(){},update,kick};
+}
+
+/* Catch the Kit: the same falling items on every screen, from the round's seed and the shared clock. */
+const CPLAN=new Map();
+function catchPlan(seed,dur){const key=seed+':'+dur;if(CPLAN.has(key))return CPLAN.get(key);const rn=seeded('catch'+seed),items=[];let t=.3,px=.5,good=0;
+  while(t<dur-.5){let x,tries=0;do{x=.08+rn()*.84;}while(Math.abs(x-px)<.2&&++tries<20);px=x;const g=rn()<.68;
+    items.push({i:items.length,t:+t.toFixed(3),x,e:g?CATCH_GOOD[Math.floor(rn()*CATCH_GOOD.length)]:CATCH_BAD[Math.floor(rn()*CATCH_BAD.length)],g,fall:2.4+rn()*1.1});if(g)good++;t+=.34+rn()*.3;}
+  const p={items,good:Math.max(1,good)};CPLAN.set(key,p);return p;}
+function buildCatch(box,riders,{small=false,place=1,seed='x',dur=30,clock=()=>0,canPlay=()=>false,onGood=()=>{},onBad=()=>{},me=null}={}){
+  box.innerHTML='';box.classList.remove('riverbox');const plan=catchPlan(seed,dur),playing=small&&!!me;
+  const wrap=el('div','catchwrap'+(small?' small':'')),legend=el('div','clegend');legend.append(el('span','ok','Catch: '+CATCH_GOOD.join(' ')),el('span','no','Leave: '+CATCH_BAD.join(' ')));
+  const field=el('div','cfield'),bar=el('div','cbar'),score=el('span','cscore'),frost=el('span','cfrost','❄️ Frozen!');frost.hidden=true;bar.append(score,frost);bar.hidden=!playing;
+  const top=el('ol','plead'+(small?'':' side'));wrap.append(legend,bar,field,top);box.append(wrap);
+  const live=new Map(),got=new Set();let frozenTill=0,lastTop=0,mine=0,H=field.clientHeight||300,W=field.clientWidth||300;
+  const relayout=()=>{H=field.clientHeight||300;W=field.clientWidth||300;};
+  function tap(it,node,e){e.preventDefault();if(!playing||got.has(it.i)||!canPlay())return;const now=performance.now();if(now<frozenTill)return;
+    if(it.g){got.add(it.i);node.style.setProperty('--t',node.style.transform||'none');node.classList.add('got');setTimeout(()=>node.remove(),260);live.delete(it.i);mine++;onGood();}
+    else{frozenTill=now+1000;frost.hidden=false;field.classList.add('frozen');node.classList.add('bad');onBad();setTimeout(()=>{if(performance.now()>=frozenTill){frost.hidden=true;field.classList.remove('frozen');}},1020);}}
+  function update(prog,order,crossed,final,counts){
+    const t=clock();
+    for(const it of plan.items){const y=(t-it.t)/it.fall,on=y>-.02&&y<1.08&&!got.has(it.i)&&!final;let node=live.get(it.i);
+      if(on&&!node){node=el(playing?'button':'span','citem'+(it.g?' good':' bad'),it.e);if(playing){node.type='button';node.setAttribute('aria-label',it.g?'2San kit':'Not 2San');node.addEventListener('pointerdown',e=>tap(it,node,e));}field.append(node);live.set(it.i,node);}
+      if(!on&&node&&!node.classList.contains('got')){node.remove();live.delete(it.i);continue;}
+      if(node&&on)node.style.transform=`translate3d(${(it.x*W-28).toFixed(1)}px,${(y*(H+70)-64).toFixed(1)}px,0)`;}
+    if(playing)score.textContent=`🧺 ${(counts&&me&&counts[me])||mine} caught`;
+    const now=performance.now();if(now-lastTop>250&&Object.values(counts||{}).some(v=>v>0)){lastTop=now;top.innerHTML='';
+      order.slice(0,small?3:6).forEach((id,i)=>{const li=el('li',id===me?'me':'');li.append(el('b',null,ordinal(place+i)),el('span',null,(riders.find(r=>r.id===id)||{}).name||''),el('small',null,String((counts&&counts[id])||0)));top.append(li);});}
+  }
+  const ro=new ResizeObserver(relayout);ro.observe(field);
+  return {relayout,update,kick(){},caught:()=>mine};
+}
 
 function renderRace(isHost){
   const r=STATE.race;if(!r)return;
   if(isHost)hostShow('hRace');else playerShow('pRace');
   const k=(isHost?'h':'p')+STATE.session+r.seed;if(RACE.key===k)return;RACE.key=k;const run=++RACE.run;stopConfetti();clearInterval(RACE.iv);
-  const P_=isHost?'h':'p',me=ME&&ME.player_id,n=r.ids.length,tgt=r.target||raceTarget(r.dur),racing=!isHost&&r.ids.includes(me);
-  $(P_+'RaceTitle').textContent=r.game?`🦆 Race ${STATE.idx+1} of ${STATE.total}: ${r.name}`:`🦆 Duck race for ${ordinal(r.place)} place`;
-  $(P_+'RaceResult').hidden=true;$(P_+'RaceCount').textContent='';$(P_+'RaceHow').textContent=RACE_HOW;$(P_+'RaceHow').hidden=false;
+  const P_=isHost?'h':'p',me=ME&&ME.player_id,n=r.ids.length,K=kindOf(r),kind=r.kind||'duck',tgt=r.target||K.target(r.dur,r.seed),racing=!isHost&&r.ids.includes(me);
+  $(P_+'RaceTitle').textContent=r.game?`${K.icon} ${K.noun} ${STATE.idx+1} of ${STATE.total}: ${r.name}`:`🦆 Duck race for ${ordinal(r.place)} place`;
+  $(P_+'RaceResult').hidden=true;$(P_+'RaceCount').textContent='';$(P_+'RaceHow').textContent=K.how();$(P_+'RaceHow').hidden=false;
+  $(P_+'RaceLanes').closest('.race').dataset.kind=kind;
   if(isHost){$('hRaceFact').hidden=!r.fact;$('hRaceFact').textContent=r.fact?'2San fact: '+r.fact:'';$('raceDoneBtn').textContent=r.game&&STATE.idx+1<STATE.total?'Show leaderboard':'Show final results';}
   else $('pRaceWait').textContent=r.game&&STATE.idx+1<STATE.total?'Waiting for the host to show the leaderboard.':'Waiting for the host to show the final results.';
   const live=isHost?null:$('pRaceLive');if(live){live.hidden=racing;live.textContent=racing?'':'You are watching this race.';}
-  const padBtn=$('pPad');if(!isHost){padBtn.hidden=!racing;$('pPadWrap').hidden=!racing;$('pRace').classList.toggle('padding',racing);}
+  const usePad=racing&&kind!=='catch',padBtn=$('pPad');if(!isHost){padBtn.hidden=!usePad;$('pPadWrap').hidden=!usePad;$('pRace').classList.toggle('padding',usePad);}
   const riders=r.ids.map(id=>{const p=PLAYERS[id]||{};return {id,name:playerName(id),...look(p),me:id===me};});
-  const RV=buildRiver($(P_+'RaceLanes'),riders,{small:!isHost,board:isHost&&n>3,dur:r.dur,place:r.place,follow:racing?me:null});
-  // Clock: local time since the race was saved, corrected by the server's own "ms since GO" when it answers.
-  const el0=Date.now()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<600000?el0:0);
+  // Clock: local time since the race was saved (server clock), corrected by the server's own "ms since GO" when it answers.
+  const el0=serverNow()-Date.parse(STATE.startedAt||''),startLocal=performance.now()-(isFinite(el0)&&el0>=0&&el0<600000?el0:0);
   const C={corr:0,rtt:1e9};const raw=()=>(performance.now()-startLocal)/1000-RACE_LEAD,clock=()=>raw()+C.corr;
   const B={board:{},asking:false,ask:0,finishing:false,heard:{}},shown={};r.ids.forEach(id=>shown[id]=0);
   const take=(b,sent)=>{if(!b||run!==RACE.run)return;const rtt=performance.now()-sent;
@@ -923,14 +1504,17 @@ function renderRace(isHost){
     const nb={};for(const id in b)if(id[0]!=='_')nb[id]=b[id];
     for(const id in nb){const was=B.board[id];if(was&&nb[id][0]>was[0]&&id!==me)RV.kick(id);}
     B.board=nb;};
-  const pad=racing?{seed:r.seed,taps:0,sent:0,inflight:0,lastNet:-1e9,lastTap:0,fin:false,closed:false,live:true}:null;RACE.pad=pad;
+  const pad=racing?{seed:r.seed,taps:0,sent:0,inflight:0,lastNet:-1e9,lastTap:0,fin:false,closed:false,live:true,noKey:kind==='catch'}:null;RACE.pad=pad;
   const send=()=>{if(!pad)return;const n0=pad.taps,t0=performance.now();pad.inflight++;pad.lastNet=t0;
     rpc('player_paddle',{p_token:TOKEN,p_seed:r.seed,p_taps:n0}).then(b=>{if(n0>pad.sent)pad.sent=n0;take(b,t0);}).catch(()=>{}).finally(()=>{pad.inflight--;});};
   const padState=()=>{const t=clock(),R=STATE.race||r;return pad.fin?'fin':R.done||t>=r.dur?'up':t<0?'wait':'go';};
-  if(pad){pad.tap=()=>{if(run!==RACE.run||padState()!=='go')return;const now=performance.now();if(now-pad.lastTap<PAD_MIN_MS)return;pad.lastTap=now;
-      pad.taps=Math.min(tgt,pad.taps+1);padPress(padBtn);RV.kick(me);beep(pad.taps%2?740:880,.025);
-      if(pad.taps>=tgt){pad.fin=true;send();beep(1320,.15);}paintPad(padBtn,{state:padState(),taps:pad.taps,tgt,rank:pad.rank});};
-    paintPad(padBtn,{state:padState(),taps:0,tgt});try{if(document.activeElement&&document.activeElement!==document.body)document.activeElement.blur();}catch(e){}}
+  let RV=null;
+  if(pad){pad.tap=()=>{if(run!==RACE.run||padState()!=='go')return;const now=performance.now();if(kind!=='catch'&&now-pad.lastTap<PAD_MIN_MS)return;pad.lastTap=now;
+      pad.taps=Math.min(tgt,pad.taps+1);if(usePad)padPress(padBtn);if(RV)RV.kick(me);beep(kind==='catch'?990:pad.taps%2?740:880,kind==='catch'?.05:.025);
+      if(pad.taps>=tgt){pad.fin=true;send();beep(1320,.15);}if(usePad)paintPad(padBtn,{state:padState(),taps:pad.taps,tgt,rank:pad.rank,K});};
+    if(usePad)paintPad(padBtn,{state:padState(),taps:0,tgt,K});try{if(document.activeElement&&document.activeElement!==document.body)document.activeElement.blur();}catch(e){}}
+  const lanes=$(P_+'RaceLanes'),opts={small:!isHost,board:isHost&&n>3,dur:r.dur,place:r.place,follow:racing?me:null};
+  RV=kind==='pump'?buildBottles(lanes,riders,opts):kind==='catch'?buildCatch(lanes,riders,{...opts,seed:r.seed,clock,me:racing?me:null,canPlay:()=>pad&&padState()==='go',onGood:()=>pad&&pad.tap(),onBad:()=>beep(160,.25)}):buildRiver(lanes,riders,opts);
   const finalize=async()=>{B.finishing=true;let b=B.board;try{const t0=performance.now(),x=await rpc('race_board',{p_token:TOKEN});if(x){take(x,t0);b=B.board;}}catch(e){}
     if(run!==RACE.run||!STATE||!STATE.race||STATE.race.seed!==r.seed||STATE.race.done)return;
     const order=raceOrder(r.ids,b,r.seed),taps={},ms={};r.ids.forEach(id=>{const v=b[id]||[0,null];taps[id]=v[0]||0;if(v[1]!=null)ms[id]=v[1];});
@@ -950,8 +1534,9 @@ function renderRace(isHost){
     const now=performance.now(),dt=Math.min(.1,(now-prev)/1000),R=STATE.race,t=clock();prev=now;
     const c=R.done||t<-3?'':t<0?String(Math.ceil(-t)):t<.8?'GO!':'';
     // Phones: once the countdown starts, bring the river up so it shows above the PADDLE button.
-    if(pad&&!pad.scrolled&&t>=-3&&!R.done){pad.scrolled=true;fitRace(true);}
-    if(c!==lastCount){lastCount=c;$(P_+'RaceCount').textContent=c;if(c)beep(c==='GO!'?990:520,.12);}
+    if(pad&&usePad&&!pad.scrolled&&t>=-3&&!R.done){pad.scrolled=true;fitRace(true);}
+    if(pad&&kind==='catch'&&!pad.scrolled&&t>=-3&&!R.done){pad.scrolled=true;try{lanes.scrollIntoView({block:'center',behavior:calm()?'auto':'smooth'});}catch(e){}}
+    if(c!==lastCount){lastCount=c;$(P_+'RaceCount').textContent=c;if(c)beep(c==='GO!'?990:520,.12);if(kind!=='duck')lanes.closest('.race').classList.toggle('counting',t<0);}
     $(P_+'RaceClock').textContent=R.done?'🏁':`⏱ ${Math.max(0,Math.ceil(t<0?r.dur:r.dur-t))}s`;
     // Board to show: the final one once saved, else the latest from the server plus my own paddles.
     const bd=R.done?Object.fromEntries(r.ids.map(id=>[id,[(R.taps||{})[id]||0,(R.ms||{})[id]??null]])):{...B.board};
@@ -961,10 +1546,11 @@ function renderRace(isHost){
     order.forEach((id,i)=>{if(bd[id]&&bd[id][1]!=null)crossed[id]=i;});
     if(pad&&pad.fin&&crossed[me]==null&&!R.done)crossed[me]=Object.keys(crossed).length;
     for(const id of r.ids){const g=goal[id],a=calm()?1:1-Math.exp(-dt*(id===me?20:7));shown[id]+=(g-shown[id])*a;if(Math.abs(g-shown[id])<.0005)shown[id]=g;}
-    RV.update(shown,order,crossed,!!R.done);
+    const cnt={};r.ids.forEach(id=>cnt[id]=(bd[id]||[0])[0]||0);
+    RV.update(shown,order,crossed,!!R.done,cnt);
     if(pad&&now-lastLive>120){lastLive=now;const mine=order.indexOf(me);
-      pad.rank=t>0&&!R.done?`${ordinal(r.place+mine)} of ${n}`:'';paintPad(padBtn,{state:padState(),taps:R.done?((R.taps||{})[me]||0):pad.taps,tgt,rank:pad.rank});
-      padBtn.setAttribute('aria-label',`Paddle. ${pad.taps} of ${tgt} paddles`+(t>0?`, ${ordinal(r.place+mine)} of ${n}`:''));
+      pad.rank=t>0&&!R.done?`${ordinal(r.place+mine)} of ${n}`:'';if(usePad){paintPad(padBtn,{state:padState(),taps:R.done?((R.taps||{})[me]||0):pad.taps,tgt,rank:pad.rank,K});
+      padBtn.setAttribute('aria-label',`${K.btn} ${pad.taps} of ${tgt} ${K.unit}`+(t>0?`, ${ordinal(r.place+mine)} of ${n}`:''));}
       if(live&&R.done){live.hidden=false;live.textContent=`You finished ${ordinal(r.place+mine)} of ${n}`;}}
     if(R.done&&!doneAt){doneAt=now;if(live&&!racing)live.hidden=true;if(!isHost)padHide();$(P_+'RaceHow').hidden=true;showRaceResult(P_,R,me);}
     if(!doneAt||now-doneAt<2500)requestAnimationFrame(frame);
@@ -972,11 +1558,11 @@ function renderRace(isHost){
 }
 function showRaceResult(P_,r,me){
   const box=$(P_+'RaceResult');box.hidden=false;animIn(box);const taps=r.taps||{};
-  $(P_+'RaceWinner').textContent=`${playerName(r.order[0])}'s duck wins!`;
+  const K=kindOf(r);$(P_+'RaceWinner').textContent=K.win(playerName(r.order[0]));
   const ol=$(P_+'RaceOrder'),top=P_==='h'?10:5,list=r.order.map((id,i)=>[id,i]).filter(([id,i])=>i<top||id===me);ol.innerHTML='';
-  list.forEach(([id,i])=>{const li=el('li',id===me?'me':'');li.append(el('b',null,ordinal(r.place+i)),el('span',null,' '+playerName(id)),el('small',null,`${taps[id]||0} paddles`));ol.append(li);});stagger(ol);
+  list.forEach(([id,i])=>{const li=el('li',id===me?'me':'');li.append(el('b',null,ordinal(r.place+i)),el('span',null,' '+playerName(id)),el('small',null,`${taps[id]||0} ${K.unit}`));ol.append(li);});stagger(ol);
   const mine=$(P_+'RaceMine');
-  if(mine){const pos=r.order.indexOf(me),t=taps[me]||0;mine.textContent=me&&pos>=0?(pos===0?`Your duck won with ${t} paddles! 🎉`:t===0?'Your duck did not move. Press SPACE or tap PADDLE next time!':`Your duck came ${ordinal(r.place+pos)}${r.game?' of '+r.order.length:''} with ${t} paddles.`):'';}
+  if(mine){const pos=r.order.indexOf(me),t=taps[me]||0;mine.textContent=me&&pos>=0?K.mine(pos,t,r.place,r.game?' of '+r.order.length:''):'';}
   confetti();fanfare();
 }
 function drawPodium(id,rows){
@@ -1005,29 +1591,38 @@ function renderPlayer(){
   if(ph==='race')return renderRace(false);
 }
 function renderPlayerQ(){
-  const s=STATE,q=s.q||{},k='q'+s.session+s.idx;playerShow('pQ');worldPlayer();const mine=myAnswerFor(s);
+  const s=STATE,q=s.q||{},k='q'+s.session+s.idx,uid=ME.player_id;playerShow('pQ');worldPlayer();const mine=myAnswerFor(s);
+  const out=s.game==='last'&&Array.isArray(s.alive)&&!s.alive.includes(uid),drawer=q.type==='draw'&&q.drawer===uid,play=(q.type==='react'||q.type==='spot'||q.type==='order'||drawer)&&!out;
   if(pKey!==k){
     pKey=k;P.localStart=roundStart(s);animIn($('pCard'));
-    $('pQNum').textContent=`Round ${s.idx+1} of ${s.total}`;$('pCat').textContent=q.cat;$('pText').textContent=q.text;
+    $('pQNum').textContent=`Round ${s.idx+1} of ${s.total}`+(s.game==='last'&&s.alive?` · 👥 ${s.alive.length} in`:'');$('pCat').textContent=q.cat;$('pText').textContent=drawer?'You are the drawer!':q.text;
+    teamChip($('pTeam'),uid);
     renderDisplay($('pDisp'),q,false,P.localStart); // every clue shows on the phone's TV too (the memory flash hides at the same moment as on the big screen)
-    $('pHint').textContent=q.hint||'';$('pHint').hidden=!q.hint;
-    const box=$('pOpts');box.innerHTML='';box.hidden=q.type!=='choice';
-    $('pNum').hidden=q.type!=='number';$('pNumIn').value='';
-    $('pTxt').hidden=q.type!=='text';$('pTxtIn').value='';
-    $('pSlide').hidden=q.type!=='slide';
-    if(q.type==='choice')q.options.forEach((t,i)=>{const st=optStyle(s,i);const b=el('button','opt');b.type='button';b.style.setProperty('--c',st.c);if(st.fg)b.style.setProperty('--fg',st.fg);
-      b.append(el('span','sh',q.tf?(i===0?'✓':'✗'):st.s),optLabel(t));b.onclick=()=>answer({choice:i});box.append(b);});stagger(box);
-    if(q.type==='slide')startSlide(q.tiles);
+    $('pHint').textContent=q.hint||'';$('pHint').hidden=!q.hint||drawer;
+    const box=$('pOpts');box.innerHTML='';box.hidden=q.type!=='choice'||out;
+    $('pNum').hidden=q.type!=='number'||out;$('pNumIn').value='';
+    $('pTxt').hidden=!(q.type==='text'||(q.type==='draw'&&!drawer))||out;$('pTxtIn').value='';$('pTxtIn').dataset.typing=q.typing?'1':'';
+    $('pTxtIn').placeholder=q.typing?'Type the line here':q.type==='draw'?'Type your guess':'Type your answer';
+    $('pSlide').hidden=q.type!=='slide'||out;
+    $('pOut').hidden=!out;
+    const pp=$('pPlay');pp.hidden=!play;P.draw=null;if(!play){pp.innerHTML='';boxTimers(pp);}
+    if(q.type==='choice'&&!out)q.options.forEach((t,i)=>{const st=optStyle(s,i);const b=el('button','opt');b.type='button';b.style.setProperty('--c',st.c);if(st.fg)b.style.setProperty('--fg',st.fg);
+      b.append(el('span','sh',optSym(q,i,st)),optLabel(t));b.onclick=()=>answer({choice:i});box.append(b);});stagger(box);
+    if(q.type==='slide'&&!out)startSlide(q.tiles);
+    if(play){const round=s.session+':'+s.idx;P.draw=buildPlay(pp,q,{start:P.localStart,locked:mine?{...mine}:null,onAnswer:a=>answer(a),round});
+      if(drawer)fetchWord(round);}
     clearInterval(P.tick);const tick=()=>{const left=Math.max(0,s.dur-(performance.now()-P.localStart)/1000);$('pClock').textContent=Math.ceil(left)+'s';if(left<=0)clearInterval(P.tick);};tick();P.tick=setInterval(tick,250);
     try{navigator.vibrate&&navigator.vibrate(60);}catch(e){}
   }
-  const locked=mine!=null;$('pLocked').hidden=!locked;$('pOpts').classList.toggle('static',locked);
+  const locked=mine!=null&&!out&&!drawer;$('pLocked').hidden=!locked||q.type==='react';$('pOpts').classList.toggle('static',locked);
   document.querySelectorAll('#pOpts .opt').forEach((b,i)=>{b.disabled=locked;b.classList.toggle('dim',locked&&mine.choice!==i);b.classList.toggle('mine',locked&&mine.choice===i);});
-  if(q.type==='number')$('pNum').hidden=locked;
-  if(q.type==='text')$('pTxt').hidden=locked;
+  if(q.type==='number')$('pNum').hidden=locked||out;
+  if(q.type==='text'||(q.type==='draw'&&!drawer))$('pTxt').hidden=locked||out;
   if(q.type==='slide')$('pSlide').classList.toggle('done',locked);
-  if(locked)$('pLockedText').textContent=q.type==='choice'?'Wait for the reveal.':q.type==='slide'?`Solved in ${mine.value} moves! Wait for the others.`:q.type==='text'?`You answered "${mine.text}". Wait for the reveal.`:`You answered ${mine.value}. Wait for the reveal.`;
+  if(locked)$('pLockedText').textContent=q.type==='choice'?'Wait for the reveal.':q.type==='slide'?`Solved in ${mine.value} moves! Wait for the others.`:q.type==='text'||q.type==='draw'?`You answered "${mine.text}". Wait for the reveal.`:q.type==='spot'?'Wait for the reveal.':q.type==='order'?'Order locked in. Wait for the reveal.':`You answered ${mine.value}. Wait for the reveal.`;
 }
+/* Draw It: only the drawer's phone asks the server for the word. */
+async function fetchWord(round){for(let i=0;i<6;i++){try{const r=await rpc('player_secret',{p_token:TOKEN});if(r&&r.round===round&&r.word){if(P.draw&&P.draw.setWord&&pKey==='q'+round.replace(':',''))P.draw.setWord(r.word);return;}}catch(e){}await new Promise(ok=>setTimeout(ok,700));}}
 /* Sliding puzzle on the player's phone. Solved = 1..8 in order with the gap last. */
 let SL={t:[],moves:0};
 function startSlide(tiles){SL={t:tiles.slice(),moves:0};paintSlide();}
@@ -1046,29 +1641,41 @@ async function answer(a){
   const s=STATE;if(!s||s.phase!=='question'||myAnswerFor(s))return;
   P.answered={[s.session+':'+s.idx]:a};local.set('answered',P.answered);renderPlayerQ();beep(700,.06);stamp();
   try{const okk=await rpc('player_answer',{p_token:TOKEN,p_session:s.session,p_idx:s.idx,p_choice:a.choice??null,p_value:a.value??null,p_text:a.text??null});if(!okk)status('Too late, this round is closed.');}
-  catch(e){P.answered={};local.set('answered',{});renderPlayerQ();status('Your answer did not send. Tap again.');}
+  catch(e){P.answered={};local.set('answered',{});pKey='';renderPlayerQ();status('Your answer did not send. Tap again.');}
 }
 $('pNumBtn').onclick=()=>{const v=parseFloat($('pNumIn').value);if(!isFinite(v)){status('Type a number first.');return;}answer({value:v});};
 $('pNumIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('pNumBtn').click();});
 $('pTxtBtn').onclick=()=>{const v=$('pTxtIn').value.trim().slice(0,40);if(!v){status('Type your answer first.');return;}answer({text:v});};
+// Type Race: no pasting the line.
+$('pTxtIn').addEventListener('paste',e=>{if($('pTxtIn').dataset.typing)e.preventDefault();});$('pTxtIn').addEventListener('drop',e=>{if($('pTxtIn').dataset.typing)e.preventDefault();});
 $('pTxtIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('pTxtBtn').click();});
 function renderPlayerReveal(){
-  const s=STATE,q=s.q||{},uid=ME.player_id;clearInterval(P.tick);playerShow('pReveal');if(s.game!=='duck')worldPlayer();else worldOff();
+  const s=STATE,q=s.q||{},uid=ME.player_id;clearInterval(P.tick);playerShow('pReveal');if(!(GAMES[s.game]||{}).race)worldPlayer();else worldOff();
+  if(s.phase==='reveal')revealDisplay($('pDisp'),q,s);teamChip($('pTeamR'),uid);
   if(q.display&&q.display.kind==='flash'){const g=$('pDisp').querySelector('.egrid');if(g){clearTimeout(flashT);g.classList.remove('gone');g.querySelectorAll('span').forEach((x,i)=>x.textContent=q.display.items[i]);}} // reveal: the flashed icons come back
   const sc=SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx?SCORES:null;
   const gain=sc&&sc.last?sc.last[uid]:undefined,ok=sc&&sc.ok?sc.ok[uid]:undefined,answered=sc&&gain!==undefined;
   const k='r'+s.session+s.idx+(sc?'y':'n')+s.phase;
   $('pResult').className='result '+(ok?'ok':'no');
   $('pGain').textContent=answered?'+'+gain:sc?'+0':'…';
-  const closestGame=q.type==='number'&&!q.exact,duck=s.game==='duck'&&s.race&&s.race.game,dpos=duck?s.race.order.indexOf(uid):-1;
-  $('pAnswerLbl').textContent=duck?'Race winner':'Answer';
-  $('pVerdict').textContent=duck?(dpos<0?'You joined after this race':!((s.race.taps||{})[uid])?'Your duck did not move':dpos===0?'Your duck won! 🎉':`Your duck finished ${ordinal(dpos+1)}`):!sc?'Scoring…':!answered?(q.type==='slide'?'Not solved in time':'No answer this time'):closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!':ok?'Correct!':'Not this time';
+  const closestGame=q.type==='number'&&!q.exact,duck=!!((GAMES[s.game]||{}).race&&s.race&&s.race.game&&s.race.order),K=kindOf(s.race),dpos=duck?s.race.order.indexOf(uid):-1;
+  const mineA=myAnswerFor(s),wasOut=s.game==='last'&&Array.isArray(s.out)&&s.out.includes(uid),watching=s.game==='last'&&Array.isArray(s.alive)&&!s.alive.includes(uid)&&!wasOut,drew=q.type==='draw'&&q.drawer===uid;
+  $('pAnswerLbl').textContent=duck?'Winner':key_(q,s)==='maj'?'Most picked':q.type==='react'?'Fastest':'Answer';
+  $('pVerdict').textContent=duck?(dpos<0?'You joined after this round':K.verdict(dpos,(s.race.taps||{})[uid]||0))
+    :drew?(!sc?'Scoring…':`${s.right||0} ${(s.right||0)===1?'player':'players'} guessed your drawing`)
+    :wasOut?'You are out! 😵':watching?'Watching from the side':!sc?'Scoring…'
+    :!answered?(q.type==='slide'?'Not solved in time':q.type==='react'?'No tap this time':'No answer this time')
+    :q.type==='react'?(ok?`${(mineA&&mineA.value/1000||0).toFixed(3)} s reaction!`:'Too soon!')
+    :key_(q,s)==='maj'?(ok?'You picked with the crowd! 🎉':'The crowd picked something else')
+    :s.game==='last'?(ok?'Still standing! 💪':'Not this time')
+    :closestGame?(gain===1000?'Exactly right!':ok?'So close!':'Not quite'):q.type==='slide'?'Solved!':ok?'Correct!':'Not this time';
   $('pAnswer').textContent=duck?`${playerName(s.race.order[0])} won ${s.race.name}`:s.answer||'';
   const rows=ranking(),r=rows.find(x=>x.id===uid),total=r?r.score:0;$('pRank').textContent=r?`${r.place} / ${rows.length}`:'–';
   const rk=s.session+':'+s.idx;
   if(pKey!==k){pKey=k;if(sc&&P.counted!==rk){P.counted=rk;animIn($('pResult'));countUp($('pScore'),total-(gain||0),total);if(answered){ok?beep(1040,.12):beep(240,.18);flashScreen(!!ok);}}else if(!$('pScore').dataset.busy)$('pScore').textContent=total;}
   else if(!$('pScore').dataset.busy)$('pScore').textContent=total;
 }
+const key_=(q,s)=>q.maj?'maj':'';
 function renderPlayerFinal(){
   const uid=ME.player_id;playerShow('pFinal');const rows=ranking(),r=rows.find(x=>x.id===uid),me=PLAYERS[uid];const k='f'+STATE.session+(r?r.score+':'+r.place:'');
   if(pKey===k+JSON.stringify(STATE.tb||{}))return;pKey=k+JSON.stringify(STATE.tb||{});clearInterval(P.tick);
@@ -1077,10 +1684,12 @@ function renderPlayerFinal(){
   put('pFinalChar',charScene(look(me),1.5,r&&r.place<=3));
   $('pFinalScore').textContent=r?r.score:0;$('pFinalRank').textContent=r?`${r.place} / ${rows.length}`:'–';
   boardRows('pTop',rows,{showGain:false,limit:5,highlight:uid});if(r&&r.place<=3&&!inTie){confetti();fanfare();}
+  const t=teamRows(rows),myT=teamOn()?STATE.teams[uid]:null;$('pFinalTeam').hidden=!t||myT==null;
+  if(t&&myT!=null){const pos=t.findIndex(p=>p.k===myT),best=t[0];$('pFinalTeam').textContent=pos===0||t[pos].avg===best.avg?`🏆 Team ${TEAMS[myT][0]} won with ${best.avg} points on average!`:`Team ${TEAMS[myT][0]} came ${ordinal(pos+1)} (${t[pos].avg} average). Team ${best.name} won.`;$('pFinalTeam').style.setProperty('--c',TEAMS[myT][1]);}
 }
 
 /* ================= 3D world (world.js + three.js, loaded the first time a round is shown) ================= */
-const BUILD='20261119b';
+const BUILD='20261126a';
 const THREE_URL='https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
 const W3={state:'idle',want:null};
 function hasWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch(e){return false;}}
@@ -1098,7 +1707,7 @@ function worldRound(){
   const s=STATE,q=s.q||{},choice=q.type==='choice',sc=SCORES&&SCORES.session===s.session&&SCORES.idx===s.idx?SCORES:null;
   return {key:s.session+':'+s.idx,phase:s.phase==='question'?'question':'reveal',text:q.text||'',cat:q.cat||'',answer:s.answer||'',
     options:choice?q.options.map((t,i)=>{const st=optStyle(s,i);return {c:cssColor(st.c),fg:!!st.fg,s:q.tf?(i===0?'✓':'✗'):st.s,label:t};}):[],
-    correct:s.correct,picks:isHost()?Object.fromEntries(answeredIds().map(id=>[id,ANSWERS[id].choice])):s.phase==='question'?(ME&&myAnswerFor(s)&&typeof myAnswerFor(s).choice==='number'?{[ME.player_id]:myAnswerFor(s).choice}:{}):(s.picks||{}),
+    correct:choice?s.correct:-1,picks:!choice?{}:isHost()?Object.fromEntries(answeredIds().map(id=>[id,ANSWERS[id].choice])):s.phase==='question'?(ME&&myAnswerFor(s)&&typeof myAnswerFor(s).choice==='number'?{[ME.player_id]:myAnswerFor(s).choice}:{}):(s.picks||{}),
     ok:sc?sc.ok||{}:{},answered:isHost()?answeredIds():(ME&&myAnswerFor(s)&&s.phase==='question'?[ME.player_id]:[])};
 }
 function worldPlayers(){return playerIds().map(id=>({id,name:playerName(id),look:look(PLAYERS[id]),me:!!(ME&&id===ME.player_id)}));}
@@ -1109,8 +1718,11 @@ function worldHost(){
   catch(e){worldBroke(e);}
 }
 /* Phones: the world panel. wait=true is the lobby (the TV says who we are waiting for), otherwise the question sits on the TV. */
+/* Tap-heavy rounds (Two Lines!, Spot the Difference, Order It, Draw It) use the plain phone screen so the controls stay in view. */
+const PLAIN_PHONE=['react','spot','order','draw'];
 function worldPlayer(wait){
-  if(W3.state!=='ready'){if(W3.state!=='failed'){W3.want=()=>{if(view!=='player')return;if(playerSub==='pWait'&&(!STATE||STATE.phase==='lobby'))worldPlayer(true);else if((playerSub==='pQ'||playerSub==='pReveal')&&STATE&&STATE.game!=='duck')worldPlayer();};loadWorld();}return;}
+  if(!wait&&STATE&&STATE.q&&PLAIN_PHONE.includes(STATE.q.type)){worldOff();return;}
+  if(W3.state!=='ready'){if(W3.state!=='failed'){W3.want=()=>{if(view!=='player')return;if(playerSub==='pWait'&&(!STATE||STATE.phase==='lobby'))worldPlayer(true);else if((playerSub==='pQ'||playerSub==='pReveal')&&STATE&&!(GAMES[STATE.game]||{}).race)worldPlayer();};loadWorld();}return;}
   try{
     document.body.classList.remove('world-host');document.body.classList.add('world-phone');document.body.classList.toggle('world-wait',!!wait);$('pWorld').hidden=false;
     $('pWaitTv').hidden=!wait;
@@ -1226,7 +1838,7 @@ let confettiRun=0;
 function stopConfetti(){confettiRun++;const cv=$('confetti');const c=cv.getContext&&cv.getContext('2d');if(c)c.clearRect(0,0,cv.width,cv.height);cv.hidden=true;}
 function confetti(){
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const run=++confettiRun;const cv=$('confetti'),ctx=cv.getContext('2d');if(!ctx)return;cv.hidden=false;cv.width=innerWidth;cv.height=innerHeight;
-  const ps=Array.from({length:160},()=>({x:Math.random()*cv.width,y:-30-Math.random()*cv.height*.6,vx:(Math.random()-.5)*3,vy:2+Math.random()*4,r:Math.random()*6,vr:(Math.random()-.5)*.2,s:8+Math.random()*8,c:COLORS[Math.floor(Math.random()*COLORS.length)]}));
-  let t=0;(function f(){ctx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);ctx.strokeStyle='#1D1D4F';ctx.lineWidth=2;ctx.strokeRect(-p.s/2,-p.s/2,p.s,p.s);ctx.restore();});if(run!==confettiRun)return;if(++t<240)requestAnimationFrame(f);else{ctx.clearRect(0,0,cv.width,cv.height);cv.hidden=true;}})();
+  const ps=Array.from({length:document.documentElement.classList.contains('lowfx')||WEAK_DEVICE?70:140},()=>({x:Math.random()*cv.width,y:-30-Math.random()*cv.height*.6,vx:(Math.random()-.5)*3,vy:2+Math.random()*4,r:Math.random()*6,vr:(Math.random()-.5)*.2,s:8+Math.random()*8,c:COLORS[Math.floor(Math.random()*COLORS.length)]}));
+  let t=0;(function f(){ctx.clearRect(0,0,cv.width,cv.height);ctx.lineWidth=2;ctx.strokeStyle='#1D1D4F';ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;const c=Math.cos(p.r),n=Math.sin(p.r);ctx.setTransform(c,n,-n,c,p.x,p.y);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);ctx.strokeRect(-p.s/2,-p.s/2,p.s,p.s);});ctx.setTransform(1,0,0,1,0,0);if(run!==confettiRun)return;if(++t<240)requestAnimationFrame(f);else{ctx.clearRect(0,0,cv.width,cv.height);cv.hidden=true;}})();
 }
 boot().catch(()=>showNoAccess());

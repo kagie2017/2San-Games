@@ -13,6 +13,7 @@ drop function if exists public.is_host(text), public.host_check(text), public.pl
   public.host_set_state(text,jsonb,boolean), public.host_set_scores(text,jsonb),
   public.host_set_key(text,jsonb), public.host_get_key(text), public.host_answers(text),
   public.host_kick(text,uuid), public.host_clear(text) cascade;
+drop table if exists public.draws cascade;
 
 -- ---------- tables ----------
 create table public.lobbies (
@@ -323,3 +324,74 @@ begin
 end $$;
 
 grant execute on function public.race_board(text), public.player_paddle(text,text,int) to anon, authenticated;
+
+-- ---------- new games: shared clock, private word for the drawer, Draw It strokes ----------
+-- Server time in ms, so every screen can line up timed clues (Two Lines!, Pixel Reveal, Who Am I?).
+create or replace function public.server_clock() returns double precision
+language sql stable as $$ select extract(epoch from clock_timestamp()) * 1000 $$;
+
+-- A secret only one player may read (the word in Draw It). The host stores it in its key as
+-- {"secret_for": "<player id>", "secret": "<word>", "secret_round": "<session>:<idx>"}.
+create or replace function public.player_secret(p_token text) returns jsonb
+language plpgsql stable security definer set search_path = public as $$
+declare me players; k jsonb;
+begin
+  me := public._me(p_token);
+  if me.id is null then return null; end if;
+  select key into k from lobby_secrets where lobby_id = me.lobby_id;
+  if k is null or k->>'secret_for' is distinct from me.id::text then return null; end if;
+  return jsonb_build_object('word', k->>'secret', 'round', k->>'secret_round');
+end $$;
+
+-- Draw It: the drawing of the current round. strokes is a list of short lines; only the drawer adds to it.
+create table if not exists public.draws (
+  lobby_id uuid primary key references public.lobbies(id) on delete cascade,
+  round text not null,
+  strokes jsonb not null default '[]',
+  updated_at timestamptz not null default now()
+);
+alter table public.draws enable row level security;
+
+-- Add strokes. p_from = how many strokes the drawer already sent this round (so a retry never doubles a line).
+-- p_clear = true wipes the drawing first. At most 1500 strokes a round, each at most 600 characters.
+create or replace function public.draw_push(p_token text, p_round text, p_from int, p_strokes jsonb, p_clear boolean default false) returns int
+language plpgsql security definer set search_path = public as $$
+declare me players; k jsonb; st jsonb; cur jsonb; n int; s jsonb; add jsonb := '[]';
+begin
+  me := public._me(p_token);
+  if me.id is null then return -1; end if;
+  select key into k from lobby_secrets where lobby_id = me.lobby_id;
+  select state into st from lobbies where id = me.lobby_id;
+  if k->>'secret_for' is distinct from me.id::text or k->>'secret_round' is distinct from p_round
+     or st->>'phase' <> 'question' or (st->>'session') || ':' || (st->>'idx') <> p_round then return -1; end if;
+  if jsonb_typeof(p_strokes) <> 'array' then return -1; end if;
+  for s in select * from jsonb_array_elements(p_strokes) loop
+    if jsonb_typeof(s) = 'array' and length(s::text) <= 600 then add := add || jsonb_build_array(s); end if;
+  end loop;
+  insert into draws (lobby_id, round, strokes) values (me.lobby_id, p_round, '[]')
+    on conflict (lobby_id) do update set round = excluded.round, strokes = case when draws.round = excluded.round then draws.strokes else '[]' end;
+  select strokes into cur from draws where lobby_id = me.lobby_id for update;
+  if p_clear then cur := '[]'; end if;
+  n := jsonb_array_length(cur);
+  if p_clear or n = p_from then
+    if n + jsonb_array_length(add) <= 1500 then cur := cur || add; end if;
+    update draws set strokes = cur, updated_at = now() where lobby_id = me.lobby_id;
+  end if;
+  return jsonb_array_length(cur);
+end $$;
+
+-- Read the drawing from stroke p_from on. Anyone in the lobby. Returns {n, from, s:[...] }.
+create or replace function public.draw_get(p_token text, p_round text, p_from int) returns jsonb
+language plpgsql stable security definer set search_path = public as $$
+declare me players; d draws; n int; f int;
+begin
+  me := public._me(p_token);
+  if me.id is null then return null; end if;
+  select * into d from draws where lobby_id = me.lobby_id;
+  if d.lobby_id is null or d.round is distinct from p_round then return jsonb_build_object('n', 0, 'from', 0, 's', '[]'::jsonb); end if;
+  n := jsonb_array_length(d.strokes);
+  f := case when p_from is null or p_from < 0 or p_from > n then 0 else p_from end;
+  return jsonb_build_object('n', n, 'from', f, 's', coalesce((select jsonb_agg(x.v order by x.i) from jsonb_array_elements(d.strokes) with ordinality as x(v, i) where x.i > f), '[]'::jsonb));
+end $$;
+
+grant execute on function public.server_clock(), public.player_secret(text), public.draw_push(text,text,int,jsonb,boolean), public.draw_get(text,text,int) to anon, authenticated;

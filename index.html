@@ -31,8 +31,168 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 .hdr-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .whoami{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;background:var(--white);border:3px solid var(--navy);border-radius:12px;padding:4px 10px 4px 4px;box-shadow:0 4px 0 var(--navy)}
 @media (max-width:520px){#musicBtn .ml{display:none}}
+/* ===== newer games ===== */
+.ghead{grid-column:1/-1;margin:8px 0 0;font-family:var(--display);font-weight:400;font-size:1.15rem;color:var(--navy)}
+.games .ghead:first-child,.gcards .ghead:first-child{margin-top:0}
+.gcard.team{background:#FFF6DA}
+/* Two Lines! test strip */
+.strip{display:grid;place-items:center;width:100%}
+.cass{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(100%,520px);padding:14px 18px 18px;background:var(--white);border:4px solid var(--navy);border-radius:60px;box-shadow:0 7px 0 var(--navy)}
+.cass .sname{font-family:var(--display);font-weight:400;font-size:clamp(.95rem,2.4vw,1.25rem);color:var(--navy)}
+.cass .win{position:relative;display:grid;grid-template-columns:auto 1fr auto 1fr;align-items:center;gap:10px;width:78%;height:clamp(62px,12vw,92px);padding:0 18px;background:#FDF8F2;border:3px solid var(--navy);border-radius:12px}
+.cass .lbl{font-style:normal;letter-spacing:0;font-size:.95rem;color:var(--navy)}
+.cass .ln{display:block;justify-self:center;width:clamp(12px,2.4vw,18px);height:78%;border-radius:4px;background:var(--coral)}
+.cass .ln.t{opacity:0;transform:scaleY(.3);transition:opacity .12s,transform .18s cubic-bezier(.2,.9,.3,1.4)}
+.cass .ln.t.on{opacity:1;transform:none;box-shadow:0 0 0 4px rgba(251,117,105,.35)}
+.cass .well{width:42px;height:42px;border-radius:50%;border:3px solid var(--navy);background:radial-gradient(circle at 40% 35%,#fff,#E9EDF7)}
+.strip.pos .cass{animation:stripPop .35s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes stripPop{40%{transform:scale(1.05)}}
+/* Type Race */
+.typeline{font-family:var(--display);font-size:clamp(1.5rem,4.6vw,3rem);line-height:1.15;color:var(--navy);background:var(--sun);border:3px solid var(--navy);border-radius:14px;padding:12px 18px;box-shadow:0 6px 0 var(--navy);text-wrap:balance;user-select:none;-webkit-user-select:none;animation:popIn .45s cubic-bezier(.2,.9,.3,1.3) .1s both}
+/* Finish the Slogan */
+.blankline{font-family:var(--display);font-size:clamp(1.5rem,4.4vw,2.9rem);line-height:1.2;color:var(--navy);text-wrap:balance;animation:popIn .45s cubic-bezier(.2,.9,.3,1.3) .1s both}
+.blankline .blank{display:inline-block;min-width:3.5em;padding:0 .3em;margin:0 .1em;border-bottom:5px solid var(--coral);color:var(--coral)}
+.blankline .blank.shown{color:var(--mint);border-color:var(--mint);animation:popIn .4s ease-out both}
+/* Higher or Lower */
+.hilo{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;width:min(100%,640px)}
+.hcard{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:150px;padding:14px;border:3px solid var(--navy);border-radius:16px;box-shadow:0 6px 0 var(--navy);text-align:center;animation:popIn .45s cubic-bezier(.2,.9,.3,1.3) both}
+.hcard.a{background:var(--paper)}.hcard.b{background:var(--sun);animation-delay:.18s}
+.hcard{min-width:0;overflow-wrap:anywhere}
+.hcard small{font-weight:700;font-size:clamp(.82rem,1.8vw,1rem);color:var(--navy);line-height:1.2}
+.hcard b{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,6vw,3.8rem);line-height:1;color:var(--navy)}
+.hcard .qv.shown{animation:popIn .45s cubic-bezier(.2,.9,.3,1.4) both}
+.hcard.up{background:var(--mint)}.hcard.down{background:var(--coral)}
+.hilo .vs{font-family:var(--display);font-size:1.4rem;color:var(--white);background:var(--navy);border-radius:50%;width:52px;height:52px;display:grid;place-items:center}
+@media (max-width:520px){.hcard{min-height:120px}.hilo{gap:8px}.hilo .vs{width:40px;height:40px;font-size:1.05rem}}
+/* Who Am I? */
+.clues{list-style:none;margin:0;padding:0;display:grid;gap:8px;width:min(100%,640px);text-align:left;counter-reset:c}
+.clues li{position:relative;padding:10px 14px 10px 50px;background:var(--paper);border:3px solid var(--navy);border-radius:12px;font-weight:700;font-size:clamp(.95rem,2.2vw,1.25rem);color:var(--navy);opacity:.18;filter:blur(3px);transition:opacity .4s,filter .4s,transform .4s;transform:translateX(-8px)}
+.clues li::before{content:var(--n);counter-increment:c;content:counter(c);position:absolute;left:10px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;background:var(--purple);color:var(--white);display:grid;place-items:center;font-family:var(--display);font-weight:400}
+.clues li.on{opacity:1;filter:none;transform:none;background:var(--white)}
+/* Pixel Reveal */
+.pixwrap{width:min(100%,460px)}
+.pixwrap canvas{display:block;width:100%;height:auto;aspect-ratio:8/5;border:4px solid var(--navy);border-radius:18px;box-shadow:0 7px 0 var(--navy);background:var(--paper);image-rendering:pixelated}
+/* Spot the Difference */
+.spot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,640px)}
+.spot.one{grid-template-columns:minmax(0,1fr);width:min(100%,240px)}
+.sgrid{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.sgrid .sname{font-family:var(--display);font-weight:400;font-size:1.2rem;background:var(--navy);color:var(--white);border-radius:8px;padding:0 10px}
+.scells{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;width:100%;font-size:clamp(1.3rem,3.6vw,2.2rem)}
+.scells span{display:grid;place-items:center;aspect-ratio:1;background:var(--paper);border:2px solid var(--navy);border-radius:9px;animation:popIn .3s ease-out both;animation-delay:calc(var(--i,0)*15ms)}
+.scells span.hit{background:var(--sun);box-shadow:0 0 0 4px var(--coral);animation:hitPulse 1s ease-in-out 3}
+@keyframes hitPulse{50%{transform:scale(1.15)}}
+/* Order It */
+.olist{display:grid;gap:8px;width:min(100%,640px)}
+.ocard{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--paper);border:3px solid var(--navy);border-radius:12px;font-weight:700;font-size:clamp(.95rem,2.2vw,1.3rem);color:var(--navy);text-align:left;animation:rise .35s ease-out both;animation-delay:calc(var(--i,0)*70ms)}
+.olet{flex:none;width:34px;height:34px;border-radius:9px;background:var(--blue);color:var(--white);display:grid;place-items:center;font-family:var(--display);font-weight:400}
+.olist.done .ocard{background:var(--white)}.olist.done .olet{background:var(--mint);color:var(--ink)}
+/* Draw It */
+.drawview{position:relative;width:min(100%,560px)}
+.drawview canvas,.drawpad canvas{display:block;width:100%;height:auto;aspect-ratio:4/3;background:#fff;border:4px solid var(--navy);border-radius:16px;box-shadow:0 6px 0 var(--navy)}
+.drawview .who{position:absolute;left:10px;top:10px;background:var(--sun);border:2px solid var(--navy);border-radius:8px;padding:2px 8px;font-weight:700;font-size:.85rem}
+.drawview.mine canvas{display:none}.drawview.mine .who{position:static;display:inline-block}
+.drawpad{display:flex;flex-direction:column;gap:10px;width:100%}
+.drawpad canvas{touch-action:none;cursor:crosshair}
+.drawword{display:flex;flex-direction:column;align-items:center;background:var(--sun);border:3px solid var(--navy);border-radius:12px;padding:6px 10px;box-shadow:0 4px 0 var(--navy)}
+.drawword small{font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
+.drawword b{font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,6vw,2.2rem);letter-spacing:.04em}
+.drawtools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pal{display:flex;gap:6px;flex-wrap:wrap}
+.pal button{width:36px;height:36px;border-radius:50%;border:3px solid var(--navy);cursor:pointer;font-weight:700;color:var(--navy);padding:0}
+.pal button.on{box-shadow:0 0 0 3px var(--white),0 0 0 6px var(--navy)}
+/* play areas */
+.play{display:flex;flex-direction:column;gap:10px}
+.playhint{margin:0;text-align:center;font-weight:700;color:var(--muted)}
+.reactpad{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:clamp(170px,30vh,260px);border:4px solid var(--navy);border-radius:22px;background:var(--navy);color:var(--white);box-shadow:0 9px 0 var(--ink);cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;text-align:center;padding:12px}
+.reactpad b{font-family:var(--display);font-weight:400;font-size:clamp(2.2rem,10vw,3.6rem);line-height:1}
+.reactpad span{font-weight:700}
+.reactpad[data-state="go"]{background:var(--coral);color:var(--ink);animation:goFlash .5s ease-in-out infinite alternate}
+.reactpad[data-state="done"]{background:var(--mint);color:var(--ink)}
+.reactpad[data-state="soon"]{background:#8E8AA8}
+.reactpad:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
+@keyframes goFlash{to{filter:brightness(1.15)}}
+.spotpad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:min(100%,440px);align-self:center}
+.spotpad button{all:unset;box-sizing:border-box;display:grid;place-items:center;aspect-ratio:1;font-size:clamp(1.6rem,8vw,2.4rem);background:var(--white);border:3px solid var(--navy);border-radius:12px;box-shadow:0 4px 0 var(--navy);cursor:pointer;touch-action:manipulation}
+.spotpad button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--navy)}
+.spotpad button.mine{background:var(--sun)}.spotpad button:disabled:not(.mine){opacity:.55}
+.orderpad{display:grid;gap:8px}
+.orderpad button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:58px;background:var(--white);border:3px solid var(--navy);border-radius:14px;box-shadow:0 5px 0 var(--navy);font-weight:700;color:var(--navy);cursor:pointer;touch-action:manipulation}
+.orderpad .onum{flex:none;width:36px;height:36px;border-radius:9px;background:var(--paper);border:2px solid var(--navy);display:grid;place-items:center;font-family:var(--display);font-weight:400;font-size:1.2rem}
+.orderpad button.picked{background:var(--mint)}.orderpad button.picked .onum{background:var(--navy);color:var(--white)}
+.orderpad button:disabled{cursor:default}
+.play .actions{justify-content:center}
+/* teams */
+.teambars{display:grid;gap:8px}
+.tbar{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:10px 14px;background:var(--white);border:3px solid var(--navy);border-radius:12px;overflow:hidden;animation:rise .4s ease-out both;animation-delay:calc(var(--i,0)*90ms)}
+.tbar .tfill{position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--c);opacity:.35;transition:width .8s cubic-bezier(.2,.9,.3,1)}
+.tbar .tname,.tbar .tpts{position:relative}.tbar .tname{font-family:var(--display);font-weight:400;font-size:1.25rem}.tbar .tpts{font-weight:700;font-size:.9rem;white-space:nowrap}
+.teamchip{display:inline-block;padding:2px 10px;border:2px solid var(--navy);border-radius:999px;background:var(--c,var(--paper));font-weight:700;font-size:.8rem;color:var(--ink);white-space:nowrap}
+.teamwin{margin:0;padding:10px 14px;border:3px solid var(--navy);border-radius:12px;background:var(--c,var(--sun));font-family:var(--display);font-size:clamp(1.1rem,3vw,1.6rem);text-align:center;color:var(--ink);animation:popIn .5s cubic-bezier(.2,.9,.3,1.3) both}
+/* Last One Standing */
+.outlist{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.pcard.out{opacity:.8;filter:grayscale(.6)}
+.outbox{background:#EDEAF5}
+/* Hydration Pump */
+.race[data-kind="pump"],.race[data-kind="catch"]{background:linear-gradient(180deg,#BFE6FF,#7CCBFF)}
+.pumpwrap{position:relative;display:flex;gap:12px;align-items:flex-start;min-height:300px}
+.bottles{flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;min-width:0}
+.bottles.mid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+.bottles.few{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}.bottles.few .btl{width:70px;height:150px}.bottles.few .bcnt{font-size:1.5rem}.bottles.few .bname{font-size:.95rem}
+.bottles.crowd{grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:5px}
+.bcard{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 6px;background:rgba(255,255,255,.9);border:3px solid var(--navy);border-radius:12px;min-width:0}
+.bcard.me{background:var(--sun)}.bcard.won{box-shadow:0 0 0 4px var(--sun)}
+.bcard[data-medal]:not([data-medal=""])::after{content:attr(data-medal);position:absolute;top:-10px;right:-6px;font-size:1.6rem}
+.btl{position:relative;width:46px;height:96px;border:3px solid var(--navy);border-radius:12px 12px 16px 16px;background:rgba(255,255,255,.75);overflow:hidden}
+.btl .water{position:absolute;inset:0;transform-origin:bottom;transform:scaleY(0);background:linear-gradient(180deg,#5BD0FF,#0084DB);will-change:transform}
+.btl .blabel{position:absolute;left:0;right:0;top:40%;text-align:center;font-family:var(--display);font-size:.8rem;color:var(--navy);mix-blend-mode:multiply}
+.btl .bcap{position:absolute;top:-1px;left:50%;width:22px;height:9px;transform:translateX(-50%);background:var(--navy);border-radius:0 0 4px 4px}
+.bottles.crowd .btl{width:28px;height:50px;border-width:2px;border-radius:8px 8px 11px 11px}.bottles.crowd .bcap{width:14px;height:6px}.bottles.crowd .blabel{font-size:.5rem}.bottles.crowd .bname{font-size:.68rem}.bottles.crowd .bcard{padding:5px 3px;gap:2px;border-width:2px}.bottles.crowd .bcnt{font-size:.95rem}.bottles.crowd .bcard[data-medal]:not([data-medal=""])::after{font-size:1.2rem;top:-8px;right:-4px}
+.bname{font-weight:700;font-size:.8rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bcnt{font-family:var(--display);font-size:1.1rem;color:var(--navy)}
+.bcard.big{flex:none;width:min(46%,190px);padding:12px}.bcard.big .btl{width:84px;height:170px}.bcard.big .bcnt{font-size:1.6rem}
+.pumpwrap.small{justify-content:center;align-items:center;min-height:260px}
+.plead{margin:0;padding:8px 12px;list-style:none;background:rgba(255,255,255,.95);border:3px solid var(--navy);border-radius:12px;font-weight:700;font-size:.9rem;min-width:150px;display:grid;gap:4px}
+.plead:empty{display:none}
+.plead li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px;align-items:baseline}.plead li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plead li.me{color:var(--blue)}.plead b{font-family:var(--display);font-weight:400}
+.plead.side{flex:none;width:190px;align-self:flex-start}
+@media (max-width:640px){.pumpwrap{flex-direction:column}.plead.side{width:100%}}
+.pumpwrap.small{flex-direction:row;align-items:center;gap:10px}.pumpwrap.small .plead{flex:1;min-width:0}.pumpwrap.small .bcard.big{width:min(48%,190px)}
+/* Catch the Kit */
+.catchwrap{display:grid;grid-template-columns:minmax(0,1fr) 200px;grid-template-rows:auto 1fr;gap:10px}
+.catchwrap.small{grid-template-columns:1fr;grid-template-rows:auto auto auto auto}
+.cbar{grid-column:1/-1;display:flex;justify-content:center;gap:10px}.cbar[hidden]{display:none}
+.clegend{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-weight:700;font-size:.92rem}
+.clegend span{background:rgba(255,255,255,.9);border:2px solid var(--navy);border-radius:8px;padding:2px 8px}.clegend .no{opacity:.85}
+.cfield{position:relative;height:clamp(320px,54vh,540px);overflow:hidden;overflow:clip;border:3px solid var(--navy);border-radius:14px;background:linear-gradient(180deg,#E8F6FF,#BFE6FF 70%,#9ED8A8 70%,#7CC98A);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.catchwrap.small .cfield{height:clamp(300px,52vh,460px)}
+.citem{all:unset;position:absolute;left:0;top:0;width:56px;height:56px;display:grid;place-items:center;font-size:2.4rem;line-height:1;will-change:transform;cursor:pointer;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 3px 0 rgba(29,29,79,.35))}
+.citem.got{animation:gotIt .26s ease-out forwards}
+.citem.bad.bad{pointer-events:auto}
+.cfield.frozen{filter:grayscale(.7) brightness(.9)}
+.cfield.frozen .citem{pointer-events:none}
+.cfrost{padding:2px 12px;background:var(--white);border:3px solid var(--navy);border-radius:10px;font-family:var(--display);font-size:1.3rem;color:var(--blue)}
+.cscore{background:var(--white);border:3px solid var(--navy);border-radius:10px;padding:2px 12px;font-family:var(--display);font-size:1.3rem}
+.cscore:empty{display:none}
+@keyframes gotIt{to{transform:var(--t,none) scale(1.8);opacity:0}}
+.catchwrap .plead.side{grid-row:3;grid-column:2;width:auto}
+.catchwrap:not(.small) .cfield{grid-row:3;grid-column:1}
+.race.counting .lanes>*{visibility:hidden}
+@media (max-width:640px){.catchwrap{grid-template-columns:1fr}.catchwrap .plead.side{grid-row:auto;grid-column:auto}}
+/* world (3D) screens: keep the newer pictures compact on the TV */
+body.world-host #hDisp .hcard{min-height:110px}
+body.world-host #hDisp .clues li{padding:7px 12px 7px 46px;font-size:clamp(.9rem,1.5vw,1.15rem)}
+body.world-host #hDisp .pixwrap{width:min(100%,360px)}
+body.world-host #hDisp .spot{width:min(100%,560px)}body.world-host #hDisp .scells{font-size:clamp(1.1rem,2.2vw,1.7rem)}
+body.world-host #hDisp .drawview{width:min(100%,420px)}
+body.world-host #hDisp .cass .win{height:64px}
+body.world-phone #pWorld .hcard{min-height:90px;padding:8px}body.world-phone #pWorld .hcard b{font-size:1.8rem}
+body.world-phone #pWorld .clues li{padding:6px 10px 6px 42px;font-size:.88rem}
+body.world-phone #pWorld .scells{font-size:1.1rem;gap:3px}
+body.world-phone #pWorld .cass{padding:8px 12px 10px}body.world-phone #pWorld .cass .win{height:52px}
+.lowfx .reactpad[data-state="go"]{animation:none}
 /* slow devices: the same screens without the costly decorations */
-.lowfx .duck{filter:none;animation:none}.lowfx .rwater{animation:none}.lowfx .sway,.lowfx .hop{animation:none}
+.lowfx .duck{filter:none;animation:none}.lowfx .rwater::before,.lowfx .rwater::after{animation:none}.lowfx .sway,.lowfx .hop{animation:none}
 .lowfx .duck .bird{filter:none}
 .whoami img{width:26px;height:26px;border-radius:7px;border:2px solid var(--navy)}
 h2{font-family:var(--display);font-weight:400;font-size:clamp(2rem,5vw,3.4rem);line-height:1.02;margin:0;text-wrap:balance;color:var(--white);-webkit-text-stroke:3px var(--navy);paint-order:stroke fill;text-shadow:0 6px 0 var(--navy)}
@@ -53,6 +213,8 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .warn{color:#b3261e;font-weight:700}
 /* 3D blocks */
 .scene{perspective:900px;display:grid;place-items:center}
+.scene.baked{position:relative;display:block}
+.stepon{position:absolute;pointer-events:none}
 .world{position:relative;transform-style:preserve-3d}
 .sway{animation:sway 5s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotateX(-14deg) rotateY(-34deg)}50%{transform:rotateX(-10deg) rotateY(-12deg)}}
@@ -166,8 +328,12 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .rview{position:relative;height:clamp(320px,54vh,540px);overflow:hidden;border:3px solid var(--navy);border-radius:14px;background:#0084DB}
 .race.small .rview{height:310px}
 .rworld{position:absolute;left:0;top:0;bottom:0;will-change:transform}
-.rwater{position:absolute;inset:0;background:radial-gradient(ellipse 18px 5px at 50% 100%,rgba(255,255,255,.4) 96%,transparent) 0 0/72px 30px,radial-gradient(ellipse 14px 4px at 50% 100%,rgba(255,255,255,.25) 96%,transparent) 36px 15px/72px 30px,linear-gradient(180deg,#7CCBFF,#0084DB 85%);animation:flow 2.4s linear infinite}
-@keyframes flow{to{background-position:-72px 0,-36px 15px,0 0}}
+.rwater{position:absolute;inset:0;overflow:hidden;background:linear-gradient(180deg,#7CCBFF,#0084DB 85%)}
+/* ripples slide with a transform (cheap for the graphics chip) instead of repainting the river every frame */
+.rwater::before,.rwater::after{content:"";position:absolute;top:0;bottom:0;left:0;right:-72px;will-change:transform;animation:flow 2.4s linear infinite}
+.rwater::before{background:radial-gradient(ellipse 18px 5px at 50% 100%,rgba(255,255,255,.4) 96%,transparent) 0 0/72px 30px}
+.rwater::after{background:radial-gradient(ellipse 14px 4px at 50% 100%,rgba(255,255,255,.25) 96%,transparent) 36px 15px/72px 30px;animation-duration:4.8s}
+@keyframes flow{to{transform:translateX(-72px)}}
 .rbank{position:absolute;left:0;right:0;top:0;background:linear-gradient(180deg,#A6E06A,#5DA92F);border-bottom:4px solid #3E7A1F}
 .rshore{position:absolute;left:0;right:0;bottom:0;height:12px;background:#F3D58A;border-top:3px solid #D9B45E}
 .rsign{position:absolute;bottom:7px;translate:-50% 0;white-space:nowrap;font-family:var(--display);font-size:.95rem;line-height:1.3;background:var(--white);color:var(--navy);border:3px solid var(--navy);border-radius:7px;padding:0 9px 3px;box-shadow:inset 0 -5px 0 var(--c),0 3px 0 rgba(12,9,40,.35)}
@@ -214,8 +380,6 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .padbtn>span{position:relative}
 .padbig{font-family:var(--display);font-size:clamp(2.1rem,9vw,3rem);line-height:1;-webkit-text-stroke:2px var(--navy);paint-order:stroke fill}
 .padsub{font-weight:700;font-size:1rem}
-.padbtn.hit{animation:padHit .12s ease-out}
-@keyframes padHit{40%{transform:translateY(6px) scale(.97);box-shadow:0 3px 0 var(--navy)}}
 .padbtn:disabled{cursor:default;background:var(--sky,#5BB8F0)}
 .padbtn[data-state="wait"]{background:#8E8AA8}
 .padbtn[data-state="fin"]{background:var(--mint);color:var(--ink)}
@@ -223,8 +387,6 @@ input[type=text],input[type=number],select{width:100%;background:var(--paper);co
 .padbtn:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
 .racecard .padbtn{min-height:96px;margin-top:10px;width:100%}
 .racecard .racehow{margin-bottom:10px;font-size:.9rem}
-.duck.kick .bird{animation:kick .25s ease-out}
-@keyframes kick{40%{transform:scaleX(-1) translateX(-6px) rotate(-8deg)}}
 /* lobby browser */
 .bcols{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:22px;align-items:start}
 @media (max-width:760px){.bcols{grid-template-columns:1fr}}
@@ -509,8 +671,10 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
                 <select id="hCount"><option>3</option><option>5</option><option>8</option><option selected>10</option><option>15</option><option>20</option></select></div>
               <div id="hTimeBox"><label class="lbl" for="hTime">Seconds per question</label>
                 <select id="hTime"><option>10</option><option>15</option><option selected>20</option><option>25</option><option>30</option><option>45</option><option>60</option><option>90</option></select></div>
-              <div id="hRaceLenBox" hidden><label class="lbl" for="hRaceLen">Race length</label>
+              <div id="hRaceLenBox" hidden><label class="lbl" for="hRaceLen" id="hRaceLenLbl">Race length</label>
                 <select id="hRaceLen"><option value="10">10 seconds</option><option value="30" selected>30 seconds</option><option value="60">1 minute</option></select></div>
+              <div id="hTeamBox"><label class="lbl" for="hTeams">Team battle</label>
+                <select id="hTeams"><option value="0" selected>Off (everyone for themselves)</option><option value="2">2 teams</option><option value="4">4 teams</option></select></div>
             </div>
             <p class="hint" id="poolInfo"></p>
             <div class="actions">
@@ -557,6 +721,7 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
       <!-- host leaderboard -->
       <div id="hBoard" hidden style="display:flex;flex-direction:column;gap:20px">
         <div class="qhead"><h2>Leaderboard</h2><span class="qcount" id="hBoardNum"></span></div>
+        <div class="teambars" id="hTeamBars" hidden></div>
         <div class="board" id="hBoardList"></div>
         <div class="actions"><button class="btn big coral" id="nextBtn" type="button">Next question</button><button class="btn" id="hEndBtn2" type="button">End game</button></div>
       </div>
@@ -565,6 +730,8 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
       <div id="hFinal" hidden style="display:flex;flex-direction:column;gap:22px">
         <span class="qcount">Final results</span>
         <h2 id="hWinner"></h2>
+        <p class="teamwin" id="hTeamWin" hidden></p>
+        <div class="teambars" id="hFinalTeams" hidden></div>
         <div class="blk tie" id="hTie" hidden>
           <div class="tieheads" id="tieHeads"></div>
           <p class="hint" id="tieText"></p>
@@ -600,16 +767,19 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
       </div>
 
       <div id="pQ" hidden style="display:flex;flex-direction:column;gap:20px">
-        <div class="qhead"><span class="qcount" id="pQNum"></span><span class="qcount" id="pClock" style="font-size:2rem"></span></div>
+        <div class="qhead"><span class="qcount" id="pQNum"></span><span class="teamchip" id="pTeam" hidden></span><span class="qcount" id="pClock" style="font-size:2rem"></span></div>
         <div class="card" id="pCard" style="min-height:150px;padding:18px"><div class="cat" id="pCat"></div><div class="qtext" id="pText" style="font-size:clamp(1.3rem,5vw,2.2rem)"></div><div class="disp small" id="pDisp"></div><div class="hintline" id="pHint" hidden></div></div>
         <div class="opts" id="pOpts"></div>
-        <div id="pTxt" class="numrow" hidden><input type="text" id="pTxtIn" maxlength="40" autocomplete="off" autocapitalize="characters" aria-label="Your answer" placeholder="Type your answer"><button class="btn big mint" id="pTxtBtn" type="button">Lock it in</button></div>
+        <div class="play" id="pPlay" hidden></div>
+        <div class="blk locked outbox" id="pOut" hidden><b class="out" style="font-size:2rem">You're out!</b><span>Watch who survives. Everyone is back in next game.</span></div>
+        <div id="pTxt" class="numrow" hidden><input type="text" id="pTxtIn" maxlength="40" autocomplete="off" autocorrect="off" spellcheck="false" autocapitalize="characters" aria-label="Your answer" placeholder="Type your answer"><button class="btn big mint" id="pTxtBtn" type="button">Lock it in</button></div>
         <div id="pSlideWrap" class="center" style="gap:10px"><div class="slide" id="pSlide" hidden></div><span class="lbl" id="pSlideMoves"></span></div>
         <div id="pNum" class="numrow" hidden><input type="number" id="pNumIn" inputmode="decimal" aria-label="Your number" placeholder="Type a number"><button class="btn big mint" id="pNumBtn" type="button">Lock it in</button></div>
         <div class="blk locked" id="pLocked" hidden><b class="out" style="font-size:2rem">Locked in!</b><span id="pLockedText">Wait for the reveal.</span></div>
       </div>
 
       <div id="pReveal" hidden class="center">
+        <span class="teamchip" id="pTeamR" hidden></span>
         <div class="result" id="pResult"><div class="gain" id="pGain"></div><b id="pVerdict" style="font-family:var(--display);font-size:1.6rem"></b></div>
         <div class="blk" style="width:min(100%,560px)"><span class="lbl" id="pAnswerLbl">Answer</span><div class="answerline" id="pAnswer"></div></div>
         <div class="blk" style="width:min(100%,560px);display:flex;justify-content:space-around;gap:12px">
@@ -639,6 +809,7 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
           <div><span class="lbl">Final score</span><div class="big-count" id="pFinalScore">0</div></div>
           <div><span class="lbl">Final place</span><div class="big-count" id="pFinalRank">–</div></div>
         </div>
+        <p class="teamwin" id="pFinalTeam" hidden></p>
         <div class="board" id="pTop" style="width:min(100%,560px)"></div>
       </div>
     </section>
@@ -655,7 +826,8 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
     <div class="card" id="dCard" style="min-height:120px;padding:16px;transform:none"><div class="cat" id="dCat"></div><div class="qtext" id="dText" style="font-size:clamp(1.2rem,4.4vw,1.9rem)"></div><div class="disp small" id="dDisp"></div><div class="hintline" id="dHint" hidden></div></div>
     <p class="hint" id="dNote" hidden></p>
     <div class="opts" id="dOpts"></div>
-    <div id="dTxt" class="numrow" hidden><input type="text" id="dTxtIn" maxlength="40" autocomplete="off" aria-label="Your answer" placeholder="Type your answer"><button class="btn mint" id="dTxtBtn" type="button">Check</button></div>
+    <div class="play" id="dPlay" hidden></div>
+    <div id="dTxt" class="numrow" hidden><input type="text" id="dTxtIn" maxlength="40" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Your answer" placeholder="Type your answer"><button class="btn mint" id="dTxtBtn" type="button">Check</button></div>
     <div id="dNum" class="numrow" hidden><input type="number" id="dNumIn" inputmode="decimal" aria-label="Your number" placeholder="Type a number"><button class="btn mint" id="dNumBtn" type="button">Check</button></div>
     <div id="dSlideWrap" class="center" style="gap:8px" hidden><div class="slide" id="dSlide"></div><span class="lbl" id="dSlideMoves"></span></div>
     <div id="dResult" class="center" hidden style="gap:6px"><b class="dverdict" id="dVerdict"></b><span class="answerline" id="dAnswer" style="font-size:1.4rem"></span></div>
@@ -669,7 +841,7 @@ body.world-phone #pWorld #pCard{min-height:0!important;padding:12px 12px 14px!im
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <!-- the PADDLE button for phones in a duck race: outside the animated screens so it can stay pinned to the bottom -->
 <div class="padwrap" id="pPadWrap" hidden><button class="padbtn" id="pPad" type="button" hidden><span class="padbig">Get ready…</span><span class="padsub"></span></button></div>
-<script src="config.js?v=20261119b"></script>
-<script src="app.js?v=20261119b"></script>
+<script src="config.js?v=20261126a"></script>
+<script src="app.js?v=20261126a"></script>
 </body>
 </html>

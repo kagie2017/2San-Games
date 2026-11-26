@@ -32,9 +32,24 @@ Every game uses 2San content from [2san.com](https://2san.com): products, values
 | Memory Flash | 4 choices | Six 2San kit icons flash for 5 seconds; which was missing? |
 | Sliding Puzzle | solve on phone | Slide the tiles to spell 2SAN HOME; fastest wins |
 | Closest Number | type a number | Guess the 2San number |
+| Finish the Slogan | 4 choices | Fill in the missing word of a 2San line |
+| Who Am I? | 4 choices | Clues about a 2San product, value or person appear one by one; 1000 on clue 1, 800, 600, 400 after |
+| Higher or Lower | 2 choices | Two 2San numbers of the same kind: is the second higher or lower? |
+| Type Race | type the line | Type a 2San line as fast as you can (capitals and punctuation do not matter) |
+| Pixel Reveal | 4 choices | A 2San product comes into focus; earlier guesses score more (1000 down to 400) |
+| Draw It | draw / type a word | One player draws a 2San thing on their phone (only they see the word); others type guesses. The drawer scores by how many guessed |
+| Two Lines! | tap the pad | Watch a 2San test strip; tap when the second line shows. Fastest 1000, slower less, too soon 0 |
+| Spot the Difference | tap a box | Grid A on every screen, grid B on the big screen; tap the box in B that changed |
+| Order It | tap in order | Put 2San steps or facts in the right order |
+| Majority Wins | 4 choices | No right answer: the most picked option gets 1000, others by share |
+| Last One Standing | 4 choices | Wrong or no answer and you are out; 100 per round survived, +500 for the last one in |
+| Hydration Pump | press Space / tap PUMP | Fill your Hydration Test bottle; fullest bottle wins (1000, 900, 800 …) |
+| Catch the Kit | tap falling items | Catch falling 2San kit; tapping non-2San items freezes you for 1 second; most catches wins |
 | 2San Duck Race | press Space / tap PADDLE | Every character rides a duck down the 2San river. Each press of Space (computer) or tap on PADDLE (phone) moves the duck forward; the finish line is 4.5 paddles per second of race (45 for 10s, 135 for 30s, 270 for 1 min). First over the line wins; when time runs out, more paddles places higher. 1st 1000, 2nd 900, 3rd 800 … at least 100; a duck that never moves gets 0 |
 
 Correct answers score 500 to 1000 points: the faster, the more. Closest Number scores by how near the guess is.
+
+**Team Battle:** in the lobby the host can set Teams to 2 or 4 for any game. Players are split evenly into colored teams; each team's score is the average of its members, shown as bars on the leaderboard and final screen.
 
 If players tie for a podium place (top 3) at the end of any game, the host starts a duck race between them to decide the order. Only the tied players paddle; everyone else watches.
 
@@ -47,6 +62,8 @@ During question rounds the big screen shows a blocky 3D world in 2San colors: th
 ## Slow devices
 
 Tablets and budget phones are detected (4 GB of memory or less, 4 cores or less, or an Android tablet) and start the 3D world without anti-aliasing at a lower resolution. While the 3D world runs, the frame rate is checked every 2 seconds. Below about 42 frames a second the resolution steps down (1×, 0.8×, 0.65×) and fewer characters are drawn. If even the lowest step stays below about 24, the device switches to the plain screens for the rest of the visit and shows a short note. If the plain screens also run slowly, costly decorations (duck shadows, rippling water, idle bobbing) turn off. The game itself never changes.
+
+Big races and long player lists are kept light everywhere: in Chrome-based browsers (Android, desktop Chrome and Edge) each character made of CSS boxes in a race, a head in a list, or a weapon tile is turned once into a still picture of the same boxes, so the page moves one picture instead of dozens of 3D sides. A 32-rider race went from about 7 to about 56 frames a second on a 4× slowed-down processor. On tablets and budget phones the podium characters are still pictures too, with the rank number laid on top.
 
 ## Music
 
